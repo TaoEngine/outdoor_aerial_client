@@ -1,54 +1,20 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_soloud/flutter_soloud.dart';
 import 'package:outline_aerial_client/pages/home.dart';
 import 'package:outline_aerial_client/pages/play.dart';
-import 'package:web_socket/web_socket.dart';
+import 'package:outline_aerial_client/services/stream_service.dart';
 
 void main() async {
-  // if (!SoLoud.instance.isInitialized) {
-  //   SoLoud.instance.init();
-  // }
-  // test123();
-  runApp(const MainApp());
-}
-
-void test123() async {
-  final socket = await WebSocket.connect(Uri.parse("ws://192.168.31.148:8765"));
-
-  final stream = SoLoud.instance.setBufferStream(
-    bufferingType: BufferingType.released,
-    channels: Channels.stereo,
-    format: BufferType.s16le,
-    bufferingTimeNeeds: 0.010,
-    sampleRate: 44100,
-    onBuffering: (isBuffering, handle, time) {
-      // 监控缓冲状态
-      if (isBuffering) {
-        print('Buffering... time: $time');
-      }
-    },
+  var audio = await AudioService.init(
+    builder: () => StreamService(
+      streamUriWebSocket: Uri.parse("ws://192.168.31.148:8765"),
+    ),
   );
+  await audio.play();
+  var item = MediaItem(id: "测试123", title: "测试123");
+  await audio.playMediaItem(item);
 
-  final SoundHandle handle = await SoLoud.instance.play(stream);
-
-  socket.events.listen((e) async {
-    switch (e) {
-      case TextDataReceived(text: final text):
-        print('Received Text: $text');
-
-      case BinaryDataReceived(data: final data):
-        SoLoud.instance.addAudioDataStream(stream, data);
-        if (SoLoud.instance.getBufferSize(stream) < 65536) {
-          SoLoud.instance.setPause(handle, true);
-        } else {
-          SoLoud.instance.setPause(handle, false);
-        }
-
-      case CloseReceived(code: final code, reason: final reason):
-        await SoLoud.instance.stop(handle);
-        print('Connection to server closed: $code [$reason]');
-    }
-  });
+  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {
