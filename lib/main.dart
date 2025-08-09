@@ -1,7 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:outline_aerial_client/pages/home.dart';
-import 'package:outline_aerial_client/pages/play.dart';
+import 'package:outline_aerial_client/pages/home_page.dart';
+import 'package:outline_aerial_client/widgets/play_widget.dart';
 import 'package:outline_aerial_client/services/stream_service.dart';
 
 void main() async {
