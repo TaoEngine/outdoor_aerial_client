@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'dart:async';
 
 class PlayStreamDesktop extends StatefulWidget {
   /// 在桌面端显示的串流页面测试
@@ -11,13 +12,6 @@ class PlayStreamDesktop extends StatefulWidget {
 
   @override
   State<PlayStreamDesktop> createState() => _PlayStreamDesktopState();
-}
-
-class _PlayStreamDesktopState extends State<PlayStreamDesktop> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
 }
 
 class PlayStreamMobile extends StatefulWidget {
@@ -68,6 +62,28 @@ class PlayStreamMobile extends StatefulWidget {
   State<PlayStreamMobile> createState() => _PlayStreamMobileState();
 }
 
+class TimeSlider extends StatefulWidget {
+  final DateTimeRange programTimeRange;
+  final Duration programTimeRefresh;
+  final VoidCallback onTimeReached;
+  const TimeSlider({
+    super.key,
+    required this.programTimeRange,
+    this.programTimeRefresh = const Duration(seconds: 1),
+    required this.onTimeReached,
+  });
+
+  @override
+  State<TimeSlider> createState() => _TimeSliderState();
+}
+
+class _PlayStreamDesktopState extends State<PlayStreamDesktop> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
 class _PlayStreamMobileState extends State<PlayStreamMobile> {
   /// 是否选择录制此节目
   ///
@@ -91,7 +107,7 @@ class _PlayStreamMobileState extends State<PlayStreamMobile> {
       child: Flex(
         direction: Axis.vertical,
         children: [
-          Expanded(
+          const Expanded(
             flex: 6,
             child: AspectRatio(aspectRatio: 1.0, child: Placeholder()),
           ),
@@ -127,7 +143,9 @@ class _PlayStreamMobileState extends State<PlayStreamMobile> {
                       icon: isFavorite
                           ? const Icon(TablerIcons.heart_filled)
                           : const Icon(TablerIcons.heart_plus),
-                      label: isFavorite ? Text("已添加喜欢") : Text("喜欢此节目"),
+                      label: isFavorite
+                          ? const Text("已添加喜欢")
+                          : const Text("喜欢此节目"),
                     ),
                   ],
                 ),
@@ -141,7 +159,7 @@ class _PlayStreamMobileState extends State<PlayStreamMobile> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(TablerIcons.users_group, size: 20),
+                    const Icon(TablerIcons.users_group, size: 20),
                     Text(
                       widget.programHost,
                       style: Theme.of(context).textTheme.bodyMedium,
@@ -154,7 +172,7 @@ class _PlayStreamMobileState extends State<PlayStreamMobile> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(TablerIcons.building_broadcast_tower, size: 20),
+                    const Icon(TablerIcons.building_broadcast_tower, size: 20),
                     Text(
                       widget.programBroadcasting,
                       style: Theme.of(context).textTheme.bodyMedium,
@@ -197,47 +215,80 @@ class _PlayStreamMobileState extends State<PlayStreamMobile> {
   }
 }
 
-class TimeSlider extends StatefulWidget {
-  final DateTimeRange programTimeRange;
-  final VoidCallback onTimeReached;
-  const TimeSlider({
-    super.key,
-    required this.programTimeRange,
-    required this.onTimeReached,
-  });
-
-  @override
-  State<TimeSlider> createState() => _TimeSliderState();
-}
-
 class _TimeSliderState extends State<TimeSlider> {
-  late DateTimeRange nowTimeRange;
-  late Timer _timer;
+  late DateTimeRange _nowTimeRange;
+  late Timer _programTimer;
 
   @override
-  void initState() {
-    super.initState();
-    nowTimeRange = DateTimeRange(
-      start: widget.programTimeRange.start,
-      end: DateTime.now(),
+  Widget build(BuildContext context) {
+    // 生成一下进度条该有的进度
+    final int nowtimeSpent = _nowTimeRange.duration.inMilliseconds;
+    final int programSpent = widget.programTimeRange.duration.inMilliseconds;
+    final double? indicatorValue = switch (nowtimeSpent / programSpent) {
+      >= 1 => 1,
+      <= 0 => null,
+      _ => nowtimeSpent / programSpent,
+    };
+
+    // 生成一下
+    final String startTimeTitle = tagGenerate(widget.programTimeRange.start);
+    final String stopTimeTitle = tagGenerate(widget.programTimeRange.end);
+
+    if (nowtimeSpent >= programSpent) widget.onTimeReached.call();
+    return Column(
+      spacing: 5,
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text("节目播出时间", style: Theme.of(context).textTheme.bodyMedium),
+        SizedBox(
+          width: 200,
+          child: LinearProgressIndicator(
+            minHeight: 10,
+            borderRadius: BorderRadius.circular(25),
+            value: indicatorValue,
+            // ignore: deprecated_member_use
+            year2023: false,
+          ),
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(startTimeTitle, style: Theme.of(context).textTheme.bodySmall),
+            Text(stopTimeTitle, style: Theme.of(context).textTheme.bodySmall),
+          ],
+        ),
+      ],
     );
-    _timer = Timer.periodic(Duration(seconds: 1), (_) {
-      setState(() {
-        nowTimeRange = DateTimeRange(
-          start: widget.programTimeRange.start,
-          end: DateTime.now(),
-        );
-      });
-    });
   }
 
   @override
   void dispose() {
-    _timer.cancel();
+    _programTimer.cancel();
     super.dispose();
   }
 
-  String timeTagGenerate(DateTime datetime) {
+  @override
+  void initState() {
+    super.initState();
+    _nowTimeRange = DateTimeRange(
+      start: widget.programTimeRange.start,
+      end: DateTime.now(),
+    );
+    _programTimer = Timer.periodic(
+      widget.programTimeRefresh,
+      (_) => setState(() {
+        _nowTimeRange = DateTimeRange(
+          start: widget.programTimeRange.start,
+          end: DateTime.now(),
+        );
+      }),
+    );
+  }
+
+  String tagGenerate(DateTime datetime) {
     String dateTag;
     dateTag = switch (datetime.hour) {
       <= 3 => "午夜",
@@ -255,48 +306,5 @@ class _TimeSliderState extends State<TimeSlider> {
         ":${datetime.minute.toString().length == 1 ? "0${datetime.minute}" : datetime.minute}";
 
     return dateTag;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    double timeSpent =
-        nowTimeRange.duration.inSeconds /
-        widget.programTimeRange.duration.inSeconds;
-
-    if (timeSpent >= 1) widget.onTimeReached.call();
-
-    final String startTimeTitle = timeTagGenerate(
-      widget.programTimeRange.start,
-    );
-
-    final String stopTimeTitle = timeTagGenerate(widget.programTimeRange.end);
-
-    return Column(
-      spacing: 5,
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text("节目播出时间", style: Theme.of(context).textTheme.bodyMedium),
-        SizedBox(
-          width: 200,
-          child: LinearProgressIndicator(
-            minHeight: 10,
-            borderRadius: BorderRadius.circular(25),
-            value: timeSpent >= 1 ? 1 : timeSpent,
-            // ignore: deprecated_member_use
-            year2023: false,
-          ),
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(startTimeTitle, style: Theme.of(context).textTheme.bodySmall),
-            Text(stopTimeTitle, style: Theme.of(context).textTheme.bodySmall),
-          ],
-        ),
-      ],
-    );
   }
 }

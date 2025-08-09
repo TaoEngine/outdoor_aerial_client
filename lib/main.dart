@@ -11,7 +11,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: "室外天线", home: MainPage());
+    return const MaterialApp(title: "室外天线", home: MainPage());
   }
 }
 
@@ -26,7 +26,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return MainNavigation(
-      tunerPage: TunerPage(),
+      tunerPage: const TunerPage(),
       playlistPage: Container(),
       favoritePage: Container(),
       settingsPage: Container(),
