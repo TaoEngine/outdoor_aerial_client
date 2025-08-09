@@ -28,10 +28,10 @@ class MainNavigation extends StatefulWidget {
 
 class _MainNavigationState extends State<MainNavigation> {
   /// 屏幕大小在多少的时候实施切换
-  static const double screenCustomWidth = 640;
+  static const double _screenCustomWidth = 640;
 
   /// APP包含这些主页面
-  static const Map<String, IconData> _homeNavigationUnit = {
+  static const Map<String, IconData> _mainNavigationUnit = {
     "调谐器": TablerIcons.antenna,
     "节目单": TablerIcons.timeline_event_text,
     "我喜欢": TablerIcons.heart,
@@ -45,10 +45,10 @@ class _MainNavigationState extends State<MainNavigation> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    final NavigationBar? homeNavigationBar = switch (screenWidth) {
-      > screenCustomWidth => null,
+    final NavigationBar? mainNavigationBar = switch (screenWidth) {
+      > _screenCustomWidth => null,
       _ => NavigationBar(
-        destinations: _homeNavigationUnit.entries
+        destinations: _mainNavigationUnit.entries
             .map(
               (entry) => NavigationDestination(
                 icon: Icon(entry.value),
@@ -63,10 +63,10 @@ class _MainNavigationState extends State<MainNavigation> {
       ),
     };
 
-    final NavigationRail? homeNavigationRail = switch (screenWidth) {
-      <= screenCustomWidth => null,
+    final NavigationRail? mainNavigationRail = switch (screenWidth) {
+      <= _screenCustomWidth => null,
       _ => NavigationRail(
-        destinations: _homeNavigationUnit.entries
+        destinations: _mainNavigationUnit.entries
             .map(
               (entry) => NavigationRailDestination(
                 icon: Icon(entry.value),
@@ -83,12 +83,20 @@ class _MainNavigationState extends State<MainNavigation> {
       ),
     };
 
+    final Widget mainNavigationChild = switch (selectedIndex) {
+      0 => widget.tunerPage,
+      1 => widget.playlistPage,
+      2 => widget.favoritePage,
+      3 => widget.settingsPage,
+      _ => Center(child: Text("出错了")), // TODO: 其实这里应该有个全局报错页面的
+    };
+
     return Scaffold(
-      bottomNavigationBar: homeNavigationBar,
+      bottomNavigationBar: mainNavigationBar,
       body: Row(
         children: <Widget>[
-          ?homeNavigationRail as Widget?,
-          Expanded(child: widget.tunerPage),
+          ?mainNavigationRail as Widget?,
+          Expanded(child: mainNavigationChild),
         ],
       ),
     );
