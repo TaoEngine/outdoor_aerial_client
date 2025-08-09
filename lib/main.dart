@@ -1,7 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:outline_aerial_client/pages/tuner_page.dart';
 import 'package:outline_aerial_client/widgets/main_navigation_widget.dart';
-import 'package:outline_aerial_client/widgets/play_widget.dart';
 import 'package:outline_aerial_client/services/stream_service.dart';
 
 void main() async {
@@ -37,7 +37,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return MainNavigation(
-      tunerPage: Container(),
+      tunerPage: TunerPage(),
       playlistPage: Container(),
       favoritePage: Container(),
       settingsPage: Container(),
