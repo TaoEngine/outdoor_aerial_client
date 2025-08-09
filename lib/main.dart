@@ -1,6 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:outline_aerial_client/pages/home_page.dart';
+import 'package:outline_aerial_client/widgets/main_navigation_widget.dart';
 import 'package:outline_aerial_client/widgets/play_widget.dart';
 import 'package:outline_aerial_client/services/stream_service.dart';
 
@@ -36,8 +36,8 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
-    return HomeNavigation(
-      child: PlayStreamMobile(
+    return MainNavigation(
+      tunerPage: PlayStreamMobile(
         programName: '节目名称',
         programTitle: '节目口号',
         programHost: '节目主持人',
@@ -61,6 +61,9 @@ class _MainPageState extends State<MainPage> {
         ),
         onTimeReached: () => print("时间到了"),
       ),
+      playlistPage: Container(),
+      favoritePage: Container(),
+      settingsPage: Container(),
     );
   }
 }

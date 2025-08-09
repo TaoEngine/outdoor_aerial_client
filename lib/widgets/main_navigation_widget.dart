@@ -1,15 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
-class HomeNavigation extends StatefulWidget {
-  final Widget child;
-  const HomeNavigation({super.key, required this.child});
+class MainNavigation extends StatefulWidget {
+  /// “调谐器”界面
+  final Widget tunerPage;
+
+  /// “节目单”界面
+  final Widget playlistPage;
+
+  /// “我喜欢”界面
+  final Widget favoritePage;
+
+  /// “调设置”界面
+  final Widget settingsPage;
+
+  const MainNavigation({
+    super.key,
+    required this.tunerPage,
+    required this.playlistPage,
+    required this.favoritePage,
+    required this.settingsPage,
+  });
 
   @override
-  State<HomeNavigation> createState() => _HomeNavigationState();
+  State<MainNavigation> createState() => _MainNavigationState();
 }
 
-class _HomeNavigationState extends State<HomeNavigation> {
+class _MainNavigationState extends State<MainNavigation> {
   /// 屏幕大小在多少的时候实施切换
   static const double screenCustomWidth = 640;
 
@@ -71,7 +88,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
       body: Row(
         children: <Widget>[
           ?homeNavigationRail as Widget?,
-          Expanded(child: widget.child),
+          Expanded(child: widget.tunerPage),
         ],
       ),
     );
