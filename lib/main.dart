@@ -37,30 +37,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return MainNavigation(
-      tunerPage: PlayStreamMobile(
-        programName: '节目名称',
-        programTitle: '节目口号',
-        programHost: '节目主持人',
-        programBroadcasting: '节目所属广播电台',
-        programDate: [],
-        programTime: DateTimeRange(
-          start: DateTime.now().copyWith(
-            month: 8,
-            day: 8,
-            hour: 12,
-            minute: 00,
-            second: 00,
-          ),
-          end: DateTime.now().copyWith(
-            month: 8,
-            day: 8,
-            hour: 14,
-            minute: 00,
-            second: 00,
-          ),
-        ),
-        onTimeReached: () => print("时间到了"),
-      ),
+      tunerPage: Container(),
       playlistPage: Container(),
       favoritePage: Container(),
       settingsPage: Container(),
