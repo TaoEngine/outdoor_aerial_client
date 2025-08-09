@@ -284,6 +284,7 @@ class _TimeSliderState extends State<TimeSlider> {
             minHeight: 10,
             borderRadius: BorderRadius.circular(25),
             value: timeSpent >= 1 ? 1 : timeSpent,
+            // ignore: deprecated_member_use
             year2023: false,
           ),
         ),
