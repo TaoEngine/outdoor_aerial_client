@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:outline_aerial_client/pages/tuner_page.dart';
 import 'package:outline_aerial_client/widgets/main_navigation_widget.dart';
 
-void main() async {
+void main() {
   runApp(const MainApp());
 }
 
@@ -25,12 +25,6 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
-    return MainNavigation(
-      tunerPage: const TunerMainPage(),
-      playlistPage: Container(),
-      favoritePage: Container(),
-      settingsPage: Container(),
-      actionButton: null,
-    );
+    return MainNavigation();
   }
 }
