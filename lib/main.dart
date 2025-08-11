@@ -30,6 +30,7 @@ class _MainPageState extends State<MainPage> {
       playlistPage: Container(),
       favoritePage: Container(),
       settingsPage: Container(),
+      actionButton: null,
     );
   }
 }

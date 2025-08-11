@@ -12,7 +12,12 @@ class TunerMainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return switch (true) {
+    // floatingActionButton: FloatingActionButton.extended(
+    //   onPressed: () {},
+    //   icon: Icon(TablerIcons.chart_arcs),
+    //   label: const Text("搜索节目"),
+    // ),
+    return switch (false) {
       false => const NoProgramPage(),
       _ => TunerPage(),
     };
@@ -45,24 +50,16 @@ class NoProgramPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        icon: Icon(TablerIcons.chart_arcs),
-        label: const Text("搜索节目"),
-      ),
-      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-      body: Column(
+    return Center(
+      child: Column(
         spacing: 10,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // TODO: 弄个类似于电视雪花屏一样的背景，表示无节目
           const Icon(TablerIcons.antenna_off, size: 100),
-          Text(
-            "没有节目哦！试着搜索一些...",
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          Text("没有节目哦！试着搜索一些...", style: Theme.of(context).textTheme.titleLarge),
         ],
       ),
     );
