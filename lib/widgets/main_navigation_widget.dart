@@ -14,12 +14,16 @@ class MainNavigation extends StatefulWidget {
   /// “调设置”界面
   final Widget settingsPage;
 
+  /// 放在左下角以供操作的FAB
+  final FloatingActionButton? actionButton;
+
   const MainNavigation({
     super.key,
     required this.tunerPage,
     required this.playlistPage,
     required this.favoritePage,
     required this.settingsPage,
+    required this.actionButton,
   });
 
   @override
@@ -49,12 +53,7 @@ class _MainNavigationState extends State<MainNavigation> {
       > _screenCustomWidth => null,
       _ => NavigationBar(
         destinations: _mainNavigationUnit.entries
-            .map(
-              (entry) => NavigationDestination(
-                icon: Icon(entry.value),
-                label: entry.key,
-              ),
-            )
+            .map((entry) => NavigationDestination(icon: Icon(entry.value), label: entry.key))
             .toList(),
         selectedIndex: selectedIndex,
         onDestinationSelected: (value) => setState(() {
@@ -68,10 +67,7 @@ class _MainNavigationState extends State<MainNavigation> {
       _ => NavigationRail(
         destinations: _mainNavigationUnit.entries
             .map(
-              (entry) => NavigationRailDestination(
-                icon: Icon(entry.value),
-                label: Text(entry.key),
-              ),
+              (entry) => NavigationRailDestination(icon: Icon(entry.value), label: Text(entry.key)),
             )
             .toList(),
         selectedIndex: selectedIndex,

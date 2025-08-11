@@ -26,10 +26,11 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return MainNavigation(
-      tunerPage: const TunerPage(),
+      tunerPage: const TunerMainPage(),
       playlistPage: Container(),
       favoritePage: Container(),
       settingsPage: Container(),
+      actionButton: null,
     );
   }
 }
