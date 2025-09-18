@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:outline_aerial_client/pages/tuner_page.dart';
-import 'package:outline_aerial_client/widgets/main_navigation_widget.dart';
+
+import 'package:go_router/go_router.dart';
+
+import 'package:outline_aerial_client/pages/main_page.dart';
+import 'package:outline_aerial_client/pages/splash_page.dart';
 
 void main() {
   runApp(const MainApp());
@@ -11,20 +14,27 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(title: "室外天线", home: MainPage());
+    return MaterialApp.router(title: "室外天线", routerConfig: router);
   }
 }
 
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
-
-  @override
-  State<MainPage> createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  @override
-  Widget build(BuildContext context) {
-    return MainNavigation();
-  }
-}
+final GoRouter router = GoRouter(
+  initialLocation: "/",
+  routes: <RouteBase>[
+    GoRoute(
+      path: "/",
+      name: "splash",
+      builder: (context, state) => const SplashPage(),
+    ),
+    GoRoute(
+      path: "/tuner",
+      name: "ThisTuner",
+      builder: (context, state) {
+        return Scaffold(
+          body: Placeholder(),
+          bottomNavigationBar: MainNavigation(),
+        );
+      },
+    ),
+  ],
+);

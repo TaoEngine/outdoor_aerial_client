@@ -1,44 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
-// class MainPage extends StatefulWidget {
-//   /// “调谐器”界面
-//   final Widget tunerPage;
+class MainNavigation extends StatelessWidget {
+  const MainNavigation({super.key});
 
-//   /// “节目单”界面
-//   final Widget playlistPage;
+  static const Map<String, IconData> _mainNavigationUnit = {
+    "调谐器": TablerIcons.antenna,
+    "节目单": TablerIcons.timeline_event_text,
+    "我喜欢": TablerIcons.heart,
+    "改设置": TablerIcons.settings,
+  };
 
-//   /// “我喜欢”界面
-//   final Widget favoritePage;
+  @override
+  Widget build(BuildContext context) {
+    return NavigationBar(
+      destinations: _mainNavigationUnit.entries
+          .map(
+            (entry) => NavigationDestination(
+              icon: Icon(entry.value),
+              label: entry.key,
+            ),
+          )
+          .toList(),
+    );
+  }
+}
 
-//   /// “调设置”界面
-//   final Widget settingsPage;
-
-//   /// 放在左下角以供操作的FAB
-//   final FloatingActionButton? actionButton;
-
-//   const MainPage({
-//     super.key,
-//     required this.tunerPage,
-//     required this.playlistPage,
-//     required this.favoritePage,
-//     required this.settingsPage,
-//     this.actionButton,
-//   });
-
-//   @override
-//   State<MainPage> createState() => _MainPageState();
-// }
-
-// class _MainPageState extends State<MainPage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Row(
-//         children: <Widget>[
-//           ?mainNavigationRail as Widget?,
-//           Expanded(child: mainNavigationChild),
-//         ],
-//       ),
-//     );
-//   }
-// }
