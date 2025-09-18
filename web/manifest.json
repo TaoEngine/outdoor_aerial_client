@@ -1,11 +1,11 @@
 {
-    "name": "outline_aerial_client",
-    "short_name": "outline_aerial_client",
+    "name": "Outdoor Aerial Client",
+    "short_name": "Outdoor Aerial",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Outdoor Aerial WebClient",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

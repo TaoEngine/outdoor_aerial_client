@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 
-import 'package:outline_aerial_client/pages/main_page.dart';
-import 'package:outline_aerial_client/pages/splash_page.dart';
+import 'package:outdoor_aerial_client/pages/main_page.dart';
+import 'package:outdoor_aerial_client/pages/splash_page.dart';
 
 void main() {
   runApp(const MainApp());
