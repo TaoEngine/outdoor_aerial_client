@@ -23,18 +23,16 @@ final GoRouter router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: "/",
-      name: "splash",
+      name: "Splash",
       builder: (context, state) => const SplashPage(),
     ),
     GoRoute(
-      path: "/tuner",
-      name: "ThisTuner",
+      path: "/main",
+      name: "MainPage",
       builder: (context, state) {
-        return Scaffold(
-          body: Placeholder(),
-          bottomNavigationBar: MainNavigation(),
-        );
+        return MainPage();
       },
     ),
   ],
 );
+

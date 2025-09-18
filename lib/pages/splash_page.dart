@@ -19,11 +19,7 @@ class SplashPage extends StatelessWidget {
       asyncNavigationCallback: () async {
         await Future.delayed(const Duration(seconds: 3));
         if (context.mounted) {
-          GoRouter.of(context).goNamed("ThisTuner");
-          // 也可以根据设置选择跳转到别的页面去
-          // GoRouter.of(context).goNamed("Playlist");
-          // GoRouter.of(context).goNamed("Favorite");
-          // GoRouter.of(context).goNamed("Settings");
+          GoRouter.of(context).goNamed("MainPage");
         }
       },
     );
