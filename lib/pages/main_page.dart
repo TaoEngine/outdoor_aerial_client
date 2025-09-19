@@ -59,20 +59,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               Placeholder(),
             ],
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: SizedBox(
-              height: 120,
-              width: switch (MediaQuery.sizeOf(context).width) {
-                >= 600 => 600,
-                final width => width,
-              },
-              child: Padding(
-                padding: EdgeInsetsGeometry.all(10),
-                child: Expanded(child: Card.filled()),
-              ),
-            ),
-          ),
+          BottomPlayWidget(),
         ],
       ),
       bottomNavigationBar: NavigationBar(
@@ -105,6 +92,82 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           });
         },
         selectedIndex: _index,
+      ),
+    );
+  }
+}
+
+class BottomPlayWidget extends StatelessWidget {
+  const BottomPlayWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: SizedBox(
+        height: 120,
+        width: switch (MediaQuery.sizeOf(context).width) {
+          >= 600 => 600,
+          final width => width,
+        },
+        child: Padding(
+          padding: EdgeInsetsGeometry.all(10),
+          child: Card.filled(
+            clipBehavior: Clip.antiAlias,
+            child: Stack(
+              children: [
+                Flex(
+                  direction: Axis.horizontal,
+                  children: [
+                    Expanded(
+                      flex: 8,
+                      child: ClipRRect(
+                        clipBehavior: Clip.antiAlias,
+                        borderRadius: BorderRadiusGeometry.circular(10),
+                        child: Container(
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                        ),
+                      ),
+                    ),
+                    Expanded(flex: 2, child: Container()),
+                  ],
+                ),
+                Flex(
+                  direction: Axis.horizontal,
+                  children: [
+                    ClipRRect(
+                      clipBehavior: Clip.antiAlias,
+                      borderRadius: BorderRadiusGeometry.circular(10),
+                      child: Image.network(
+                        "https://p2.music.126.net/cmoE8PsdK_Yn9VJ8ZVCGrw==/109951170507596121.jpg",
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsetsGeometry.only(left: 15, right: 15),
+                        child: Column(
+                          spacing: 5,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "跳楼机·LBI利比",
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            Text(
+                              "音乐爱假日 | 安徽音乐广播",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
