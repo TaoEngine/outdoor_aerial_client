@@ -47,14 +47,32 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           ),
         ],
       ),
-      body: TabBarView(
-        controller: _tabController,
-        physics: const NeverScrollableScrollPhysics(),
-        children: <Widget>[
-          TunerPage(),
-          Placeholder(),
-          Placeholder(),
-          Placeholder(),
+      body: Stack(
+        children: [
+          TabBarView(
+            controller: _tabController,
+            physics: const NeverScrollableScrollPhysics(),
+            children: <Widget>[
+              TunerPage(),
+              Placeholder(),
+              Placeholder(),
+              Placeholder(),
+            ],
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SizedBox(
+              height: 120,
+              width: switch (MediaQuery.sizeOf(context).width) {
+                >= 600 => 600,
+                final width => width,
+              },
+              child: Padding(
+                padding: EdgeInsetsGeometry.all(10),
+                child: Expanded(child: Card.filled()),
+              ),
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: NavigationBar(

@@ -12,7 +12,7 @@ class _TunerPageState extends State<TunerPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(initialIndex: 0, length: 8, vsync: this);
+    _tabController = TabController(initialIndex: 0, length: 1, vsync: this);
   }
 
   @override
@@ -23,53 +23,39 @@ class _TunerPageState extends State<TunerPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         TabBar(
           controller: _tabController,
+          indicatorSize: TabBarIndicatorSize.tab,
+          tabAlignment: TabAlignment.center,
           isScrollable: true,
+          dividerHeight: 0,
           tabs: [
             Tab(
-              icon: Image.network(
-                "https://ytmedia.radio.cn/CCYT%2F202407%2F23%2F20%2FySDxekAkYODX0CiElAjIfhrzA5Af0ugnlKkGHhTboa2024072320988.jpg",
-              ),
-            ),
-            Tab(
-              icon: Image.network(
-                "https://ytmedia.radio.cn/CCYT%2F202407%2F23%2F20%2FPIaFilaog3C7OCpvyjBJ1soT40EMErj1y2024072320478.jpg",
-              ),
-            ),
-            Tab(
-              icon: Image.network(
-                "https://ytmedia.radio.cn/CCYT%2F202307%2F19%2F14%2Fr40Lbd5da1p3BFPDF0JuyNmJILvsZ5DLnoRWk8Cdfzy2023071914352.jpg",
-              ),
-            ),
-            Tab(
-              icon: Image.network(
-                "https://ytmedia.radio.cn/CCYT%2F202407%2F23%2F20%2Fe3Tt7oCvlk7Jqvc9quZuStEXorRqMLa8ysWS2024072320460.jpg",
-              ),
-            ),
-            Tab(
-              icon: Image.network(
-                "https://ytmedia.radio.cn/CCYT%2F202407%2F23%2F20%2FJwbi4NDQ2024072320225.png",
-              ),
-            ),
-            Tab(
-              icon: Image.network(
-                "https://ytmedia.radio.cn/CCYT%2F202407%2F23%2F20%2FTWUnd3Dx91UHm2024072320530.jpg",
-              ),
-            ),
-            Tab(
-              icon: Image.network(
-                "https://ytmedia.radio.cn/CCYT%2F202407%2F23%2F21%2FqrAYKFsw1eT1zBqivRaAw7wqDTub9JBBRe2024072321762.PNG",
-              ),
-            ),
-            Tab(
-              icon: Image.network(
-                "https://ytmedia.radio.cn/CCYT%2F202407%2F23%2F20%2F7UD3U0bncsbHFPya0MF2024072320388.jpg",
+              icon: SizedBox(
+                width: 36,
+                height: 36,
+                child: Image.network(
+                  "https://ytmedia.radio.cn/CCYT%2F202407%2F23%2F21%2FqrAYKFsw1eT1zBqivRaAw7wqDTub9JBBRe2024072321762.PNG",
+                ),
               ),
             ),
           ],
+        ),
+        Padding(
+          padding: EdgeInsetsGeometry.only(top: 10, bottom: 10),
+          child: SizedBox(
+            height: 100,
+            child: ListView(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              scrollDirection: Axis.horizontal,
+              children: [SizedBox(width: 300, child: Card.filled())],
+            ),
+          ),
         ),
       ],
     );
