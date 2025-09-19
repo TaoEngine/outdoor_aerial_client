@@ -16,22 +16,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(initialIndex: 0, length: 4, vsync: this);
-    _tabController.addListener(_handleTabBar);
   }
 
   @override
   void dispose() {
-    _tabController.removeListener(_handleTabBar);
     _tabController.dispose();
     super.dispose();
-  }
-
-  void _handleTabBar() {
-    if (!_tabController.indexIsChanging) {
-      setState(() {
-        _index = _tabController.index;
-      });
-    }
   }
 
   @override
@@ -39,6 +29,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     return Scaffold(
       body: TabBarView(
         controller: _tabController,
+        physics: const NeverScrollableScrollPhysics(),
         children: <Widget>[
           Placeholder(),
           Placeholder(),
