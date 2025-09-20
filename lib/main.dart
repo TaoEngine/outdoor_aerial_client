@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import 'package:outdoor_aerial_client/pages/main_page.dart';
 import 'package:outdoor_aerial_client/pages/splash_page.dart';
-import 'package:outdoor_aerial_client/widgets/play_widget.dart';
 
 void main() {
   runApp(const MainApp());
@@ -27,15 +26,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: "/tuner/play",
       name: "PlayPage",
-      builder: (context, state) => PlayStreamMobile(
-        programName: "测试",
-        programTitle: "测试Slogan",
-        programHost: "博主",
-        programBroadcasting: "测试电台",
-        programDate: [DateTime.now()],
-        programTime: DateTimeRange(start: DateTime.now(), end: DateTime.now()),
-        onTimeReached: () {},
-      ),
+      builder: (context, state) => Placeholder()
     ),
   ],
 );

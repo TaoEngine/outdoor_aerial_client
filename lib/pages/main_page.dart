@@ -50,9 +50,10 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           BottomPlayWidget(
             programTitle: '某节目Slogan',
             programName: '某节目',
-            broadcastName: '某频道',
+            programBroadcasting: '某频道',
             programImage: null,
             onStopButtomTap: () {},
+            programProgress: 0.2,
           ),
         ],
       ),
@@ -83,7 +84,10 @@ class BottomPlayWidget extends StatelessWidget {
   final String programName;
 
   /// 电台名称
-  final String broadcastName;
+  final String programBroadcasting;
+
+  /// 节目播出进度
+  final double programProgress;
 
   /// 可选描述节目的图片
   final Image? programImage;
@@ -96,7 +100,8 @@ class BottomPlayWidget extends StatelessWidget {
     super.key,
     required this.programTitle,
     required this.programName,
-    required this.broadcastName,
+    required this.programBroadcasting,
+    required this.programProgress,
     required this.onStopButtomTap,
     this.programImage,
   });
@@ -119,50 +124,50 @@ class BottomPlayWidget extends StatelessWidget {
               onTap: () => GoRouter.of(context).goNamed("PlayPage"),
               child: Stack(
                 children: [
-                  Flex(
-                    direction: Axis.horizontal,
-                    children: [
-                      Expanded(flex: 8, child: Ink(color: Theme.of(context).colorScheme.tertiaryContainer)),
-                      Expanded(flex: 2, child: Ink()),
-                    ],
+                  FractionallySizedBox(
+                    alignment: Alignment.centerLeft,
+                    widthFactor: programProgress,
+                    child: Ink(color: Theme.of(context).colorScheme.tertiaryContainer),
                   ),
-                  Flex(
-                    direction: Axis.horizontal,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       ClipRRect(
                         clipBehavior: Clip.antiAlias,
                         borderRadius: BorderRadiusGeometry.circular(10),
                         child: AspectRatio(
                           aspectRatio: 1,
-                          child: programImage ?? Center(child: Icon(TablerIcons.music_question)),
+                          child: programImage ?? Center(child: Icon(TablerIcons.radio)),
                         ),
                       ),
-                      Expanded(
-                        flex: 7,
-                        child: Padding(
-                          padding: EdgeInsetsGeometry.only(left: 15, right: 15),
-                          child: Column(
-                            spacing: 5,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(programTitle, style: Theme.of(context).textTheme.bodyLarge),
-                              Text("$programName|$broadcastName", style: Theme.of(context).textTheme.bodySmall),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Center(
-                          child: IconButton.outlined(
-                            onPressed: () => onStopButtomTap.call(),
-                            icon: Icon(TablerIcons.player_stop),
-                            tooltip: "停止播放",
-                          ),
+                      Padding(
+                        padding: EdgeInsetsGeometry.only(left: 15, right: 15),
+                        child: Column(
+                          spacing: 5,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(programTitle, style: Theme.of(context).textTheme.bodyLarge),
+                            Text("$programName|$programBroadcasting", style: Theme.of(context).textTheme.bodySmall),
+                          ],
                         ),
                       ),
                     ],
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: Center(
+                        child: IconButton.outlined(
+                          onPressed: () => onStopButtomTap.call(),
+                          icon: Icon(TablerIcons.player_stop),
+                          tooltip: "停止播放",
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
