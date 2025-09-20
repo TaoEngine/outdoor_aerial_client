@@ -11,7 +11,15 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
+  static const mainNavigationBarDestinations = <Widget>[
+    NavigationDestination(icon: Icon(TablerIcons.antenna), label: "调谐器", tooltip: "调谐器"),
+    NavigationDestination(icon: Icon(TablerIcons.timeline_event_text), label: "节目单", tooltip: "节目单"),
+    NavigationDestination(icon: Icon(TablerIcons.heart), label: "我喜欢", tooltip: "我喜欢"),
+    NavigationDestination(icon: Icon(TablerIcons.settings), label: "改设置", tooltip: "改设置"),
+  ];
+
   late final TabController _tabController;
+
   int _index = 0;
 
   @override
@@ -31,12 +39,34 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Icon(TablerIcons.antenna),
-        leading: IconButton(onPressed: () {}, icon: Icon(TablerIcons.search), tooltip: "查找"),
+        title: AspectRatio(
+          aspectRatio: 1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            spacing: 5,
+            children: [
+              Icon(TablerIcons.antenna),
+              Text("室外天线", style: Theme.of(context).textTheme.titleSmall),
+            ],
+          ),
+        ),
+        leading: IconButton(
+          onPressed: () => GoRouter.of(context).goNamed("SearchPage"),
+          icon: Icon(TablerIcons.search),
+          tooltip: "查找节目",
+        ),
         actions: [
-          Padding(
-            padding: EdgeInsetsGeometry.all(8),
-            child: IconButton(onPressed: () {}, icon: Icon(TablerIcons.radar), tooltip: "搜台"),
+          AspectRatio(
+            aspectRatio: 1,
+            child: Center(
+              child: IconButton(
+                onPressed: () => GoRouter.of(context).goNamed("ScanPage"),
+                icon: Icon(TablerIcons.radar),
+                tooltip: "频率搜索",
+              ),
+            ),
           ),
         ],
       ),
@@ -58,12 +88,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         ],
       ),
       bottomNavigationBar: NavigationBar(
-        destinations: const <Widget>[
-          NavigationDestination(icon: Icon(TablerIcons.antenna), label: "调谐器", tooltip: "调谐器"),
-          NavigationDestination(icon: Icon(TablerIcons.timeline_event_text), label: "节目单", tooltip: "节目单"),
-          NavigationDestination(icon: Icon(TablerIcons.heart), label: "我喜欢", tooltip: "我喜欢"),
-          NavigationDestination(icon: Icon(TablerIcons.settings), label: "改设置", tooltip: "改设置"),
-        ],
+        destinations: mainNavigationBarDestinations,
         onDestinationSelected: (value) {
           _index = value;
           setState(() {
