@@ -107,7 +107,7 @@ class BottomPlayWidget extends StatelessWidget {
       child: SizedBox(
         height: 120,
         width: switch (MediaQuery.sizeOf(context).width) {
-          >= 600 => 600,
+          >= 500 => 500,
           final width => width,
         },
         child: Padding(
@@ -143,6 +143,7 @@ class BottomPlayWidget extends StatelessWidget {
                         ),
                       ),
                       Expanded(
+                        flex: 7,
                         child: Padding(
                           padding: EdgeInsetsGeometry.only(left: 15, right: 15),
                           child: Column(
@@ -159,6 +160,16 @@ class BottomPlayWidget extends StatelessWidget {
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Center(
+                          child: IconButton.outlined(
+                            onPressed: () {},
+                            icon: Icon(TablerIcons.player_stop),
+                            tooltip: "停止播放",
                           ),
                         ),
                       ),
