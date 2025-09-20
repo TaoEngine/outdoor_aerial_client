@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   audio_service: ^0.18.18
   another_flutter_splash_screen: ^1.2.1
   flutter_tabler_icons: ^1.43.0
@@ -24,3 +26,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
