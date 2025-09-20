@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:go_router/go_router.dart';
 import 'package:outdoor_aerial_client/pages/tuner/tuner_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -31,19 +32,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       appBar: AppBar(
         centerTitle: true,
         title: Icon(TablerIcons.antenna),
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(TablerIcons.search),
-          tooltip: "查找",
-        ),
+        leading: IconButton(onPressed: () {}, icon: Icon(TablerIcons.search), tooltip: "查找"),
         actions: [
           Padding(
             padding: EdgeInsetsGeometry.all(8),
-            child: IconButton(
-              onPressed: () {},
-              icon: Icon(TablerIcons.radar),
-              tooltip: "搜台",
-            ),
+            child: IconButton(onPressed: () {}, icon: Icon(TablerIcons.radar), tooltip: "搜台"),
           ),
         ],
       ),
@@ -52,38 +45,23 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           TabBarView(
             controller: _tabController,
             physics: const NeverScrollableScrollPhysics(),
-            children: <Widget>[
-              TunerPage(),
-              Placeholder(),
-              Placeholder(),
-              Placeholder(),
-            ],
+            children: <Widget>[TunerPage(), Placeholder(), Placeholder(), Placeholder()],
           ),
-          BottomPlayWidget(),
+          BottomPlayWidget(
+            programTitle: '某节目Slogan',
+            programName: '某节目',
+            broadcastName: '某频道',
+            programImage: null,
+            onStopButtomTap: () {},
+          ),
         ],
       ),
       bottomNavigationBar: NavigationBar(
         destinations: const <Widget>[
-          NavigationDestination(
-            icon: Icon(TablerIcons.antenna),
-            label: "调谐器",
-            tooltip: "调谐器",
-          ),
-          NavigationDestination(
-            icon: Icon(TablerIcons.timeline_event_text),
-            label: "节目单",
-            tooltip: "节目单",
-          ),
-          NavigationDestination(
-            icon: Icon(TablerIcons.heart),
-            label: "我喜欢",
-            tooltip: "我喜欢",
-          ),
-          NavigationDestination(
-            icon: Icon(TablerIcons.settings),
-            label: "改设置",
-            tooltip: "改设置",
-          ),
+          NavigationDestination(icon: Icon(TablerIcons.antenna), label: "调谐器", tooltip: "调谐器"),
+          NavigationDestination(icon: Icon(TablerIcons.timeline_event_text), label: "节目单", tooltip: "节目单"),
+          NavigationDestination(icon: Icon(TablerIcons.heart), label: "我喜欢", tooltip: "我喜欢"),
+          NavigationDestination(icon: Icon(TablerIcons.settings), label: "改设置", tooltip: "改设置"),
         ],
         onDestinationSelected: (value) {
           _index = value;
@@ -98,7 +76,30 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 }
 
 class BottomPlayWidget extends StatelessWidget {
-  const BottomPlayWidget({super.key});
+  /// 节目的主标题，包括 Slogan 或者歌曲的名称
+  final String programTitle;
+
+  /// 节目名称
+  final String programName;
+
+  /// 电台名称
+  final String broadcastName;
+
+  /// 可选描述节目的图片
+  final Image? programImage;
+
+  /// 按下停止键需要做的事情
+  final VoidCallback onStopButtomTap;
+
+  /// 底部播放器组件
+  const BottomPlayWidget({
+    super.key,
+    required this.programTitle,
+    required this.programName,
+    required this.broadcastName,
+    required this.onStopButtomTap,
+    this.programImage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -115,20 +116,13 @@ class BottomPlayWidget extends StatelessWidget {
           child: Card.filled(
             clipBehavior: Clip.antiAlias,
             child: InkWell(
-              onTap: () {},
+              onTap: () => GoRouter.of(context).goNamed("PlayPage"),
               child: Stack(
                 children: [
                   Flex(
                     direction: Axis.horizontal,
                     children: [
-                      Expanded(
-                        flex: 8,
-                        child: Ink(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.tertiaryContainer,
-                        ),
-                      ),
+                      Expanded(flex: 8, child: Ink(color: Theme.of(context).colorScheme.tertiaryContainer)),
                       Expanded(flex: 2, child: Ink()),
                     ],
                   ),
@@ -138,8 +132,9 @@ class BottomPlayWidget extends StatelessWidget {
                       ClipRRect(
                         clipBehavior: Clip.antiAlias,
                         borderRadius: BorderRadiusGeometry.circular(10),
-                        child: Image.network(
-                          "https://p2.music.126.net/cmoE8PsdK_Yn9VJ8ZVCGrw==/109951170507596121.jpg",
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: programImage ?? Center(child: Icon(TablerIcons.music_question)),
                         ),
                       ),
                       Expanded(
@@ -151,14 +146,8 @@ class BottomPlayWidget extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "跳楼机·LBI利比",
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                              Text(
-                                "音乐爱假日 | 安徽音乐广播",
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
+                              Text(programTitle, style: Theme.of(context).textTheme.bodyLarge),
+                              Text("$programName|$broadcastName", style: Theme.of(context).textTheme.bodySmall),
                             ],
                           ),
                         ),
@@ -167,7 +156,7 @@ class BottomPlayWidget extends StatelessWidget {
                         flex: 3,
                         child: Center(
                           child: IconButton.outlined(
-                            onPressed: () {},
+                            onPressed: () => onStopButtomTap.call(),
                             icon: Icon(TablerIcons.player_stop),
                             tooltip: "停止播放",
                           ),

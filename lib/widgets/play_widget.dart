@@ -97,119 +97,89 @@ class _PlayStreamMobileState extends State<PlayStreamMobile> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsetsGeometry.only(
-        left: 60,
-        right: 60,
-        top: 40,
-        bottom: 20,
-      ),
-      child: Flex(
-        direction: Axis.vertical,
-        children: [
-          const Expanded(
-            flex: 6,
-            child: AspectRatio(aspectRatio: 1.0, child: Placeholder()),
-          ),
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsetsGeometry.only(left: 60, right: 60, top: 40, bottom: 20),
+        child: Flex(
+          direction: Axis.vertical,
+          children: [
+            const Expanded(flex: 6, child: AspectRatio(aspectRatio: 1.0, child: Placeholder())),
 
-          Expanded(
-            flex: 3,
-            child: Column(
-              spacing: 5,
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      widget.programTitle,
-                      style: Theme.of(context).textTheme.headlineLarge,
-                    ),
-                    TextButton.icon(
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all<Color>(
-                          Theme.of(context).colorScheme.secondaryContainer,
+            Expanded(
+              flex: 3,
+              child: Column(
+                spacing: 5,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(widget.programTitle, style: Theme.of(context).textTheme.headlineLarge),
+                      TextButton.icon(
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all<Color>(
+                            Theme.of(context).colorScheme.secondaryContainer,
+                          ),
+                          foregroundColor: WidgetStateProperty.all<Color>(
+                            Theme.of(context).colorScheme.onSecondaryContainer,
+                          ),
                         ),
-                        foregroundColor: WidgetStateProperty.all<Color>(
-                          Theme.of(context).colorScheme.onSecondaryContainer,
-                        ),
+                        onPressed: () => setState(() {
+                          isFavorite = !isFavorite;
+                        }),
+                        icon: isFavorite ? const Icon(TablerIcons.heart_filled) : const Icon(TablerIcons.heart_plus),
+                        label: isFavorite ? const Text("已添加喜欢") : const Text("喜欢此节目"),
                       ),
-                      onPressed: () => setState(() {
-                        isFavorite = !isFavorite;
-                      }),
-                      icon: isFavorite
-                          ? const Icon(TablerIcons.heart_filled)
-                          : const Icon(TablerIcons.heart_plus),
-                      label: isFavorite
-                          ? const Text("已添加喜欢")
-                          : const Text("喜欢此节目"),
-                    ),
-                  ],
-                ),
-                Text(
-                  widget.programName,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                Row(
-                  spacing: 5,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Icon(TablerIcons.users_group, size: 20),
-                    Text(
-                      widget.programHost,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
-                Row(
-                  spacing: 5,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Icon(TablerIcons.building_broadcast_tower, size: 20),
-                    Text(
-                      widget.programBroadcasting,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          Expanded(
-            flex: 2,
-            child: Column(
-              spacing: 10,
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TimeSlider(
-                  programTimeRange: widget.programTime,
-                  onTimeReached: widget.onTimeReached,
-                ),
-              ],
-            ),
-          ),
-
-          Expanded(
-            flex: 2,
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Text(
-                "调频频率 | 音频采样率 | 实时流大小 | 信号值 | R-D-S 状态",
-                style: Theme.of(context).textTheme.labelSmall,
+                    ],
+                  ),
+                  Text(widget.programName, style: Theme.of(context).textTheme.headlineSmall),
+                  Row(
+                    spacing: 5,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(TablerIcons.users_group, size: 20),
+                      Text(widget.programHost, style: Theme.of(context).textTheme.bodyMedium),
+                    ],
+                  ),
+                  Row(
+                    spacing: 5,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(TablerIcons.building_broadcast_tower, size: 20),
+                      Text(widget.programBroadcasting, style: Theme.of(context).textTheme.bodyMedium),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
+
+            Expanded(
+              flex: 2,
+              child: Column(
+                spacing: 10,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [TimeSlider(programTimeRange: widget.programTime, onTimeReached: widget.onTimeReached)],
+              ),
+            ),
+
+            Expanded(
+              flex: 2,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Text("调频频率 | 音频采样率 | 实时流大小 | 信号值 | R-D-S 状态", style: Theme.of(context).textTheme.labelSmall),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -273,17 +243,11 @@ class _TimeSliderState extends State<TimeSlider> {
   @override
   void initState() {
     super.initState();
-    _nowTimeRange = DateTimeRange(
-      start: widget.programTimeRange.start,
-      end: DateTime.now(),
-    );
+    _nowTimeRange = DateTimeRange(start: widget.programTimeRange.start, end: DateTime.now());
     _programTimer = Timer.periodic(
       widget.programTimeRefresh,
       (_) => setState(() {
-        _nowTimeRange = DateTimeRange(
-          start: widget.programTimeRange.start,
-          end: DateTime.now(),
-        );
+        _nowTimeRange = DateTimeRange(start: widget.programTimeRange.start, end: DateTime.now());
       }),
     );
   }
