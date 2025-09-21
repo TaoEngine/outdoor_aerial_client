@@ -4,6 +4,7 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:outdoor_aerial_client/pages/tuner/tuner_page.dart';
+import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -38,66 +39,80 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: AspectRatio(
-          aspectRatio: 1,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: 5,
-            children: [
-              Icon(TablerIcons.antenna),
-              Text("室外天线", style: Theme.of(context).textTheme.titleSmall),
-            ],
-          ),
-        ),
-        leading: IconButton(
-          onPressed: () => GoRouter.of(context).goNamed("SearchPage"),
-          icon: Icon(TablerIcons.search),
-          tooltip: "查找节目",
-        ),
-        actions: [
-          AspectRatio(
+    return ChangeNotifierProvider<PlayerState>(
+      create: (context) => PlayerState(),
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: AspectRatio(
             aspectRatio: 1,
-            child: Center(
-              child: IconButton(
-                onPressed: () => GoRouter.of(context).goNamed("ScanPage"),
-                icon: Icon(TablerIcons.radar),
-                tooltip: "频率搜索",
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              spacing: 5,
+              children: [
+                Icon(TablerIcons.antenna),
+                Text("室外天线", style: Theme.of(context).textTheme.titleSmall),
+              ],
             ),
           ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          TabBarView(
-            controller: _tabController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: <Widget>[TunerPage(), Placeholder(), Placeholder(), Placeholder()],
+          leading: IconButton(
+            onPressed: () => GoRouter.of(context).goNamed("SearchPage"),
+            icon: Icon(TablerIcons.search),
+            tooltip: "查找节目",
           ),
-          BottomPlayWidget(
-            programTitle: '某节目Slogan',
-            programName: '某节目',
-            programBroadcasting: '某频道',
-            programImage: null,
-            onStopButtomTap: () {},
-            programProgress: 0.2,
-          ),
-        ],
-      ),
-      bottomNavigationBar: NavigationBar(
-        destinations: mainNavigationBarDestinations,
-        onDestinationSelected: (value) {
-          _index = value;
-          setState(() {
-            _tabController.index = _index;
-          });
-        },
-        selectedIndex: _index,
+          actions: [
+            AspectRatio(
+              aspectRatio: 1,
+              child: Center(
+                child: IconButton(
+                  onPressed: () => GoRouter.of(context).goNamed("ScanPage"),
+                  icon: Icon(TablerIcons.radar),
+                  tooltip: "频率搜索",
+                ),
+              ),
+            ),
+          ],
+        ),
+        body: Stack(
+          children: [
+            TabBarView(
+              controller: _tabController,
+              physics: const NeverScrollableScrollPhysics(),
+              children: <Widget>[TunerPage(), Placeholder(), Placeholder(), Placeholder()],
+            ),
+            Consumer<PlayerState>(
+              builder: (context, program, _) => BottomPlayWidget(
+                programTitle: program.title,
+                programName: program.name,
+                programBroadcasting: program.broadcasting,
+                programImage: program.image,
+                onStopButtomTap: () {
+                  program.refreshProgram(
+                    programName: "音乐爱假日",
+                    programTitle: "有音乐，更青春！",
+                    programBroadcasting: "安徽音乐广播",
+                    programImage: Image.network(
+                      "https://ytmedia.radio.cn/CCYT%2F202407%2F23%2F21%2FqrAYKFsw1eT1zBqivRaAw7wqDTub9JBBRe2024072321762.PNG",
+                    ),
+                  );
+                },
+                programProgress: 0.3,
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: NavigationBar(
+          destinations: mainNavigationBarDestinations,
+          onDestinationSelected: (value) {
+            _index = value;
+            setState(() {
+              _tabController.index = _index;
+            });
+          },
+          selectedIndex: _index,
+        ),
       ),
     );
   }
@@ -161,12 +176,15 @@ class BottomPlayWidget extends StatelessWidget {
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      ClipRRect(
-                        clipBehavior: Clip.antiAlias,
-                        borderRadius: BorderRadiusGeometry.circular(10),
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: programImage ?? Center(child: Icon(TablerIcons.radio)),
+                      Padding(
+                        padding: EdgeInsetsGeometry.all(5),
+                        child: ClipRRect(
+                          clipBehavior: Clip.antiAlias,
+                          borderRadius: BorderRadiusGeometry.circular(10),
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: programImage ?? Center(child: Icon(TablerIcons.radio)),
+                          ),
                         ),
                       ),
                       Padding(
@@ -177,7 +195,7 @@ class BottomPlayWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(programTitle, style: Theme.of(context).textTheme.bodyLarge),
-                            Text("$programName|$programBroadcasting", style: Theme.of(context).textTheme.bodySmall),
+                            Text("$programName | $programBroadcasting", style: Theme.of(context).textTheme.bodySmall),
                           ],
                         ),
                       ),
@@ -203,5 +221,24 @@ class BottomPlayWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class PlayerState with ChangeNotifier {
+  String name = "";
+  String title = "";
+  String broadcasting = "";
+  Image? image;
+  void refreshProgram({
+    required String programName,
+    required String programTitle,
+    required String programBroadcasting,
+    Image? programImage,
+  }) {
+    name = programName;
+    title = programTitle;
+    broadcasting = programBroadcasting;
+    image = programImage;
+    notifyListeners();
   }
 }
