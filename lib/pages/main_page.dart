@@ -4,6 +4,7 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:outdoor_aerial_client/pages/tuner/tuner_page.dart';
+import 'package:outdoor_aerial_client/services/provider/program_provider.dart';
 import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
@@ -39,8 +40,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<PlayerState>(
-      create: (context) => PlayerState(),
+    return ChangeNotifierProvider<MusicProgramProvider>(
+      create: (context) => MusicProgramProvider(),
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -82,12 +83,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               physics: const NeverScrollableScrollPhysics(),
               children: <Widget>[TunerPage(), Placeholder(), Placeholder(), Placeholder()],
             ),
-            Consumer<PlayerState>(
+            Consumer<MusicProgramProvider>(
               builder: (context, program, _) => BottomPlayWidget(
-                programTitle: program.title,
-                programName: program.name,
-                programBroadcasting: program.broadcasting,
-                programImage: program.image,
+                programTitle: program.programTitle,
+                programName: program.programName,
+                programBroadcasting: program.programBroadcasting,
+                programImage: program.programImage,
                 onStopButtomTap: () {
                   program.refreshProgram(
                     programName: "音乐爱假日",
@@ -132,7 +133,7 @@ class BottomPlayWidget extends StatelessWidget {
   final double programProgress;
 
   /// 可选描述节目的图片
-  final Image? programImage;
+  final Widget programImage;
 
   /// 按下停止键需要做的事情
   final VoidCallback onStopButtomTap;
@@ -145,7 +146,7 @@ class BottomPlayWidget extends StatelessWidget {
     required this.programBroadcasting,
     required this.programProgress,
     required this.onStopButtomTap,
-    this.programImage,
+    required this.programImage,
   });
 
   @override
@@ -181,10 +182,7 @@ class BottomPlayWidget extends StatelessWidget {
                         child: ClipRRect(
                           clipBehavior: Clip.antiAlias,
                           borderRadius: BorderRadiusGeometry.circular(10),
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: programImage ?? Center(child: Icon(TablerIcons.radio)),
-                          ),
+                          child: AspectRatio(aspectRatio: 1, child: programImage),
                         ),
                       ),
                       Padding(
@@ -221,24 +219,5 @@ class BottomPlayWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class PlayerState with ChangeNotifier {
-  String name = "";
-  String title = "";
-  String broadcasting = "";
-  Image? image;
-  void refreshProgram({
-    required String programName,
-    required String programTitle,
-    required String programBroadcasting,
-    Image? programImage,
-  }) {
-    name = programName;
-    title = programTitle;
-    broadcasting = programBroadcasting;
-    image = programImage;
-    notifyListeners();
   }
 }
