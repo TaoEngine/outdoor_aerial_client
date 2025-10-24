@@ -26,6 +26,8 @@ class MainApp extends StatelessWidget {
       GoRoute(path: "/tuner/channel/play", name: "PlayPage", builder: (context, state) => const Placeholder()),
       // TODO 调谐器频率搜索界面 暂未制作
       GoRoute(path: "/tuner/channel/scan", name: "ScanPage", builder: (context, state) => const Placeholder()),
+      // TODO 节目界面 暂未制作
+      GoRoute(path: "/program", name: "ProgramPage", builder: (context, state) => const Placeholder()),
     ],
   );
 

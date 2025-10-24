@@ -44,20 +44,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       create: (context) => MusicProgramProvider(),
       child: Scaffold(
         appBar: AppBar(
-          centerTitle: true,
-          title: AspectRatio(
-            aspectRatio: 1,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              spacing: 5,
-              children: [
-                Icon(TablerIcons.antenna),
-                Text("室外天线", style: Theme.of(context).textTheme.titleSmall),
-              ],
-            ),
-          ),
           leading: IconButton(
             onPressed: () => GoRouter.of(context).goNamed("SearchPage"),
             icon: Icon(TablerIcons.search),
@@ -89,16 +75,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 programName: program.programName,
                 programBroadcasting: program.programBroadcasting,
                 programImage: program.programImage,
-                onStopButtomTap: () {
-                  program.refreshProgram(
-                    programName: "音乐爱假日",
-                    programTitle: "有音乐，更青春！",
-                    programBroadcasting: "安徽音乐广播",
-                    programImage: Image.network(
-                      "https://ytmedia.radio.cn/CCYT%2F202407%2F23%2F21%2FqrAYKFsw1eT1zBqivRaAw7wqDTub9JBBRe2024072321762.PNG",
-                    ),
-                  );
-                },
+                onStopButtomTap: () {},
                 programProgress: 0.3,
               ),
             ),
@@ -153,12 +130,14 @@ class BottomPlayWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
-      child: SizedBox(
-        height: 120,
-        width: switch (MediaQuery.sizeOf(context).width) {
-          >= 500 => 500,
-          final width => width,
-        },
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: 100,
+          maxWidth: switch (MediaQuery.sizeOf(context).width) {
+            >= 500 => 500,
+            final width => width,
+          },
+        ),
         child: Padding(
           padding: EdgeInsetsGeometry.all(10),
           child: Card.filled(
