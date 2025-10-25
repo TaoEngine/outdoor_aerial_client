@@ -22,19 +22,19 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     NavigationDestination(icon: Icon(TablerIcons.settings), label: "改设置", tooltip: "改设置"),
   ];
 
-  late final TabController _tabController;
+  late final PageController __pageController;
 
-  int _index = 0;
+  int __bottomNavigationBarIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(initialIndex: 0, length: 4, vsync: this);
+    __pageController = PageController(initialPage: 0);
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    __pageController.dispose();
     super.dispose();
   }
 
@@ -64,8 +64,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         ),
         body: Stack(
           children: [
-            TabBarView(
-              controller: _tabController,
+            PageView(
+              controller: __pageController,
               physics: const NeverScrollableScrollPhysics(),
               children: <Widget>[TunerPage(), Placeholder(), Placeholder(), Placeholder()],
             ),
@@ -84,12 +84,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         bottomNavigationBar: NavigationBar(
           destinations: mainNavigationBarDestinations,
           onDestinationSelected: (value) {
-            _index = value;
+            __pageController.animateToPage(value, duration: Duration(milliseconds: 1000), curve: Curves.easeInOut);
             setState(() {
-              _tabController.index = _index;
+              __bottomNavigationBarIndex = value;
             });
           },
-          selectedIndex: _index,
+          selectedIndex: __bottomNavigationBarIndex,
         ),
       ),
     );
