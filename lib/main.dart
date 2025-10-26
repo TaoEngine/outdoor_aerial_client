@@ -14,10 +14,10 @@ class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   static final GoRouter mainAppRouter = GoRouter(
-    initialLocation: "/loading",
+    initialLocation: "/init",
     routes: <RouteBase>[
       //加载界面
-      GoRoute(path: "/loading", name: "SplashPage", builder: (context, state) => const SplashPage()),
+      GoRoute(path: "/init", name: "SplashPage", builder: (context, state) => const SplashPage()),
       // 应用主界面
       GoRoute(path: "/main", name: "MainPage", builder: (context, state) => const MainPage()),
       // TODO 应用搜索界面 暂未制作

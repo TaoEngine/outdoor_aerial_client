@@ -84,7 +84,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         bottomNavigationBar: NavigationBar(
           destinations: mainNavigationBarDestinations,
           onDestinationSelected: (value) {
-            __pageController.animateToPage(value, duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+            __pageController.animateToPage(value, duration: Duration(milliseconds: 300), curve: Curves.easeInOutCubic);
             setState(() {
               __bottomNavigationBarIndex = value;
             });
