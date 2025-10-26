@@ -43,7 +43,7 @@ class _TunerPageState extends State<TunerPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               spacing: 10,
               children: [
-                CircleAvatar(child: Icon(TablerIcons.mood_happy)),
+                CircleAvatar(child: Icon(TablerIcons.robot)),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -51,7 +51,7 @@ class _TunerPageState extends State<TunerPage> {
                   spacing: 1,
                   children: [
                     Text("立即听", style: Theme.of(context).textTheme.bodyLarge),
-                    Text("最近录制的标星节目", style: Theme.of(context).textTheme.bodySmall),
+                    Text("交由我们推荐的节目", style: Theme.of(context).textTheme.bodySmall),
                   ],
                 ),
               ],
@@ -63,13 +63,9 @@ class _TunerPageState extends State<TunerPage> {
               controller: __carouselController,
               flexWeights: [1, 6, 1],
               itemSnapping: true,
-              children: <Widget>[
-                Container(color: Colors.amber),
-                Container(color: Colors.amber),
-                Container(color: Colors.amber),
-                Container(color: Colors.amber),
-                Container(color: Colors.amber),
-              ],
+              children: List.generate(5, (int index) {
+                return Card.filled(clipBehavior: Clip.antiAlias, child: Center());
+              }),
               onTap: (value) {
                 __carouselController.animateToItem(value);
                 if (__carouselPage == value) {
@@ -81,6 +77,28 @@ class _TunerPageState extends State<TunerPage> {
             ),
           ),
           Divider(),
+          ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: 50),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              spacing: 10,
+              children: [
+                CircleAvatar(child: Icon(TablerIcons.mood_heart)),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 1,
+                  children: [
+                    Text("选着听", style: Theme.of(context).textTheme.bodyLarge),
+                    Text("由你收藏过的节目", style: Theme.of(context).textTheme.bodySmall),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
