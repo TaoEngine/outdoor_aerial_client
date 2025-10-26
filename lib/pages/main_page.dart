@@ -49,6 +49,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             icon: Icon(TablerIcons.search),
             tooltip: "查找节目",
           ),
+          title: Text("室外天线"),
+          titleTextStyle: Theme.of(context).textTheme.titleLarge,
+          centerTitle: true,
           actions: [
             AspectRatio(
               aspectRatio: 1,
