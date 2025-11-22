@@ -1,7 +1,8 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:m3e_collection/m3e_collection.dart';
 
 import 'package:outdoor_aerial_client/pages/main_page.dart';
 import 'package:outdoor_aerial_client/pages/splash_page.dart';
@@ -13,6 +14,7 @@ void main() {
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
+  /// 应用全局路由
   static final GoRouter mainAppRouter = GoRouter(
     initialLocation: "/init",
     routes: <RouteBase>[
@@ -31,17 +33,34 @@ class MainApp extends StatelessWidget {
     ],
   );
 
+  /// 应用语言配置
+  static const localizationsDelegates = [
+    GlobalWidgetsLocalizations.delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ];
+
+  /// 应用支持的语言
+  static const supportedLocales = [
+    Locale('en', 'US'),
+    Locale('zh', 'CN'),
+    Locale('zh', 'HK'),
+    Locale('zh', 'MO'),
+    Locale('zh', 'SG'),
+    Locale('zh', 'TW'),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: "室外天线",
-      routerConfig: mainAppRouter,
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [Locale('zh', 'CN'), Locale('en', 'US')],
+    return DynamicColorBuilder(
+      builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) => MaterialApp.router(
+        title: "室外天线",
+        theme: withM3ETheme(ThemeData(fontFamily: "AlibabaPuHuiTi", colorScheme: lightDynamic)),
+        darkTheme: withM3ETheme(ThemeData(fontFamily: "AlibabaPuHuiTi", colorScheme: darkDynamic)),
+        routerConfig: mainAppRouter,
+        localizationsDelegates: localizationsDelegates,
+        supportedLocales: supportedLocales,
+      ),
     );
   }
 }
