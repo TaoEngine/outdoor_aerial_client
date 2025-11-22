@@ -43,28 +43,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     return ChangeNotifierProvider<MusicProgramProvider>(
       create: (context) => MusicProgramProvider(),
       child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () => GoRouter.of(context).goNamed("SearchPage"),
-            icon: Icon(TablerIcons.search),
-            tooltip: "查找节目",
-          ),
-          title: Text("室外天线"),
-          titleTextStyle: Theme.of(context).textTheme.titleLarge,
-          centerTitle: true,
-          actions: [
-            AspectRatio(
-              aspectRatio: 1,
-              child: Center(
-                child: IconButton(
-                  onPressed: () => GoRouter.of(context).goNamed("ScanPage"),
-                  icon: Icon(TablerIcons.radar),
-                  tooltip: "频率搜索",
-                ),
-              ),
-            ),
-          ],
-        ),
         body: Stack(
           children: [
             PageView(

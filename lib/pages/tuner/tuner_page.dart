@@ -12,7 +12,30 @@ class TunerPage extends StatefulWidget {
 class _TunerPageState extends State<TunerPage> {
   @override
   Widget build(BuildContext context) {
-    return ListView(children: [SelectionProgramTitle(), SelectionProgramView(), Divider(), FavoriteProgramTitle()]);
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          expandedHeight: 100,
+          pinned: true,
+          flexibleSpace: FlexibleSpaceBar(
+            title: Row(
+              spacing: 8,
+              children: [
+                CircleAvatar(child: Icon(TablerIcons.antenna)),
+                Text("室外天线"),
+              ],
+            ),
+            titlePadding: EdgeInsets.only(left: 16, bottom: 8),
+          ),
+        ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) => ListTile(title: Text('Item $index')),
+            childCount: 50,
+          ),
+        ),
+      ],
+    );
   }
 }
 
