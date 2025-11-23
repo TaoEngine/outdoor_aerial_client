@@ -10,40 +10,41 @@ class TunerPage extends StatefulWidget {
 }
 
 class _TunerPageState extends State<TunerPage> {
+  // AppBar
+  Widget appBar() => SliverAppBar(
+    expandedHeight: 120,
+    pinned: true,
+    flexibleSpace: FlexibleSpaceBar(
+      title: Row(
+        mainAxisSize: MainAxisSize.min,
+        spacing: 16,
+        children: [
+          Icon(TablerIcons.antenna),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("室外天线", style: Theme.of(context).textTheme.headlineSmall),
+              Text("安装在安徽省马鞍山市", style: Theme.of(context).textTheme.labelSmall),
+            ],
+          ),
+        ],
+      ),
+      titlePadding: EdgeInsets.only(left: 16, bottom: 6),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        SliverAppBar(
-          expandedHeight: 120,
-          pinned: true,
-          flexibleSpace: FlexibleSpaceBar(
-            title: Row(
-              mainAxisSize: MainAxisSize.min,
-              spacing: 16,
-              children: [
-                Icon(TablerIcons.antenna),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "室外天线",
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    Text(
-                      "节目源在安徽省马鞍山市",
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            titlePadding: EdgeInsets.only(left: 16, bottom: 6),
-          ),
+        appBar(),
+        SliverPadding(
+          padding: EdgeInsetsGeometry.only(left: 16, right: 16, top: 16),
+          sliver: SliverToBoxAdapter(child: _ProgramCarouselView()),
         ),
         SliverPadding(
-          padding: EdgeInsetsGeometry.all(16),
+          padding: EdgeInsetsGeometry.all(8),
           sliver: SliverCrossAxisGroup(
             slivers: [
               SliverCrossAxisExpanded(
@@ -109,6 +110,59 @@ class _TunerPageState extends State<TunerPage> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ProgramCarouselView extends StatefulWidget {
+  const _ProgramCarouselView();
+
+  @override
+  State<_ProgramCarouselView> createState() => _ProgramCarouselViewState();
+}
+
+class _ProgramCarouselViewState extends State<_ProgramCarouselView> {
+  late final CarouselController _carouselController;
+
+  @override
+  void initState() {
+    super.initState();
+    _carouselController = CarouselController();
+  }
+
+  @override
+  void dispose() {
+    _carouselController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: 240),
+      child: CarouselView.weighted(
+        key: const PageStorageKey('program_carousel'),
+        controller: _carouselController,
+        flexWeights: [1, 6, 1],
+        itemSnapping: true,
+        children: List.generate(5, (index) {
+          return Container(
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            child: Center(child: Text("$index")),
+          );
+        }),
+        onTap: (value) {
+          final maxScroll = _carouselController.position.maxScrollExtent;
+          final itemExtent = maxScroll > 0 ? maxScroll / (5 - 1) : 1;
+          final int currentIndex = (_carouselController.offset / itemExtent)
+              .round();
+          if (currentIndex == value) {
+            GoRouter.of(context).goNamed("ProgramPage");
+          } else {
+            _carouselController.animateToItem(value);
+          }
+        },
+      ),
     );
   }
 }
@@ -209,38 +263,44 @@ class _ProgramCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card.filled(
-      clipBehavior: Clip.antiAlias,
-      child: Padding(
-        padding: EdgeInsetsGeometry.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 8,
-                    children: [cardTitle(context), cardBody(context)],
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Card.filled(
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(25),
+        ),
+        child: Padding(
+          padding: EdgeInsetsGeometry.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 8,
+                      children: [cardTitle(context), cardBody(context)],
+                    ),
                   ),
-                ),
-                const SizedBox(width: 16),
-                cardImage(context),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                cardChipsBuilder(context),
-                const Spacer(),
-                cardAction(context),
-              ],
-            ),
-          ],
+                  const SizedBox(width: 16),
+                  cardImage(context),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  cardChipsBuilder(context),
+                  const Spacer(),
+                  cardAction(context),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
