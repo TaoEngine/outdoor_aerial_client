@@ -33,3 +33,5 @@ flutter:
     - family: AlibabaPuHuiTi
       fonts:
         - asset: font/AlibabaPuHuiTi-Regular.ttf
+  assets:
+    - asset/
