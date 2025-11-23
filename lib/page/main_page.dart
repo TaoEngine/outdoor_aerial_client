@@ -50,16 +50,16 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               physics: const NeverScrollableScrollPhysics(),
               children: <Widget>[TunerPage(), Placeholder(), Placeholder(), Placeholder()],
             ),
-            Consumer<MusicProgramProvider>(
-              builder: (context, program, _) => BottomPlayWidget(
-                programTitle: program.programTitle,
-                programName: program.programName,
-                programBroadcasting: program.programBroadcasting,
-                programImage: program.programImage,
-                onStopButtomTap: () {},
-                programProgress: 0.3,
-              ),
-            ),
+            // Consumer<MusicProgramProvider>(
+            //   builder: (context, program, _) => BottomPlayWidget(
+            //     programTitle: program.programTitle,
+            //     programName: program.programName,
+            //     programBroadcasting: program.programBroadcasting,
+            //     programImage: program.programImage,
+            //     onStopButtomTap: () {},
+            //     programProgress: 0.3,
+            //   ),
+            // ),
           ],
         ),
         bottomNavigationBar: NavigationBar(
