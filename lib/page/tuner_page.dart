@@ -161,11 +161,7 @@ class _ProgramCarouselViewState extends State<_ProgramCarouselView> {
           if (currentIndex == value) {
             GoRouter.of(context).goNamed("ProgramPage");
           } else {
-            _carouselController.animateToItem(
-              value,
-              duration: Duration(milliseconds: 500),
-              curve: Curves.easeInOut,
-            );
+            _carouselController.animateToItem(value);
           }
         },
       ),
