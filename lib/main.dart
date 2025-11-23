@@ -41,14 +41,7 @@ class MainApp extends StatelessWidget {
   ];
 
   /// 应用支持的语言
-  static const supportedLocales = [
-    Locale('en', 'US'),
-    Locale('zh', 'CN'),
-    Locale('zh', 'HK'),
-    Locale('zh', 'MO'),
-    Locale('zh', 'SG'),
-    Locale('zh', 'TW'),
-  ];
+  static const supportedLocales = [Locale('en', 'US'), Locale('zh', 'CN')];
 
   @override
   Widget build(BuildContext context) {
