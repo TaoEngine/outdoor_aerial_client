@@ -24,13 +24,29 @@ class MainApp extends StatelessWidget {
       // 应用主界面
       GoRoute(path: "/main", name: "MainPage", builder: (context, state) => const MainPage()),
       // TODO 应用搜索界面 暂未制作
-      GoRoute(path: "/main/search", name: "SearchPage", builder: (context, state) => const Placeholder()),
+      GoRoute(
+        path: "/main/search",
+        name: "SearchPage",
+        builder: (context, state) => const Placeholder(),
+      ),
       // TODO 调谐器频率播放界面 暂未制作
-      GoRoute(path: "/tuner/channel/play", name: "PlayPage", builder: (context, state) => const Placeholder()),
+      GoRoute(
+        path: "/tuner/channel/play",
+        name: "PlayPage",
+        builder: (context, state) => const Placeholder(),
+      ),
       // TODO 调谐器频率搜索界面 暂未制作
-      GoRoute(path: "/tuner/channel/scan", name: "ScanPage", builder: (context, state) => const Placeholder()),
+      GoRoute(
+        path: "/tuner/channel/scan",
+        name: "ScanPage",
+        builder: (context, state) => const Placeholder(),
+      ),
       // TODO 节目界面 暂未制作
-      GoRoute(path: "/program", name: "ProgramPage", builder: (context, state) => const Placeholder()),
+      GoRoute(
+        path: "/program",
+        name: "ProgramPage",
+        builder: (context, state) => const Placeholder(),
+      ),
     ],
   );
 

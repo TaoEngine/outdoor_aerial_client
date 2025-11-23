@@ -17,7 +17,11 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   static const mainNavigationBarDestinations = <Widget>[
     NavigationDestination(icon: Icon(TablerIcons.antenna), label: "调谐器", tooltip: "调谐器"),
-    NavigationDestination(icon: Icon(TablerIcons.timeline_event_text), label: "节目单", tooltip: "节目单"),
+    NavigationDestination(
+      icon: Icon(TablerIcons.timeline_event_text),
+      label: "节目单",
+      tooltip: "节目单",
+    ),
     NavigationDestination(icon: Icon(TablerIcons.heart), label: "我喜欢", tooltip: "我喜欢"),
     NavigationDestination(icon: Icon(TablerIcons.settings), label: "改设置", tooltip: "改设置"),
   ];
@@ -65,7 +69,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         bottomNavigationBar: NavigationBar(
           destinations: mainNavigationBarDestinations,
           onDestinationSelected: (value) {
-            __pageController.animateToPage(value, duration: Duration(milliseconds: 300), curve: Curves.easeInOutCubic);
+            __pageController.animateToPage(
+              value,
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeInOutCubic,
+            );
             setState(() {
               __bottomNavigationBarIndex = value;
             });
@@ -153,7 +161,10 @@ class BottomPlayWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(programTitle, style: Theme.of(context).textTheme.bodyLarge),
-                            Text("$programName | $programBroadcasting", style: Theme.of(context).textTheme.bodySmall),
+                            Text(
+                              "$programName | $programBroadcasting",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
                           ],
                         ),
                       ),

@@ -157,8 +157,7 @@ class _ProgramCarouselViewState extends State<_ProgramCarouselView> {
         onTap: (value) {
           final maxScroll = _carouselController.position.maxScrollExtent;
           final itemExtent = maxScroll > 0 ? maxScroll / (5 - 1) : 1;
-          final int currentIndex = (_carouselController.offset / itemExtent)
-              .round();
+          final int currentIndex = (_carouselController.offset / itemExtent).round();
           if (currentIndex == value) {
             GoRouter.of(context).goNamed("ProgramPage");
           } else {
@@ -248,17 +247,12 @@ class _ProgramView extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  Image(
-                                    image: programBroadCastingLogo,
-                                    height: 16,
-                                  ),
+                                  Image(image: programBroadCastingLogo, height: 16),
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
                                       programName,
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.titleSmall,
+                                      style: Theme.of(context).textTheme.titleSmall,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
@@ -267,20 +261,18 @@ class _ProgramView extends StatelessWidget {
                               const SizedBox(height: 12),
                               Text(
                                 programTitle,
-                                style: Theme.of(context).textTheme.titleLarge
-                                    ?.copyWith(fontWeight: FontWeight.bold),
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               const Spacer(),
                               Text(
                                 "正在播出 · $timeLabel",
-                                style: Theme.of(context).textTheme.labelSmall
-                                    ?.copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onSurfaceVariant,
-                                    ),
+                                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                ),
                               ),
                             ],
                           ),
@@ -335,16 +327,12 @@ class _ProgramCard extends StatelessWidget {
 
     // 标签“已收藏”
     if (programTagged) {
-      chips.add(
-        Chip(avatar: const Icon(TablerIcons.tag_filled), label: Text("已收藏")),
-      );
+      chips.add(Chip(avatar: const Icon(TablerIcons.tag_filled), label: Text("已收藏")));
     }
 
     // 标签“我喜欢”
     if (programFavorite) {
-      chips.add(
-        Chip(avatar: Icon(TablerIcons.heart_filled), label: Text("我喜欢")),
-      );
+      chips.add(Chip(avatar: Icon(TablerIcons.heart_filled), label: Text("我喜欢")));
     }
     final timeDifference = DateTime.now().difference(programStartTime);
     final timeLabel = switch (timeDifference.inHours) {
@@ -353,9 +341,7 @@ class _ProgramCard extends StatelessWidget {
     };
 
     // 标签“时间”
-    chips.add(
-      Chip(avatar: const Icon(TablerIcons.clock), label: Text(timeLabel)),
-    );
+    chips.add(Chip(avatar: const Icon(TablerIcons.clock), label: Text(timeLabel)));
     return Row(mainAxisSize: MainAxisSize.min, spacing: 4, children: chips);
   }
 
@@ -372,9 +358,7 @@ class _ProgramCard extends StatelessWidget {
   // 卡片的主体
   Widget cardBody(context) => Text(
     programTitle,
-    style: Theme.of(
-      context,
-    ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+    style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
   );
 
   // 卡片右侧的图片
@@ -397,9 +381,7 @@ class _ProgramCard extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       child: Card.filled(
         clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusGeometry.circular(25),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(25)),
         child: Padding(
           padding: EdgeInsetsGeometry.all(20),
           child: Column(
@@ -423,11 +405,7 @@ class _ProgramCard extends StatelessWidget {
               const SizedBox(height: 16),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  cardChipsBuilder(context),
-                  const Spacer(),
-                  cardAction(context),
-                ],
+                children: [cardChipsBuilder(context), const Spacer(), cardAction(context)],
               ),
             ],
           ),

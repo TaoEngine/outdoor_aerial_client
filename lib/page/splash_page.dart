@@ -11,10 +11,7 @@ class SplashPage extends StatelessWidget {
       useImmersiveMode: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
       splashScreenBody: Center(
-        child: Text(
-          "Outdoor Aerial",
-          style: Theme.of(context).textTheme.displayLarge,
-        ),
+        child: Text("Outdoor Aerial", style: Theme.of(context).textTheme.displayLarge),
       ),
       asyncNavigationCallback: () async {
         await Future.delayed(const Duration(seconds: 3));
