@@ -46,3 +46,6 @@ app.*.map.json
 
 # font file
 *.ttf
+
+# asset file
+/asset/
