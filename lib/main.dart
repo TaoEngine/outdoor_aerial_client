@@ -4,8 +4,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:m3e_collection/m3e_collection.dart';
 
-import 'package:outdoor_aerial_client/pages/main_page.dart';
-import 'package:outdoor_aerial_client/pages/splash_page.dart';
+import 'package:outdoor_aerial_client/page/main_page.dart';
+import 'package:outdoor_aerial_client/page/splash_page.dart';
 
 void main() {
   runApp(const MainApp());
