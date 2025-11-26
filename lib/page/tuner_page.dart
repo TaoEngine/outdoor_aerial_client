@@ -52,28 +52,28 @@ class _TunerPageState extends State<TunerPage> {
                 sliver: SliverList.list(
                   children: [
                     _ProgramCard(
-                      programBroadCastingLogo: AssetImage("asset/ah908.png"),
+                      programBroadCastingLogo: AssetImage("assets/ah908.png"),
                       programName: "快乐出发",
                       programTitle: "工作中的异性同事能不能处成恋爱关系",
-                      programImage: AssetImage("asset/sample1.png"),
+                      programImage: AssetImage("assets/sample1.png"),
                       programStartTime: DateTime(2025, 11, 22, 8, 30),
                       programTagged: true,
                       programFavorite: true,
                     ),
                     _ProgramCard(
-                      programBroadCastingLogo: AssetImage("asset/ah908.png"),
+                      programBroadCastingLogo: AssetImage("assets/ah908.png"),
                       programName: "正午乐逍遥",
                       programTitle: "回县城买房发展是不是一条可取的退路",
-                      programImage: AssetImage("asset/sample2.png"),
+                      programImage: AssetImage("assets/sample2.png"),
                       programStartTime: DateTime(2025, 11, 22, 12, 00),
                       programTagged: false,
                       programFavorite: true,
                     ),
                     _ProgramCard(
-                      programBroadCastingLogo: AssetImage("asset/nj887.png"),
+                      programBroadCastingLogo: AssetImage("assets/nj887.png"),
                       programName: "Top 20 Countdown",
                       programTitle: "欧美榜单第一毫无悬念是泰勒斯威夫特",
-                      programImage: AssetImage("asset/sample5.png"),
+                      programImage: AssetImage("assets/sample5.png"),
                       programStartTime: DateTime(2025, 11, 22, 18, 00),
                       programTagged: false,
                       programFavorite: false,
@@ -86,19 +86,19 @@ class _TunerPageState extends State<TunerPage> {
                 sliver: SliverList.list(
                   children: [
                     _ProgramCard(
-                      programBroadCastingLogo: AssetImage("asset/ah929.png"),
+                      programBroadCastingLogo: AssetImage("assets/ah929.png"),
                       programName: "汽车315",
                       programTitle: "小米汽车 SU7 Pro 的空调排水口被苍蝇堵住被索要 5 万元维修费的维权后续",
-                      programImage: AssetImage("asset/sample3.png"),
+                      programImage: AssetImage("assets/sample3.png"),
                       programStartTime: DateTime(2025, 11, 22, 11, 00),
                       programTagged: true,
                       programFavorite: true,
                     ),
                     _ProgramCard(
-                      programBroadCastingLogo: AssetImage("asset/ah929.png"),
+                      programBroadCastingLogo: AssetImage("assets/ah929.png"),
                       programName: "国元证券时间",
                       programTitle: "A股市场做出调整，今日市场持续低迷",
-                      programImage: AssetImage("asset/sample4.png"),
+                      programImage: AssetImage("assets/sample4.png"),
                       programStartTime: DateTime(2025, 11, 22, 15, 00),
                       programTagged: false,
                       programFavorite: false,
@@ -146,12 +146,13 @@ class _ProgramCarouselViewState extends State<_ProgramCarouselView> {
         flexWeights: [1, 6, 1],
         itemSnapping: true,
         children: List.generate(5, (index) {
-          return _ProgramView(
-            programBroadCastingLogo: AssetImage("asset/ah908.png"),
+          return _ProgramCarouselViewUnit(
+            programBroadCastingLogo: AssetImage("assets/ah908.png"),
             programName: "测试",
             programTitle: "测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字",
-            programImage: AssetImage("asset/sample1.png"),
+            programImage: AssetImage("assets/sample1.png"),
             programStartTime: DateTime.now(),
+            viewState: false,
           );
         }),
         onTap: (value) {
@@ -169,7 +170,7 @@ class _ProgramCarouselViewState extends State<_ProgramCarouselView> {
   }
 }
 
-class _ProgramView extends StatelessWidget {
+class _ProgramCarouselViewUnit extends StatelessWidget {
   /// 节目所属电台Logo
   final ImageProvider programBroadCastingLogo;
 
@@ -185,12 +186,19 @@ class _ProgramView extends StatelessWidget {
   /// 节目播出时间
   final DateTime programStartTime;
 
-  const _ProgramView({
+  /// 节目卡片根据所处位置展现的状态
+  ///
+  /// - false -> 位于侧面所以仅显示图片
+  /// - true -> 位于中间所以显示全部
+  final bool viewState;
+
+  const _ProgramCarouselViewUnit({
     required this.programBroadCastingLogo,
     required this.programName,
     required this.programTitle,
     required this.programImage,
     required this.programStartTime,
+    required this.viewState,
   });
 
   @override
@@ -205,11 +213,28 @@ class _ProgramView extends StatelessWidget {
       color: Theme.of(context).colorScheme.surfaceContainerHighest,
       child: LayoutBuilder(
         builder: (context, constraints) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // 是否显示卡片
+              if (viewState) Text("data"),
+            ],
+          );
+        },
+      ),
+    );
+
+    return Container(
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
           final width = constraints.maxWidth;
           // 计算展开进度 t
           // 当宽度 < 200 时，t = 0 (侧边状态)
           // 当宽度 > 350 时，t = 1 (中间状态)
-          final t = ((width - 200) / (350 - 200)).clamp(0.0, 1.0);
+
+          // 根据卡片目前的宽度决定
+          final double t = ((width - 200) / (350 - 200)).clamp(0, 1);
 
           // 使用曲线让变化更平滑
           final curveT = Curves.easeOut.transform(t);
@@ -317,62 +342,59 @@ class _ProgramCard extends StatelessWidget {
     required this.programFavorite,
   });
 
-  // 卡片的标签构建器
-  Widget cardChipsBuilder(context) {
-    List<Widget> chips = [];
-
-    // 标签“已收藏”
-    if (programTagged) {
-      chips.add(Chip(avatar: const Icon(TablerIcons.tag_filled), label: Text("已收藏")));
-    }
-
-    // 标签“我喜欢”
-    if (programFavorite) {
-      chips.add(Chip(avatar: Icon(TablerIcons.heart_filled), label: Text("我喜欢")));
-    }
-    final timeDifference = DateTime.now().difference(programStartTime);
-    final timeLabel = switch (timeDifference.inHours) {
-      < 24 => "${timeDifference.inHours}小时前",
-      _ => "${timeDifference.inDays}天前",
-    };
-
-    // 标签“时间”
-    chips.add(Chip(avatar: const Icon(TablerIcons.clock), label: Text(timeLabel)));
-    return Row(mainAxisSize: MainAxisSize.min, spacing: 4, children: chips);
-  }
-
-  // 卡片头部的节目称谓
-  Widget cardTitle(context) => Row(
-    mainAxisSize: MainAxisSize.min,
-    spacing: 8,
-    children: [
-      Image(image: programBroadCastingLogo, height: 16),
-      Text(programName, style: Theme.of(context).textTheme.titleMedium),
-    ],
-  );
-
-  // 卡片的主体
-  Widget cardBody(context) => Text(
-    programTitle,
-    style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-  );
-
-  // 卡片右侧的图片
-  Widget cardImage(context) => ClipRRect(
-    clipBehavior: Clip.antiAlias,
-    borderRadius: BorderRadiusGeometry.circular(16),
-    child: Image(image: programImage, width: 100, height: 100),
-  );
-
-  // 卡片播放按钮
-  Widget cardAction(context) => IconButton.filled(
-    onPressed: () => GoRouter.of(context).goNamed("PlayPage"),
-    icon: Icon(TablerIcons.player_play),
-    tooltip: "播放此节目",
-  );
-
   @override
   Widget build(BuildContext context) {
+    // 头部
+    final title = Row(
+      mainAxisSize: MainAxisSize.min,
+      spacing: 8,
+      children: [
+        Image(image: programBroadCastingLogo, height: 16),
+        Text(programName, style: Theme.of(context).textTheme.titleMedium),
+      ],
+    );
+    final body = Text(
+      programTitle,
+      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+    );
+    final head = Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 8,
+        children: [title, body],
+      ),
+    );
+
+    // 图片
+    final image = ClipRRect(
+      clipBehavior: Clip.antiAlias,
+      borderRadius: BorderRadiusGeometry.circular(16),
+      child: Image(image: programImage, width: 100, height: 100),
+    );
+
+    // 标签
+    final difference = DateTime.now().difference(programStartTime);
+    final timelabel = switch (difference.inHours) {
+      < 24 => "${difference.inHours}小时前",
+      _ => "${difference.inDays}天前",
+    };
+    final tags = Row(
+      mainAxisSize: MainAxisSize.min,
+      spacing: 4,
+      children: [
+        if (programFavorite) Chip(avatar: Icon(TablerIcons.heart_filled), label: Text("我喜欢")),
+        if (programTagged) Chip(avatar: const Icon(TablerIcons.tag_filled), label: Text("已收藏")),
+        Chip(avatar: const Icon(TablerIcons.clock), label: Text(timelabel)),
+      ],
+    );
+
+    // 操作按钮
+    final action = IconButton.filled(
+      onPressed: () => GoRouter.of(context).goNamed("PlayPage"),
+      icon: Icon(TablerIcons.player_play),
+      tooltip: "播放此节目",
+    );
+
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Card.filled(
@@ -386,22 +408,12 @@ class _ProgramCard extends StatelessWidget {
             children: [
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 8,
-                      children: [cardTitle(context), cardBody(context)],
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  cardImage(context),
-                ],
+                children: [head, const SizedBox(width: 16), image],
               ),
               const SizedBox(height: 16),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [cardChipsBuilder(context), const Spacer(), cardAction(context)],
+                children: [tags, const Spacer(), action],
               ),
             ],
           ),
