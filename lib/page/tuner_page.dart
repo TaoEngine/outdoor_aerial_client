@@ -188,8 +188,8 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
 
   /// 节目卡片根据所处位置展现的状态
   ///
-  /// - false -> 位于侧面所以仅显示图片
-  /// - true -> 位于中间所以显示全部
+  /// - false 表示卡片位于侧面所以仅显示图片
+  /// - true  表示卡片位于中间所以显示全部
   final bool viewState;
 
   const _ProgramCarouselViewUnit({
@@ -203,11 +203,11 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final timeDifference = DateTime.now().difference(programStartTime);
-    final timeLabel = switch (timeDifference.inHours) {
-      < 24 => "${timeDifference.inHours}小时前",
-      _ => "${timeDifference.inDays}天前",
-    };
+    final difference = DateTime.now().difference(programStartTime);
+    final timelabel = switch (difference.inHours) {
+      < 24 => "${difference.inHours}小时前",
+      _ => "${difference.inDays}天前",
+    }; // 构建标签
 
     return Container(
       color: Theme.of(context).colorScheme.surfaceContainerHighest,
@@ -216,7 +216,7 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
           return Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // 是否显示卡片
+              // 切换显示正文
               if (viewState) Text("data"),
             ],
           );
@@ -290,7 +290,7 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
                               ),
                               const Spacer(),
                               Text(
-                                "正在播出 · $timeLabel",
+                                "正在播出 · $timelabel",
                                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                                 ),
@@ -344,7 +344,6 @@ class _ProgramCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 头部
     final title = Row(
       mainAxisSize: MainAxisSize.min,
       spacing: 8,
@@ -363,16 +362,14 @@ class _ProgramCard extends StatelessWidget {
         spacing: 8,
         children: [title, body],
       ),
-    );
+    ); // 构建头部
 
-    // 图片
     final image = ClipRRect(
       clipBehavior: Clip.antiAlias,
       borderRadius: BorderRadiusGeometry.circular(16),
       child: Image(image: programImage, width: 100, height: 100),
-    );
+    ); // 构建图片
 
-    // 标签
     final difference = DateTime.now().difference(programStartTime);
     final timelabel = switch (difference.inHours) {
       < 24 => "${difference.inHours}小时前",
@@ -386,14 +383,13 @@ class _ProgramCard extends StatelessWidget {
         if (programTagged) Chip(avatar: const Icon(TablerIcons.tag_filled), label: Text("已收藏")),
         Chip(avatar: const Icon(TablerIcons.clock), label: Text(timelabel)),
       ],
-    );
+    ); // 构建标签
 
-    // 操作按钮
     final action = IconButton.filled(
       onPressed: () => GoRouter.of(context).goNamed("PlayPage"),
       icon: Icon(TablerIcons.player_play),
       tooltip: "播放此节目",
-    );
+    ); // 构建操作按钮
 
     return Padding(
       padding: const EdgeInsets.all(8),
