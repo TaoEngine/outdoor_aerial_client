@@ -48,4 +48,4 @@ app.*.map.json
 *.ttf
 
 # asset file
-/asset/
+/assets/
