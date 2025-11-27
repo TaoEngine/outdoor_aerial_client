@@ -139,7 +139,7 @@ class _ProgramCarouselViewState extends State<_ProgramCarouselView> {
           final itemExtent = maxScroll > 0 ? maxScroll / (3 - 1) : 1;
           final int currentIndex = (_carouselController.offset / itemExtent).round();
           if (currentIndex == value) {
-            GoRouter.of(context).goNamed("ProgramPage");
+            GoRouter.of(context).pushNamed("ProgramPage");
           } else {
             _carouselController.animateToItem(value);
           }
