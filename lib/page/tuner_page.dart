@@ -211,100 +211,60 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
 
     return Container(
       color: Theme.of(context).colorScheme.surfaceContainerHighest,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // 切换显示正文
-              if (viewState) Text("data"),
-            ],
-          );
-        },
-      ),
-    );
-
-    return Container(
-      color: Theme.of(context).colorScheme.surfaceContainerHighest,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final width = constraints.maxWidth;
-          // 计算展开进度 t
-          // 当宽度 < 200 时，t = 0 (侧边状态)
-          // 当宽度 > 350 时，t = 1 (中间状态)
-
-          // 根据卡片目前的宽度决定
-          final double t = ((width - 200) / (350 - 200)).clamp(0, 1);
-
-          // 使用曲线让变化更平滑
-          final curveT = Curves.easeOut.transform(t);
-
-          // 图片宽度比例：从 1.0 (侧边) 过渡到 0.4 (中间)
-          final imageRatio = 1.0 - (0.6 * curveT);
-          final imageWidth = width * imageRatio;
-
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(
-                width: imageWidth,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minWidth: 20),
+              child: ClipRRect(
+                clipBehavior: Clip.antiAlias,
+                borderRadius: BorderRadiusGeometry.circular(24),
                 child: Image(image: programImage, fit: BoxFit.cover),
               ),
-              if (width - imageWidth > 1) // 只有当有剩余空间时才渲染文字区域
-                Expanded(
-                  child: ClipRect(
-                    child: OverflowBox(
-                      minWidth: 0,
-                      maxWidth: double.infinity,
-                      alignment: Alignment.centerLeft,
-                      child: SizedBox(
-                        // 锁定文字区域的宽度，防止挤压换行
-                        // 这里假设完全展开时文字区域占 60%
-                        width: width * 0.6,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Image(image: programBroadCastingLogo, height: 16),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Text(
-                                      programName,
-                                      style: Theme.of(context).textTheme.titleSmall,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              Text(
-                                programTitle,
-                                style: Theme.of(
-                                  context,
-                                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              const Spacer(),
-                              Text(
-                                "正在播出 · $timelabel",
-                                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                            ],
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsetsGeometry.all(16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      if (constraints.maxWidth < 8) return SizedBox(); // 避免 Padding 的 Overflow 错误
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        spacing: 8,
+                        children: [
+                          Flexible(
+                            child: Image(
+                              image: programBroadCastingLogo,
+                              height: Theme.of(context).textTheme.titleLarge?.fontSize,
+                              fit: BoxFit.fitHeight,
+                              alignment: Alignment.centerLeft,
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
+                          Flexible(
+                            child: Text(
+                              "正在直播",
+                              style: Theme.of(context).textTheme.titleMedium,
+                              overflow: TextOverflow.clip,
+                              softWrap: false,
+                              maxLines: 1,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
-                ),
-            ],
-          );
-        },
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
