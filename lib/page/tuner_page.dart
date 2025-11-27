@@ -175,6 +175,47 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final title = LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 8) return SizedBox(); // 避免 Padding 的 Overflow 错误
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          spacing: 8,
+          children: [
+            Flexible(
+              child: Image(
+                image: programBroadCastingLogo,
+                height: Theme.of(context).textTheme.titleLarge?.fontSize,
+                fit: BoxFit.fitHeight,
+                alignment: Alignment.centerLeft,
+              ),
+            ),
+            Flexible(
+              child: Text(
+                "正在直播",
+                style: Theme.of(context).textTheme.titleMedium,
+                overflow: TextOverflow.clip,
+                softWrap: false,
+                maxLines: 1,
+              ),
+            ),
+          ],
+        );
+      },
+    ); // 构建标题
+
+    final image = Expanded(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minWidth: 20),
+        child: ClipRRect(
+          clipBehavior: Clip.antiAlias,
+          borderRadius: BorderRadiusGeometry.circular(24),
+          child: Image(image: programImage, fit: BoxFit.cover),
+        ),
+      ),
+    ); // 构建图片
+
     final difference = DateTime.now().difference(programStartTime);
     final timelabel = switch (difference.inHours) {
       < 24 => "${difference.inHours}小时前",
@@ -186,53 +227,14 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minWidth: 20),
-              child: ClipRRect(
-                clipBehavior: Clip.antiAlias,
-                borderRadius: BorderRadiusGeometry.circular(24),
-                child: Image(image: programImage, fit: BoxFit.cover),
-              ),
-            ),
-          ),
+          image,
           Expanded(
             child: Padding(
               padding: EdgeInsetsGeometry.all(16),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      if (constraints.maxWidth < 8) return SizedBox(); // 避免 Padding 的 Overflow 错误
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        spacing: 8,
-                        children: [
-                          Flexible(
-                            child: Image(
-                              image: programBroadCastingLogo,
-                              height: Theme.of(context).textTheme.titleLarge?.fontSize,
-                              fit: BoxFit.fitHeight,
-                              alignment: Alignment.centerLeft,
-                            ),
-                          ),
-                          Flexible(
-                            child: Text(
-                              "正在直播",
-                              style: Theme.of(context).textTheme.titleMedium,
-                              overflow: TextOverflow.clip,
-                              softWrap: false,
-                              maxLines: 1,
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ],
+                children: [title],
               ),
             ),
           ),
