@@ -10,72 +10,9 @@ class TunerPage extends StatefulWidget {
 }
 
 class _TunerPageState extends State<TunerPage> {
-  // AppBar
-  Widget appBar() => SliverAppBar(
-    expandedHeight: 120,
-    pinned: true,
-    flexibleSpace: FlexibleSpaceBar(
-      titlePadding: EdgeInsets.only(left: 16, bottom: 6),
-      title: Row(
-        spacing: 16,
-        children: [
-          Icon(TablerIcons.antenna),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("室外天线", style: Theme.of(context).textTheme.headlineSmall),
-              Text("安装在安徽省马鞍山市", style: Theme.of(context).textTheme.labelSmall),
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
-
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        appBar(),
-        SliverPadding(
-          padding: EdgeInsetsGeometry.only(left: 16, right: 16, top: 16),
-          sliver: SliverToBoxAdapter(child: _ProgramCarouselView()),
-        ),
-        SliverPadding(
-          padding: EdgeInsetsGeometry.all(8),
-          sliver: SliverCrossAxisGroup(
-            slivers: [
-              SliverCrossAxisExpanded(
-                flex: 1,
-                sliver: SliverList.list(
-                  children: [
-                    _ProgramCard(
-                      programBroadCastingLogo: AssetImage("assets/sample1.png"),
-                      programName: "programName",
-                      programTitle: "programTitle",
-                      programImage: AssetImage("assets/sample1.png"),
-                      programStartTime: DateTime.now(),
-                      programTagged: false,
-                      programFavorite: false,
-                    ),
-                    // 放置 _ProgramCard 卡片的地方
-                  ],
-                ),
-              ),
-              SliverCrossAxisExpanded(
-                flex: 1,
-                sliver: SliverList.list(
-                  children: [
-                    // 放置 _ProgramCard 卡片的地方
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+    return ListView(children: [_ProgramCarouselView()]);
   }
 }
 
@@ -103,47 +40,50 @@ class _ProgramCarouselViewState extends State<_ProgramCarouselView> {
 
   @override
   Widget build(BuildContext context) {
-    return LimitedBox(
-      maxHeight: 240,
-      child: CarouselView.weighted(
-        key: const PageStorageKey('program_carousel'),
-        controller: _carouselController,
-        flexWeights: [1, 6, 1],
-        itemSnapping: true,
-        children: [
-          _ProgramCarouselViewUnit(
-            programBroadCastingLogo: AssetImage("assets/ah929.png"),
-            programName: '123',
-            programTitle: '123',
-            programImage: AssetImage("assets/sample1.png"),
-            programStartTime: DateTime.now(),
-          ),
-          _ProgramCarouselViewUnit(
-            programBroadCastingLogo: AssetImage("assets/ah929.png"),
-            programName: '123',
-            programTitle: '123',
-            programImage: AssetImage("assets/sample1.png"),
-            programStartTime: DateTime.now(),
-          ),
-          _ProgramCarouselViewUnit(
-            programBroadCastingLogo: AssetImage("assets/ah929.png"),
-            programName: '123',
-            programTitle: '123',
-            programImage: AssetImage("assets/sample1.png"),
-            programStartTime: DateTime.now(),
-          ),
-          // 放置 _ProgramCarouselViewUnit 卡片的地方
-        ],
-        onTap: (value) {
-          final maxScroll = _carouselController.position.maxScrollExtent;
-          final itemExtent = maxScroll > 0 ? maxScroll / (3 - 1) : 1;
-          final int currentIndex = (_carouselController.offset / itemExtent).round();
-          if (currentIndex == value) {
-            GoRouter.of(context).pushNamed("ProgramPage");
-          } else {
-            _carouselController.animateToItem(value);
-          }
-        },
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: LimitedBox(
+        maxHeight: 240,
+        child: CarouselView.weighted(
+          key: const PageStorageKey('program_carousel'),
+          controller: _carouselController,
+          flexWeights: [1, 6, 1],
+          itemSnapping: true,
+          children: [
+            _ProgramCarouselViewUnit(
+              programBroadCastingLogo: AssetImage("assets/ah929.png"),
+              programName: '123',
+              programTitle: '123',
+              programImage: AssetImage("assets/sample1.png"),
+              programStartTime: DateTime.now(),
+            ),
+            _ProgramCarouselViewUnit(
+              programBroadCastingLogo: AssetImage("assets/ah929.png"),
+              programName: '123',
+              programTitle: '123',
+              programImage: AssetImage("assets/sample1.png"),
+              programStartTime: DateTime.now(),
+            ),
+            _ProgramCarouselViewUnit(
+              programBroadCastingLogo: AssetImage("assets/ah929.png"),
+              programName: '123',
+              programTitle: '123',
+              programImage: AssetImage("assets/sample1.png"),
+              programStartTime: DateTime.now(),
+            ),
+            // 放置 _ProgramCarouselViewUnit 卡片的地方
+          ],
+          onTap: (value) {
+            final maxScroll = _carouselController.position.maxScrollExtent;
+            final itemExtent = maxScroll > 0 ? maxScroll / (3 - 1) : 1;
+            final int currentIndex = (_carouselController.offset / itemExtent).round();
+            if (currentIndex == value) {
+              GoRouter.of(context).pushNamed("ProgramPage");
+            } else {
+              _carouselController.animateToItem(value);
+            }
+          },
+        ),
       ),
     );
   }

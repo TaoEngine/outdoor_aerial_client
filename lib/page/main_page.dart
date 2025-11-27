@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:outdoor_aerial_client/page/tuner_page.dart';
 import 'package:outdoor_aerial_client/service/provider/program_provider.dart';
+import 'package:outdoor_aerial_client/widgets/play_widget.dart';
 import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
@@ -14,32 +15,29 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
-  static const mainNavigationBarDestinations = <Widget>[
-    NavigationDrawerDestination(icon: Icon(TablerIcons.antenna), label: Text("调谐器")),
-    NavigationDrawerDestination(icon: Icon(TablerIcons.timeline_event_text), label: Text("节目单")),
-    NavigationDrawerDestination(icon: Icon(TablerIcons.heart), label: Text("我喜欢")),
-    NavigationDrawerDestination(icon: Icon(TablerIcons.settings), label: Text("改设置")),
-  ];
-
-  late final PageController __pageController;
-
-  int __bottomNavigationBarIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    __pageController = PageController(initialPage: 0);
-  }
-
-  @override
-  void dispose() {
-    __pageController.dispose();
-    super.dispose();
-  }
+class _MainPageState extends State<MainPage> {
+  int _currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    final mainNavigationBarDestinations = <Widget>[
+      Padding(
+        padding: EdgeInsetsGeometry.all(4),
+        child: ListTile(
+          leading: CircleAvatar(child: Icon(TablerIcons.antenna)),
+          title: Text("室外天线", style: Theme.of(context).textTheme.headlineSmall),
+          subtitle: Text("位于安徽省马鞍山市", style: Theme.of(context).textTheme.labelSmall),
+        ),
+      ),
+      const NavigationDrawerDestination(icon: Icon(TablerIcons.antenna), label: Text("调谐器")),
+      const NavigationDrawerDestination(
+        icon: Icon(TablerIcons.timeline_event_text),
+        label: Text("节目单"),
+      ),
+      const NavigationDrawerDestination(icon: Icon(TablerIcons.heart), label: Text("我喜欢")),
+      NavigationDrawerDestination(icon: Icon(TablerIcons.settings), label: Text("改设置")),
+    ];
+
     return ChangeNotifierProvider<MusicProgramProvider>(
       create: (context) => MusicProgramProvider(),
       child: Scaffold(
@@ -47,39 +45,24 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           children: [
             NavigationDrawer(
               onDestinationSelected: (value) {
-                __pageController.animateToPage(
-                  value,
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeInOutCubic,
-                );
                 setState(() {
-                  __bottomNavigationBarIndex = value;
+                  _currentPageIndex = value;
                 });
               },
-              selectedIndex: __bottomNavigationBarIndex,
+              selectedIndex: _currentPageIndex,
               children: mainNavigationBarDestinations,
             ),
             Expanded(
-              child: Stack(
-                children: [
-                  PageView(
-                    controller: __pageController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: <Widget>[TunerPage(), Placeholder(), Placeholder(), Placeholder()],
-                  ),
-                  // Consumer<MusicProgramProvider>(
-                  //   builder: (context, program, _) => BottomPlayWidget(
-                  //     programTitle: program.programTitle,
-                  //     programName: program.programName,
-                  //     programBroadcasting: program.programBroadcasting,
-                  //     programImage: program.programImage,
-                  //     onStopButtomTap: () {},
-                  //     programProgress: 0.3,
-                  //   ),
-                  // ),
-                ],
-              ),
+              flex: 2,
+              child: switch (_currentPageIndex) {
+                0 => TunerPage(),
+                1 => Placeholder(),
+                2 => Placeholder(),
+                3 => Placeholder(),
+                _ => TunerPage(),
+              },
             ),
+            Expanded(flex: 1, child: Placeholder()),
           ],
         ),
       ),
