@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:m3e_collection/m3e_collection.dart';
 
@@ -45,7 +46,14 @@ class MainApp extends StatelessWidget {
       GoRoute(
         path: "/program",
         name: "ProgramPage",
-        builder: (context, state) => const Placeholder(),
+        builder: (context, state) => Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () => GoRouter.of(context).pop(),
+              icon: Icon(TablerIcons.arrow_back),
+            ),
+          ),
+        ),
       ),
     ],
   );
