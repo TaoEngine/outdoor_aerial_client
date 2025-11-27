@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 
 import 'package:outdoor_aerial_client/page/tuner_page.dart';
 import 'package:outdoor_aerial_client/service/provider/program_provider.dart';
-import 'package:outdoor_aerial_client/widgets/play_widget.dart';
 import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
