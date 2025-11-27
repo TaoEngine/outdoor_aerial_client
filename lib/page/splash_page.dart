@@ -14,7 +14,7 @@ class SplashPage extends StatelessWidget {
         child: Text("Outdoor Aerial", style: Theme.of(context).textTheme.displayLarge),
       ),
       asyncNavigationCallback: () async {
-        await Future.delayed(const Duration(seconds: 3));
+        // await Future.delayed(const Duration(seconds: 1));
         if (context.mounted) {
           GoRouter.of(context).goNamed("MainPage");
         }
