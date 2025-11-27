@@ -16,14 +16,10 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   static const mainNavigationBarDestinations = <Widget>[
-    NavigationDestination(icon: Icon(TablerIcons.antenna), label: "调谐器", tooltip: "调谐器"),
-    NavigationDestination(
-      icon: Icon(TablerIcons.timeline_event_text),
-      label: "节目单",
-      tooltip: "节目单",
-    ),
-    NavigationDestination(icon: Icon(TablerIcons.heart), label: "我喜欢", tooltip: "我喜欢"),
-    NavigationDestination(icon: Icon(TablerIcons.settings), label: "改设置", tooltip: "改设置"),
+    NavigationDrawerDestination(icon: Icon(TablerIcons.antenna), label: Text("调谐器")),
+    NavigationDrawerDestination(icon: Icon(TablerIcons.timeline_event_text), label: Text("节目单")),
+    NavigationDrawerDestination(icon: Icon(TablerIcons.heart), label: Text("我喜欢")),
+    NavigationDrawerDestination(icon: Icon(TablerIcons.settings), label: Text("改设置")),
   ];
 
   late final PageController __pageController;
@@ -47,38 +43,44 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     return ChangeNotifierProvider<MusicProgramProvider>(
       create: (context) => MusicProgramProvider(),
       child: Scaffold(
-        body: Stack(
+        body: Row(
           children: [
-            PageView(
-              controller: __pageController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: <Widget>[TunerPage(), Placeholder(), Placeholder(), Placeholder()],
+            NavigationDrawer(
+              onDestinationSelected: (value) {
+                __pageController.animateToPage(
+                  value,
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeInOutCubic,
+                );
+                setState(() {
+                  __bottomNavigationBarIndex = value;
+                });
+              },
+              selectedIndex: __bottomNavigationBarIndex,
+              children: mainNavigationBarDestinations,
             ),
-            // Consumer<MusicProgramProvider>(
-            //   builder: (context, program, _) => BottomPlayWidget(
-            //     programTitle: program.programTitle,
-            //     programName: program.programName,
-            //     programBroadcasting: program.programBroadcasting,
-            //     programImage: program.programImage,
-            //     onStopButtomTap: () {},
-            //     programProgress: 0.3,
-            //   ),
-            // ),
+            Expanded(
+              child: Stack(
+                children: [
+                  PageView(
+                    controller: __pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: <Widget>[TunerPage(), Placeholder(), Placeholder(), Placeholder()],
+                  ),
+                  // Consumer<MusicProgramProvider>(
+                  //   builder: (context, program, _) => BottomPlayWidget(
+                  //     programTitle: program.programTitle,
+                  //     programName: program.programName,
+                  //     programBroadcasting: program.programBroadcasting,
+                  //     programImage: program.programImage,
+                  //     onStopButtomTap: () {},
+                  //     programProgress: 0.3,
+                  //   ),
+                  // ),
+                ],
+              ),
+            ),
           ],
-        ),
-        bottomNavigationBar: NavigationBar(
-          destinations: mainNavigationBarDestinations,
-          onDestinationSelected: (value) {
-            __pageController.animateToPage(
-              value,
-              duration: Duration(milliseconds: 300),
-              curve: Curves.easeInOutCubic,
-            );
-            setState(() {
-              __bottomNavigationBarIndex = value;
-            });
-          },
-          selectedIndex: __bottomNavigationBarIndex,
         ),
       ),
     );
