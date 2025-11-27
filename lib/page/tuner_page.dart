@@ -138,8 +138,8 @@ class _ProgramCarouselViewState extends State<_ProgramCarouselView> {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: 240),
+    return LimitedBox(
+      maxHeight: 240,
       child: CarouselView.weighted(
         key: const PageStorageKey('program_carousel'),
         controller: _carouselController,
@@ -308,19 +308,22 @@ class _ProgramCard extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       spacing: 8,
       children: [
-        Image(image: programBroadCastingLogo, height: 16),
+        Image(
+          image: programBroadCastingLogo,
+          height: Theme.of(context).textTheme.titleLarge?.fontSize,
+        ),
         Text(programName, style: Theme.of(context).textTheme.titleMedium),
       ],
     );
-    final body = Text(
+    final head = Text(
       programTitle,
       style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
     );
-    final head = Expanded(
+    final body = Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 8,
-        children: [title, body],
+        children: [title, head],
       ),
     ); // 构建头部
 
