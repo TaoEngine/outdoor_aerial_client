@@ -25,16 +25,25 @@ class _MainPageState extends State<MainPage> {
         child: ListTile(
           leading: CircleAvatar(child: Icon(TablerIcons.antenna)),
           title: Text("室外天线", style: Theme.of(context).textTheme.headlineSmall),
-          subtitle: Text("位于安徽省马鞍山市", style: Theme.of(context).textTheme.labelSmall),
+          subtitle: Text("位于安徽省马鞍山市", style: Theme.of(context).textTheme.bodySmall),
         ),
       ),
-      const NavigationDrawerDestination(icon: Icon(TablerIcons.antenna), label: Text("调谐器")),
-      const NavigationDrawerDestination(
-        icon: Icon(TablerIcons.timeline_event_text),
-        label: Text("节目单"),
+      NavigationDrawerDestination(
+        icon: Icon(TablerIcons.antenna),
+        label: Text("调谐器", style: Theme.of(context).textTheme.labelLarge),
       ),
-      const NavigationDrawerDestination(icon: Icon(TablerIcons.heart), label: Text("我喜欢")),
-      NavigationDrawerDestination(icon: Icon(TablerIcons.settings), label: Text("改设置")),
+      NavigationDrawerDestination(
+        icon: Icon(TablerIcons.timeline_event_text),
+        label: Text("节目单", style: Theme.of(context).textTheme.labelLarge),
+      ),
+      NavigationDrawerDestination(
+        icon: Icon(TablerIcons.heart),
+        label: Text("我喜欢", style: Theme.of(context).textTheme.labelLarge),
+      ),
+      NavigationDrawerDestination(
+        icon: Icon(TablerIcons.settings),
+        label: Text("改设置", style: Theme.of(context).textTheme.labelLarge),
+      ),
     ];
 
     return ChangeNotifierProvider<MusicProgramProvider>(
@@ -61,7 +70,7 @@ class _MainPageState extends State<MainPage> {
                 _ => TunerPage(),
               },
             ),
-            Expanded(flex: 1, child: Placeholder()),
+            Expanded(flex: 1, child: Container()),
           ],
         ),
       ),
