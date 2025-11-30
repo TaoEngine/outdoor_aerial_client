@@ -64,22 +64,22 @@ class _ProgramCarouselViewState extends State<_ProgramCarouselView> {
           itemSnapping: true,
           children: [
             _ProgramCarouselViewUnit(
-              programBroadCastingLogo: AssetImage("assets/sample1.png"),
-              programName: '123',
+              programBroadcastingLogo: AssetImage("assets/ah929.png"),
+              programBroadcasting: '安徽生活广播',
+              programTitle: '城市 Morning Call',
+              programImage: AssetImage("assets/sample1.png"),
+              programStartTime: DateTime.now(),
+            ),
+            _ProgramCarouselViewUnit(
+              programBroadcastingLogo: AssetImage("assets/sample1.png"),
+              programBroadcasting: '123',
               programTitle: '123',
               programImage: AssetImage("assets/sample1.png"),
               programStartTime: DateTime.now(),
             ),
             _ProgramCarouselViewUnit(
-              programBroadCastingLogo: AssetImage("assets/sample1.png"),
-              programName: '123',
-              programTitle: '123',
-              programImage: AssetImage("assets/sample1.png"),
-              programStartTime: DateTime.now(),
-            ),
-            _ProgramCarouselViewUnit(
-              programBroadCastingLogo: AssetImage("assets/sample1.png"),
-              programName: '123',
+              programBroadcastingLogo: AssetImage("assets/sample1.png"),
+              programBroadcasting: '123',
               programTitle: '123',
               programImage: AssetImage("assets/sample1.png"),
               programStartTime: DateTime.now(),
@@ -103,11 +103,11 @@ class _ProgramCarouselViewState extends State<_ProgramCarouselView> {
 }
 
 class _ProgramCarouselViewUnit extends StatelessWidget {
-  /// 节目所属电台Logo
-  final ImageProvider programBroadCastingLogo;
+  /// 节目所属电台名称
+  final String programBroadcasting;
 
-  /// 节目名称
-  final String programName;
+  /// 节目所属电台Logo
+  final ImageProvider programBroadcastingLogo;
 
   /// 节目内容
   final String programTitle;
@@ -119,8 +119,8 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
   final DateTime programStartTime;
 
   const _ProgramCarouselViewUnit({
-    required this.programBroadCastingLogo,
-    required this.programName,
+    required this.programBroadcasting,
+    required this.programBroadcastingLogo,
     required this.programTitle,
     required this.programImage,
     required this.programStartTime,
@@ -140,7 +140,7 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
           children: [
             Flexible(
               child: Image(
-                image: programBroadCastingLogo,
+                image: programBroadcastingLogo,
                 height: Theme.of(context).textTheme.titleLarge?.fontSize,
                 fit: BoxFit.fitHeight,
                 alignment: Alignment.centerLeft,
@@ -148,7 +148,7 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
             ),
             Flexible(
               child: Text(
-                "正在直播",
+                programBroadcasting,
                 style: Theme.of(context).textTheme.titleMedium,
                 overflow: TextOverflow.clip,
                 softWrap: false,
@@ -164,14 +164,14 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
       builder: (context, constraints) {
         if (constraints.maxWidth < 8) return SizedBox(); // 顺应上面布局消失逻辑
         return Text(
-          "测试文本测试",
+          programTitle,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           overflow: TextOverflow.clip,
           softWrap: false,
           maxLines: 1,
         );
       },
-    );
+    ); // 构建正文
 
     final image = ClipRRect(
       clipBehavior: Clip.antiAlias,
@@ -185,8 +185,7 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
       _ => "${difference.inDays}天前",
     }; // 构建标签
 
-    // 构建轮播指示器 TODO 换名字
-    final zhisq = LayoutBuilder(
+    final indicator = LayoutBuilder(
       builder: (context, constraints) {
         // if (constraints.maxWidth > constraints.maxHeight) return SizedBox(); // 顺应上面布局消失逻辑
         return Align(
@@ -194,7 +193,7 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
           child: CircularProgressIndicator(year2023: false, value: 0.2),
         );
       },
-    );
+    ); // 构建轮播指示
 
     return Container(
       color: Theme.of(context).colorScheme.surfaceContainerHighest,
@@ -209,7 +208,7 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [title, head, zhisq],
+                children: [title, head, indicator],
               ),
             ),
           ),
@@ -283,7 +282,7 @@ class _ProgramCard extends StatelessWidget {
           ],
         );
       },
-    );
+    ); // 构建标题
 
     final head = LayoutBuilder(
       builder: (context, constraints) {
@@ -296,15 +295,7 @@ class _ProgramCard extends StatelessWidget {
           maxLines: 3,
         );
       },
-    );
-
-    final body = Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 8,
-        children: [title, head],
-      ),
-    ); // 构建主体
+    ); // 构建正文
 
     final image = ClipRRect(
       clipBehavior: Clip.antiAlias,
@@ -331,7 +322,7 @@ class _ProgramCard extends StatelessWidget {
       onPressed: () => GoRouter.of(context).goNamed("PlayPage"),
       icon: Icon(TablerIcons.player_play),
       tooltip: "播放此节目",
-    ); // 构建操作按钮
+    ); // 构建按钮
 
     return Padding(
       padding: const EdgeInsets.all(8),
@@ -349,7 +340,16 @@ class _ProgramCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 16,
-                children: [body, image],
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 8,
+                      children: [title, head],
+                    ),
+                  ),
+                  image,
+                ],
               ),
               const SizedBox(height: 16),
               Row(
