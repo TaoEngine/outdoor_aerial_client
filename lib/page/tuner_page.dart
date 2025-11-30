@@ -12,7 +12,20 @@ class TunerPage extends StatefulWidget {
 class _TunerPageState extends State<TunerPage> {
   @override
   Widget build(BuildContext context) {
-    return ListView(children: [_ProgramCarouselView()]);
+    return ListView(
+      children: [
+        _ProgramCarouselView(),
+        _ProgramCard(
+          programBroadCastingLogo: AssetImage("assets/sample1.png"),
+          programName: "测试",
+          programTitle: "用于测试的文本",
+          programImage: AssetImage("assets/sample1.png"),
+          programStartTime: DateTime(2025, 11, 11, 11, 11),
+          programTagged: true,
+          programFavorite: true,
+        ),
+      ],
+    );
   }
 }
 
@@ -51,21 +64,21 @@ class _ProgramCarouselViewState extends State<_ProgramCarouselView> {
           itemSnapping: true,
           children: [
             _ProgramCarouselViewUnit(
-              programBroadCastingLogo: AssetImage("assets/ah929.png"),
+              programBroadCastingLogo: AssetImage("assets/sample1.png"),
               programName: '123',
               programTitle: '123',
               programImage: AssetImage("assets/sample1.png"),
               programStartTime: DateTime.now(),
             ),
             _ProgramCarouselViewUnit(
-              programBroadCastingLogo: AssetImage("assets/ah929.png"),
+              programBroadCastingLogo: AssetImage("assets/sample1.png"),
               programName: '123',
               programTitle: '123',
               programImage: AssetImage("assets/sample1.png"),
               programStartTime: DateTime.now(),
             ),
             _ProgramCarouselViewUnit(
-              programBroadCastingLogo: AssetImage("assets/ah929.png"),
+              programBroadCastingLogo: AssetImage("assets/sample1.png"),
               programName: '123',
               programTitle: '123',
               programImage: AssetImage("assets/sample1.png"),
@@ -118,7 +131,9 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
     final title = LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth < 8) return SizedBox(); // 避免 Padding 的 Overflow 错误
+
         return Row(
+          mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           spacing: 8,
@@ -145,15 +160,23 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
       },
     ); // 构建标题
 
-    final image = Expanded(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(minWidth: 20),
-        child: ClipRRect(
-          clipBehavior: Clip.antiAlias,
-          borderRadius: BorderRadiusGeometry.circular(24),
-          child: Image(image: programImage, fit: BoxFit.cover),
-        ),
-      ),
+    final head = LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 8) return SizedBox(); // 顺应上面布局消失逻辑
+        return Text(
+          "测试文本测试",
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+          overflow: TextOverflow.clip,
+          softWrap: false,
+          maxLines: 1,
+        );
+      },
+    );
+
+    final image = ClipRRect(
+      clipBehavior: Clip.antiAlias,
+      borderRadius: BorderRadiusGeometry.circular(24),
+      child: Image(image: programImage, fit: BoxFit.cover),
     ); // 构建图片
 
     final difference = DateTime.now().difference(programStartTime);
@@ -162,19 +185,31 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
       _ => "${difference.inDays}天前",
     }; // 构建标签
 
+    // 构建轮播指示器 TODO 换名字
+    final zhisq = LayoutBuilder(
+      builder: (context, constraints) {
+        // if (constraints.maxWidth > constraints.maxHeight) return SizedBox(); // 顺应上面布局消失逻辑
+        return Align(
+          alignment: Alignment.bottomRight,
+          child: CircularProgressIndicator(year2023: false, value: 0.2),
+        );
+      },
+    );
+
     return Container(
       color: Theme.of(context).colorScheme.surfaceContainerHighest,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          image,
+          Expanded(child: image),
           Expanded(
             child: Padding(
               padding: EdgeInsetsGeometry.all(16),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [title],
+                children: [title, head, zhisq],
               ),
             ),
           ),
@@ -218,21 +253,51 @@ class _ProgramCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = Row(
-      mainAxisSize: MainAxisSize.min,
-      spacing: 8,
-      children: [
-        Image(
-          image: programBroadCastingLogo,
-          height: Theme.of(context).textTheme.titleLarge?.fontSize,
-        ),
-        Text(programName, style: Theme.of(context).textTheme.titleMedium),
-      ],
+    final title = LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 8) return SizedBox(); // 避免 Padding 的 Overflow 错误
+
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          spacing: 8,
+          children: [
+            Flexible(
+              child: Image(
+                image: programBroadCastingLogo,
+                height: Theme.of(context).textTheme.titleLarge?.fontSize,
+                fit: BoxFit.fitHeight,
+                alignment: Alignment.centerLeft,
+              ),
+            ),
+            Flexible(
+              child: Text(
+                programName,
+                style: Theme.of(context).textTheme.titleMedium,
+                overflow: TextOverflow.clip,
+                softWrap: false,
+                maxLines: 1,
+              ),
+            ),
+          ],
+        );
+      },
     );
-    final head = Text(
-      programTitle,
-      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+
+    final head = LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 8) return SizedBox(); // 顺应上面布局消失逻辑
+        return Text(
+          programTitle,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+          overflow: TextOverflow.ellipsis,
+          softWrap: true,
+          maxLines: 3,
+        );
+      },
     );
+
     final body = Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -243,7 +308,7 @@ class _ProgramCard extends StatelessWidget {
 
     final image = ClipRRect(
       clipBehavior: Clip.antiAlias,
-      borderRadius: BorderRadiusGeometry.circular(16),
+      borderRadius: BorderRadiusGeometry.circular(24),
       child: Image(image: programImage, width: 100, height: 100),
     ); // 构建图片
 
@@ -280,8 +345,11 @@ class _ProgramCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [body, const SizedBox(width: 16), image],
+                spacing: 16,
+                children: [body, image],
               ),
               const SizedBox(height: 16),
               Row(
