@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,18 +14,7 @@ class _TunerPageState extends State<TunerPage> {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: [
-        _ProgramCarouselView(),
-        _ProgramCard(
-          programBroadCastingLogo: AssetImage("assets/sample1.png"),
-          programName: "测试",
-          programTitle: "用于测试的文本",
-          programImage: AssetImage("assets/sample1.png"),
-          programStartTime: DateTime(2025, 11, 11, 11, 11),
-          programTagged: true,
-          programFavorite: true,
-        ),
-      ],
+      children: [], // 放置 _ProgramCarouselView 轮播图和 _ProgramCard 卡片的地方
     );
   }
 }
@@ -51,6 +41,17 @@ class _ProgramCarouselViewState extends State<_ProgramCarouselView> {
     super.dispose();
   }
 
+  void onTap(int value) {
+    final maxScroll = _carouselController.position.maxScrollExtent;
+    final itemExtent = maxScroll > 0 ? maxScroll / (3 - 1) : 1;
+    final int currentIndex = (_carouselController.offset / itemExtent).round();
+    if (currentIndex == value) {
+      GoRouter.of(context).pushNamed("ProgramPage");
+    } else {
+      _carouselController.animateToItem(value);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -58,21 +59,12 @@ class _ProgramCarouselViewState extends State<_ProgramCarouselView> {
       child: LimitedBox(
         maxHeight: 240,
         child: CarouselView.weighted(
-          controller: _carouselController,
-          flexWeights: [1, 6, 1],
-          itemSnapping: true,
           key: const PageStorageKey('CarouselView'),
+          flexWeights: const [1, 6, 1],
+          itemSnapping: true,
+          controller: _carouselController,
           children: [], // 放置 _ProgramCarouselViewUnit 卡片的地方
-          onTap: (value) {
-            final maxScroll = _carouselController.position.maxScrollExtent;
-            final itemExtent = maxScroll > 0 ? maxScroll / (3 - 1) : 1;
-            final int currentIndex = (_carouselController.offset / itemExtent).round();
-            if (currentIndex == value) {
-              GoRouter.of(context).pushNamed("ProgramPage");
-            } else {
-              _carouselController.animateToItem(value);
-            }
-          },
+          onTap: onTap,
         ),
       ),
     );
