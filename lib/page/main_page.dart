@@ -21,7 +21,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     final mainNavigationBarDestinations = <Widget>[
       Padding(
-        padding: EdgeInsetsGeometry.all(4),
+        padding: .all(4),
         child: ListTile(
           leading: CircleAvatar(child: Icon(TablerIcons.antenna)),
           title: Text("室外天线", style: Theme.of(context).textTheme.headlineSmall),
@@ -61,7 +61,6 @@ class _MainPageState extends State<MainPage> {
               children: mainNavigationBarDestinations,
             ),
             Expanded(
-              flex: 2,
               child: switch (_currentPageIndex) {
                 0 => TunerPage(),
                 1 => Placeholder(),
@@ -70,7 +69,6 @@ class _MainPageState extends State<MainPage> {
                 _ => TunerPage(),
               },
             ),
-            Expanded(flex: 1, child: Container()),
           ],
         ),
       ),
@@ -111,7 +109,7 @@ class BottomPlayWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.bottomCenter,
+      alignment: .bottomCenter,
       child: ConstrainedBox(
         constraints: BoxConstraints(
           maxHeight: 100,
@@ -121,37 +119,37 @@ class BottomPlayWidget extends StatelessWidget {
           },
         ),
         child: Padding(
-          padding: EdgeInsetsGeometry.all(10),
+          padding: .all(10),
           child: Card.filled(
-            clipBehavior: Clip.antiAlias,
+            clipBehavior: .antiAlias,
             child: InkWell(
               onTap: () => GoRouter.of(context).goNamed("PlayPage"),
               child: Stack(
                 children: [
                   FractionallySizedBox(
-                    alignment: Alignment.centerLeft,
+                    alignment: .centerLeft,
                     widthFactor: programProgress,
                     child: Ink(color: Theme.of(context).colorScheme.tertiaryContainer),
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: .start,
+                    mainAxisSize: .max,
+                    crossAxisAlignment: .center,
                     children: [
                       Padding(
-                        padding: EdgeInsetsGeometry.all(5),
+                        padding: .all(5),
                         child: ClipRRect(
-                          clipBehavior: Clip.antiAlias,
-                          borderRadius: BorderRadiusGeometry.circular(10),
+                          clipBehavior: .antiAlias,
+                          borderRadius: .circular(10),
                           child: AspectRatio(aspectRatio: 1, child: programImage),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsGeometry.only(left: 15, right: 15),
+                        padding: .only(left: 15, right: 15),
                         child: Column(
                           spacing: 5,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: .center,
+                          crossAxisAlignment: .start,
                           children: [
                             Text(programTitle, style: Theme.of(context).textTheme.bodyLarge),
                             Text(
@@ -164,7 +162,7 @@ class BottomPlayWidget extends StatelessWidget {
                     ],
                   ),
                   Align(
-                    alignment: Alignment.centerRight,
+                    alignment: .centerRight,
                     child: AspectRatio(
                       aspectRatio: 1,
                       child: Center(

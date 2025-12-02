@@ -54,38 +54,15 @@ class _ProgramCarouselViewState extends State<_ProgramCarouselView> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 16),
+      padding: const .only(top: 16),
       child: LimitedBox(
         maxHeight: 240,
         child: CarouselView.weighted(
-          key: const PageStorageKey('program_carousel'),
           controller: _carouselController,
           flexWeights: [1, 6, 1],
           itemSnapping: true,
-          children: [
-            _ProgramCarouselViewUnit(
-              programBroadcastingLogo: AssetImage("assets/ah929.png"),
-              programBroadcasting: '安徽生活广播',
-              programTitle: '城市 Morning Call',
-              programImage: AssetImage("assets/sample1.png"),
-              programStartTime: DateTime.now(),
-            ),
-            _ProgramCarouselViewUnit(
-              programBroadcastingLogo: AssetImage("assets/sample1.png"),
-              programBroadcasting: '123',
-              programTitle: '123',
-              programImage: AssetImage("assets/sample1.png"),
-              programStartTime: DateTime.now(),
-            ),
-            _ProgramCarouselViewUnit(
-              programBroadcastingLogo: AssetImage("assets/sample1.png"),
-              programBroadcasting: '123',
-              programTitle: '123',
-              programImage: AssetImage("assets/sample1.png"),
-              programStartTime: DateTime.now(),
-            ),
-            // 放置 _ProgramCarouselViewUnit 卡片的地方
-          ],
+          key: const PageStorageKey('CarouselView'),
+          children: [], // 放置 _ProgramCarouselViewUnit 卡片的地方
           onTap: (value) {
             final maxScroll = _carouselController.position.maxScrollExtent;
             final itemExtent = maxScroll > 0 ? maxScroll / (3 - 1) : 1;
@@ -133,24 +110,24 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
         if (constraints.maxWidth < 8) return SizedBox(); // 避免 Padding 的 Overflow 错误
 
         return Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: .max,
+          mainAxisAlignment: .start,
+          crossAxisAlignment: .center,
           spacing: 8,
           children: [
             Flexible(
               child: Image(
                 image: programBroadcastingLogo,
                 height: Theme.of(context).textTheme.titleLarge?.fontSize,
-                fit: BoxFit.fitHeight,
-                alignment: Alignment.centerLeft,
+                fit: .fitHeight,
+                alignment: .centerLeft,
               ),
             ),
             Flexible(
               child: Text(
                 programBroadcasting,
                 style: Theme.of(context).textTheme.titleMedium,
-                overflow: TextOverflow.clip,
+                overflow: .clip,
                 softWrap: false,
                 maxLines: 1,
               ),
@@ -165,8 +142,8 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
         if (constraints.maxWidth < 8) return SizedBox(); // 顺应上面布局消失逻辑
         return Text(
           programTitle,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-          overflow: TextOverflow.clip,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: .bold),
+          overflow: .clip,
           softWrap: false,
           maxLines: 1,
         );
@@ -174,22 +151,22 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
     ); // 构建正文
 
     final image = ClipRRect(
-      clipBehavior: Clip.antiAlias,
-      borderRadius: BorderRadiusGeometry.circular(24),
-      child: Image(image: programImage, fit: BoxFit.cover),
+      clipBehavior: .antiAlias,
+      borderRadius: .circular(24),
+      child: Image(image: programImage, fit: .cover),
     ); // 构建图片
 
-    final difference = DateTime.now().difference(programStartTime);
-    final timelabel = switch (difference.inHours) {
-      < 24 => "${difference.inHours}小时前",
-      _ => "${difference.inDays}天前",
-    }; // 构建标签
+    // final difference = DateTime.now().difference(programStartTime);
+    // final timelabel = switch (difference.inHours) {
+    //   < 24 => "${difference.inHours}小时前",
+    //   _ => "${difference.inDays}天前",
+    // }; // 构建标签
 
     final indicator = LayoutBuilder(
       builder: (context, constraints) {
         // if (constraints.maxWidth > constraints.maxHeight) return SizedBox(); // 顺应上面布局消失逻辑
         return Align(
-          alignment: Alignment.bottomRight,
+          alignment: .bottomRight,
           child: CircularProgressIndicator(year2023: false, value: 0.2),
         );
       },
@@ -198,16 +175,16 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
     return Container(
       color: Theme.of(context).colorScheme.surfaceContainerHighest,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: .stretch,
         children: [
           Expanded(child: image),
           Expanded(
             child: Padding(
-              padding: EdgeInsetsGeometry.all(16),
+              padding: .all(16),
               child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: .max,
+                mainAxisAlignment: .spaceBetween,
+                crossAxisAlignment: .start,
                 children: [title, head, indicator],
               ),
             ),
@@ -257,24 +234,24 @@ class _ProgramCard extends StatelessWidget {
         if (constraints.maxWidth < 8) return SizedBox(); // 避免 Padding 的 Overflow 错误
 
         return Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: .max,
+          mainAxisAlignment: .start,
+          crossAxisAlignment: .center,
           spacing: 8,
           children: [
             Flexible(
               child: Image(
                 image: programBroadCastingLogo,
                 height: Theme.of(context).textTheme.titleLarge?.fontSize,
-                fit: BoxFit.fitHeight,
-                alignment: Alignment.centerLeft,
+                fit: .fitHeight,
+                alignment: .centerLeft,
               ),
             ),
             Flexible(
               child: Text(
                 programName,
                 style: Theme.of(context).textTheme.titleMedium,
-                overflow: TextOverflow.clip,
+                overflow: .clip,
                 softWrap: false,
                 maxLines: 1,
               ),
@@ -290,7 +267,7 @@ class _ProgramCard extends StatelessWidget {
         return Text(
           programTitle,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-          overflow: TextOverflow.ellipsis,
+          overflow: .ellipsis,
           softWrap: true,
           maxLines: 3,
         );
@@ -298,8 +275,8 @@ class _ProgramCard extends StatelessWidget {
     ); // 构建正文
 
     final image = ClipRRect(
-      clipBehavior: Clip.antiAlias,
-      borderRadius: BorderRadiusGeometry.circular(24),
+      clipBehavior: .antiAlias,
+      borderRadius: .circular(24),
       child: Image(image: programImage, width: 100, height: 100),
     ); // 构建图片
 
@@ -309,7 +286,7 @@ class _ProgramCard extends StatelessWidget {
       _ => "${difference.inDays}天前",
     };
     final tags = Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       spacing: 4,
       children: [
         if (programFavorite) Chip(avatar: Icon(TablerIcons.heart_filled), label: Text("我喜欢")),
@@ -325,37 +302,30 @@ class _ProgramCard extends StatelessWidget {
     ); // 构建按钮
 
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const .all(8),
       child: Card.filled(
-        clipBehavior: Clip.antiAlias,
+        clipBehavior: .antiAlias,
         shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(25)),
         child: Padding(
-          padding: EdgeInsetsGeometry.all(20),
+          padding: const .all(20),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: .min,
+            crossAxisAlignment: .start,
             children: [
               Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: .max,
+                mainAxisAlignment: .spaceAround,
+                crossAxisAlignment: .start,
                 spacing: 16,
                 children: [
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 8,
-                      children: [title, head],
-                    ),
+                    child: Column(crossAxisAlignment: .start, spacing: 8, children: [title, head]),
                   ),
                   image,
                 ],
               ),
               const SizedBox(height: 16),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [tags, const Spacer(), action],
-              ),
+              Row(crossAxisAlignment: .center, children: [tags, const Spacer(), action]),
             ],
           ),
         ),
