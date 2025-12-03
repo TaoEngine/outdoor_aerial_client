@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:go_router/go_router.dart';
+import 'package:outdoor_aerial_client/providers/broadcast_programs.dart';
 
 class TunerPage extends StatefulWidget {
   const TunerPage({super.key});
@@ -14,19 +16,19 @@ class _TunerPageState extends State<TunerPage> {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: [], // 放置 _ProgramCarouselView 轮播图和 _ProgramCard 卡片的地方
+      children: [ProgramCarouselView()], // 放置 _ProgramCarouselView 轮播图和 _ProgramCard 卡片的地方
     );
   }
 }
 
-class _ProgramCarouselView extends StatefulWidget {
-  const _ProgramCarouselView();
+class ProgramCarouselView extends ConsumerStatefulWidget {
+  const ProgramCarouselView({super.key});
 
   @override
-  State<_ProgramCarouselView> createState() => _ProgramCarouselViewState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _ProgramCarouselViewState();
 }
 
-class _ProgramCarouselViewState extends State<_ProgramCarouselView> {
+class _ProgramCarouselViewState extends ConsumerState<ProgramCarouselView> {
   late final CarouselController _carouselController;
 
   @override
@@ -54,24 +56,32 @@ class _ProgramCarouselViewState extends State<_ProgramCarouselView> {
 
   @override
   Widget build(BuildContext context) {
+    final programs = ref.watch(broadcastProgramsProvider);
     return Padding(
       padding: const .only(top: 16),
       child: LimitedBox(
         maxHeight: 240,
         child: CarouselView.weighted(
-          key: const PageStorageKey('CarouselView'),
+          key: const PageStorageKey("CarouselView"),
           flexWeights: const [1, 6, 1],
           itemSnapping: true,
           controller: _carouselController,
-          children: [], // 放置 _ProgramCarouselViewUnit 卡片的地方
-          onTap: onTap,
+          children: programs.map((program) {
+            return ProgramCarouselViewUnit(
+              programBroadcasting: program.studio.name,
+              programBroadcastingLogo: program.studio.logo,
+              programTitle: program.name,
+              programImage: program.logo,
+              programStartTime: DateTime(2025, 12, 3, program.start.hour, program.start.minute),
+            );
+          }).toList(),
         ),
       ),
     );
   }
 }
 
-class _ProgramCarouselViewUnit extends StatelessWidget {
+class ProgramCarouselViewUnit extends StatelessWidget {
   /// 节目所属电台名称
   final String programBroadcasting;
 
@@ -87,7 +97,8 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
   /// 节目播出时间
   final DateTime programStartTime;
 
-  const _ProgramCarouselViewUnit({
+  const ProgramCarouselViewUnit({
+    super.key,
     required this.programBroadcasting,
     required this.programBroadcastingLogo,
     required this.programTitle,
@@ -187,7 +198,7 @@ class _ProgramCarouselViewUnit extends StatelessWidget {
   }
 }
 
-class _ProgramCard extends StatelessWidget {
+class ProgramCard extends StatelessWidget {
   /// 节目所属电台Logo
   final ImageProvider programBroadCastingLogo;
 
@@ -209,7 +220,8 @@ class _ProgramCard extends StatelessWidget {
   /// 是否喜欢此节目
   final bool programFavorite;
 
-  const _ProgramCard({
+  const ProgramCard({
+    super.key,
     required this.programBroadCastingLogo,
     required this.programName,
     required this.programTitle,
