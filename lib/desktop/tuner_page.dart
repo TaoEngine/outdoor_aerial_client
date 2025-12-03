@@ -119,7 +119,7 @@ class ProgramCarouselViewUnit extends StatelessWidget {
       },
     ); // 构建标题
 
-    final head = LayoutBuilder(
+    final body = LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth < 8) return SizedBox(); // 顺应上面布局消失逻辑
         return Text(
@@ -137,6 +137,68 @@ class ProgramCarouselViewUnit extends StatelessWidget {
       borderRadius: .circular(24),
       child: Image(image: program.logo, fit: .cover),
     ); // 构建图片
+
+    final hostslabel = program.hosts.fold<String>("", (combine, host) {
+      return "$combine $host";
+    });
+    final hosts = LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 8) return SizedBox(); // 顺应上面布局消失逻辑
+        return Row(
+          children: [
+            if (program.hosts.isEmpty)
+              Flexible(
+                child: Icon(
+                  TablerIcons.route,
+                  size: Theme.of(context).textTheme.titleSmall?.fontSize,
+                ),
+              ),
+            if (program.hosts.length == 1)
+              Flexible(
+                child: Icon(
+                  TablerIcons.user,
+                  size: Theme.of(context).textTheme.titleSmall?.fontSize,
+                ),
+              ),
+            if (program.hosts.length == 2)
+              Flexible(
+                child: Icon(
+                  TablerIcons.users,
+                  size: Theme.of(context).textTheme.titleSmall?.fontSize,
+                ),
+              ),
+            if (program.hosts.length >= 3)
+              Flexible(
+                child: Icon(
+                  TablerIcons.users_group,
+                  size: Theme.of(context).textTheme.titleSmall?.fontSize,
+                ),
+              ),
+            if (program.hosts.isNotEmpty)
+              Flexible(
+                child: Text(
+                  hostslabel,
+                  style: Theme.of(context).textTheme.titleSmall,
+                  overflow: .ellipsis,
+                  softWrap: false,
+                  maxLines: 1,
+                ),
+              ),
+            if (program.hosts.isEmpty)
+              Flexible(
+                child: Text(
+                  "无人驾驶",
+                  style: Theme.of(context).textTheme.titleSmall,
+                  overflow: .clip,
+                  softWrap: false,
+                  maxLines: 1,
+                ),
+              ),
+          ],
+        );
+      },
+    );
+    // 构建主持人信息
 
     // final difference = DateTime.now().difference(programStartTime);
     // final timelabel = switch (difference.inHours) {
@@ -164,10 +226,13 @@ class ProgramCarouselViewUnit extends StatelessWidget {
             child: Padding(
               padding: .all(16),
               child: Column(
-                mainAxisSize: .max,
                 mainAxisAlignment: .spaceBetween,
                 crossAxisAlignment: .start,
-                children: [title, head, indicator],
+                children: [
+                  title,
+                  Column(crossAxisAlignment: .start, spacing: 4, children: [body, hosts]),
+                  indicator,
+                ],
               ),
             ),
           ),
