@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:go_router/go_router.dart';
+
 import 'package:outdoor_aerial_client/providers/broadcast_programs.dart';
 
 class TunerPage extends StatefulWidget {
@@ -30,11 +31,12 @@ class ProgramCarouselView extends ConsumerStatefulWidget {
 
 class _ProgramCarouselViewState extends ConsumerState<ProgramCarouselView> {
   late final CarouselController _carouselController;
+  int carouselItems = 0;
 
   @override
   void initState() {
     super.initState();
-    _carouselController = CarouselController();
+    _carouselController = CarouselController(initialItem: carouselItems);
   }
 
   @override
@@ -45,7 +47,7 @@ class _ProgramCarouselViewState extends ConsumerState<ProgramCarouselView> {
 
   void onTap(int value) {
     final maxScroll = _carouselController.position.maxScrollExtent;
-    final itemExtent = maxScroll > 0 ? maxScroll / (3 - 1) : 1;
+    final itemExtent = maxScroll > 0 ? maxScroll / (carouselItems - 1) : 1;
     final int currentIndex = (_carouselController.offset / itemExtent).round();
     if (currentIndex == value) {
       GoRouter.of(context).pushNamed("ProgramPage");
@@ -57,15 +59,18 @@ class _ProgramCarouselViewState extends ConsumerState<ProgramCarouselView> {
   @override
   Widget build(BuildContext context) {
     final programs = ref.watch(broadcastProgramsProvider);
+    carouselItems = programs.length;
+
     return Padding(
       padding: const .only(top: 16),
       child: LimitedBox(
         maxHeight: 240,
         child: CarouselView.weighted(
-          key: const PageStorageKey("CarouselView"),
+          key: const PageStorageKey("ProgramCarouselView"), // 持续保持轮播图展示状态
           flexWeights: const [1, 6, 1],
           itemSnapping: true,
           controller: _carouselController,
+          onTap: onTap,
           children: programs.map((program) {
             return ProgramCarouselViewUnit(
               programBroadcasting: program.studio.name,
