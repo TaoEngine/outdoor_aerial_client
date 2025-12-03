@@ -33,6 +33,9 @@ class BroadcastProgram {
   /// 电台节目的主持人
   final List<String> hosts;
 
+  /// 电台节目是否标注为喜欢
+  final bool like;
+
   /// 有关电台节目的数据模型
   const BroadcastProgram({
     required this.id,
@@ -43,13 +46,45 @@ class BroadcastProgram {
     required this.start,
     required this.end,
     required this.hosts,
+    required this.like,
+  });
+}
+
+@immutable
+class OneBroadcastProgram extends BroadcastProgram {
+  /// 某一期电台节目的讲述主题
+  final String theme;
+
+  /// 某一期电台节目的配图
+  final ImageProvider image;
+
+  /// 某一期电台节目的播出时间
+  final DateTime onestart;
+
+  /// 某一期电台节目是否标注为星标
+  final bool tag;
+
+  /// 有关某一期电台节目的数据模型
+  const OneBroadcastProgram({
+    required super.id,
+    required super.logo,
+    required super.name,
+    required super.studio,
+    required super.date,
+    required super.start,
+    required super.end,
+    required super.hosts,
+    required super.like,
+    required this.theme,
+    required this.image,
+    required this.onestart,
+    required this.tag,
   });
 }
 
 @immutable
 class TodayBroadcastProgram extends BroadcastProgram {
-  /// 本期电台节目的讲述主题
-  final String theme;
+  /// 本期 TODO 更新其数据结构
 
   /// 有关本期电台节目的数据模型
   const TodayBroadcastProgram({
@@ -61,6 +96,6 @@ class TodayBroadcastProgram extends BroadcastProgram {
     required super.start,
     required super.end,
     required super.hosts,
-    required this.theme,
+    required super.like,
   });
 }

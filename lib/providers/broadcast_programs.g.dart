@@ -13,7 +13,7 @@ part of 'broadcast_programs.dart';
 const broadcastProgramsProvider = BroadcastProgramsProvider._();
 
 final class BroadcastProgramsProvider
-    extends $NotifierProvider<BroadcastPrograms, List<BroadcastProgram>> {
+    extends $NotifierProvider<BroadcastPrograms, List<TodayBroadcastProgram>> {
   const BroadcastProgramsProvider._()
     : super(
         from: null,
@@ -33,29 +33,34 @@ final class BroadcastProgramsProvider
   BroadcastPrograms create() => BroadcastPrograms();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(List<BroadcastProgram> value) {
+  Override overrideWithValue(List<TodayBroadcastProgram> value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<List<BroadcastProgram>>(value),
+      providerOverride: $SyncValueProvider<List<TodayBroadcastProgram>>(value),
     );
   }
 }
 
-String _$broadcastProgramsHash() => r'10f364da12c9a52fc386d32589b4818e9e46d019';
+String _$broadcastProgramsHash() => r'c6c66c08ba57bd5964f6e38884e660c18ef68047';
 
-abstract class _$BroadcastPrograms extends $Notifier<List<BroadcastProgram>> {
-  List<BroadcastProgram> build();
+abstract class _$BroadcastPrograms
+    extends $Notifier<List<TodayBroadcastProgram>> {
+  List<TodayBroadcastProgram> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
     final ref =
-        this.ref as $Ref<List<BroadcastProgram>, List<BroadcastProgram>>;
+        this.ref
+            as $Ref<List<TodayBroadcastProgram>, List<TodayBroadcastProgram>>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<List<BroadcastProgram>, List<BroadcastProgram>>,
-              List<BroadcastProgram>,
+              AnyNotifier<
+                List<TodayBroadcastProgram>,
+                List<TodayBroadcastProgram>
+              >,
+              List<TodayBroadcastProgram>,
               Object?,
               Object?
             >;

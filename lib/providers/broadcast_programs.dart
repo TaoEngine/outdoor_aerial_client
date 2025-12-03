@@ -11,37 +11,67 @@ part 'broadcast_programs.g.dart';
 @riverpod
 class BroadcastPrograms extends _$BroadcastPrograms {
   @override
-  List<BroadcastProgram> build() {
+  List<TodayBroadcastProgram> build() {
     return [
-      BroadcastProgram(
+      TodayBroadcastProgram(
         id: ByteData(8),
         logo: AssetImage("assets/sample1.png"),
         name: "快乐出发",
-        studio: BroadcastStudio.getServer(Int8List.fromList([])),
+        studio: BroadcastStudio(
+          id: ByteData(8),
+          logo: AssetImage("assets/ah908.png"),
+          abstract: '',
+          name: '',
+          freq: 90.8,
+          start: TimeOfDay(hour: 0, minute: 0),
+          end: TimeOfDay(hour: 0, minute: 0),
+          like: true,
+        ),
         date: [.monday, .tuesday, .wednesday, .thursday, .friday],
         start: TimeOfDay(hour: 11, minute: 0),
         end: TimeOfDay(hour: 12, minute: 0),
         hosts: ["YoYo", "晏大胖"],
+        like: true,
       ),
-      BroadcastProgram(
+      TodayBroadcastProgram(
         id: ByteData(8),
         logo: AssetImage("assets/sample2.png"),
         name: "正午乐逍遥",
-        studio: BroadcastStudio.getServer(Int8List.fromList([])),
+        studio: BroadcastStudio(
+          id: ByteData(8),
+          logo: AssetImage("assets/ah908.png"),
+          abstract: '',
+          name: '',
+          freq: 90.8,
+          start: TimeOfDay(hour: 0, minute: 0),
+          end: TimeOfDay(hour: 0, minute: 0),
+          like: true,
+        ),
         date: [.monday, .tuesday, .wednesday, .thursday, .friday],
         start: TimeOfDay(hour: 11, minute: 0),
         end: TimeOfDay(hour: 12, minute: 0),
         hosts: ["小瑶"],
+        like: true,
       ),
-      BroadcastProgram(
+      TodayBroadcastProgram(
         id: ByteData(8),
         logo: AssetImage("assets/sample3.png"),
         name: "汽车315",
-        studio: BroadcastStudio.getServer(Int8List.fromList([])),
+        studio: BroadcastStudio(
+          id: ByteData(8),
+          logo: AssetImage("assets/ah929.png"),
+          abstract: '',
+          name: '',
+          freq: 92.9,
+          start: TimeOfDay(hour: 5, minute: 0),
+          end: TimeOfDay(hour: 23, minute: 0),
+          like: true,
+        ),
         date: [.monday, .tuesday, .wednesday, .thursday, .friday],
         start: TimeOfDay(hour: 11, minute: 0),
         end: TimeOfDay(hour: 12, minute: 0),
         hosts: ["常虹", "周敏", "雪峰", "魏国", "梦泽", "十一"],
+        like: true,
       ),
     ];
   }
