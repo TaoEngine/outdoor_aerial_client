@@ -2,23 +2,22 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:outdoor_aerial_client/models/broadcast_program.dart';
 import 'package:outdoor_aerial_client/providers/broadcast_programs.dart';
 
-class TunerPage extends StatefulWidget {
+class TunerPage extends StatelessWidget {
   const TunerPage({super.key});
 
   @override
-  State<TunerPage> createState() => _TunerPageState();
-}
-
-class _TunerPageState extends State<TunerPage> {
-  @override
   Widget build(BuildContext context) {
     return ListView(
-      children: [ProgramCarouselView()], // 放置 _ProgramCarouselView 轮播图和 _ProgramCard 卡片的地方
+      children: [
+        ProgramCarouselView(),
+        // ProgramMasonryView()
+      ],
     );
   }
 }
@@ -27,64 +26,81 @@ class ProgramCarouselView extends ConsumerStatefulWidget {
   const ProgramCarouselView({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _ProgramCarouselViewState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _ProgramCarouselViewState();
 }
 
 class _ProgramCarouselViewState extends ConsumerState<ProgramCarouselView>
     with SingleTickerProviderStateMixin {
   late final CarouselController _carouselController;
   late final AnimationController _autoplayController;
-  int carouselItems = 0;
+  int _carouselItems = 0;
 
   @override
   void initState() {
     super.initState();
-    _carouselController = CarouselController(initialItem: carouselItems);
-    _autoplayController = AnimationController(vsync: this, duration: const Duration(seconds: 10));
-    _autoplayController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        final currentIndex = getIndex();
-        if (currentIndex >= carouselItems - 1) {
-          _carouselController.animateToItem(0);
-        } else {
-          _carouselController.animateToItem(currentIndex + 1);
+    _carouselController = CarouselController(initialItem: _carouselItems);
+    _autoplayController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 10),
+    );
+    _autoplayController
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          final currentIndex = _getCarouselIndex();
+          if (currentIndex >= _carouselItems - 1) {
+            _carouselController.animateToItem(0);
+          } else {
+            _carouselController.animateToItem(currentIndex + 1);
+          }
+          _autoplayController
+            ..reset()
+            ..forward();
         }
-        _autoplayController.reset();
-        _autoplayController.forward();
-      }
-    });
-    _autoplayController.forward();
+      })
+      ..forward();
   }
 
   @override
   void dispose() {
-    _carouselController.dispose();
     _autoplayController.dispose();
+    _carouselController.dispose();
     super.dispose();
   }
 
-  int getIndex() {
+  int _getCarouselIndex() {
     final maxScroll = _carouselController.position.maxScrollExtent;
-    final itemExtent = maxScroll > 0 ? maxScroll / (carouselItems - 1) : 1;
-    final currentIndex = (_carouselController.offset / itemExtent).round();
-    return currentIndex;
+    final itemExtent = maxScroll > 0 ? maxScroll / (_carouselItems - 1) : 1;
+    final carouselIndex = (_carouselController.offset / itemExtent).round();
+    return carouselIndex;
   }
 
-  void onTap(int value) {
-    final currentIndex = getIndex();
+  void _onCarouselUnitTap(int value) {
+    final currentIndex = _getCarouselIndex();
     if (currentIndex == value) {
       GoRouter.of(context).pushNamed("ProgramPage");
     } else {
       _carouselController.animateToItem(value);
     }
-    _autoplayController.reset();
-    _autoplayController.forward();
+    _autoplayController
+      ..reset()
+      ..forward();
   }
 
   @override
   Widget build(BuildContext context) {
     final programs = ref.watch(broadcastProgramsProvider);
-    carouselItems = programs.length;
+    final programsCard = programs
+        .map(
+          (program) => ProgramCarouselViewUnit(
+            program: program,
+            controller: _autoplayController,
+          ),
+        )
+        .toList();
+
+    _carouselItems = programs.length;
+
     return Padding(
       padding: const .only(top: 16),
       child: LimitedBox(
@@ -93,14 +109,9 @@ class _ProgramCarouselViewState extends ConsumerState<ProgramCarouselView>
           key: const PageStorageKey("ProgramCarouselView"), // 持续保持轮播图展示状态
           flexWeights: const [1, 6, 1],
           itemSnapping: true,
+          onTap: _onCarouselUnitTap,
           controller: _carouselController,
-          onTap: onTap,
-          children: programs
-              .map(
-                (program) =>
-                    ProgramCarouselViewUnit(program: program, autoplay: _autoplayController),
-              )
-              .toList(),
+          children: programsCard,
         ),
       ),
     );
@@ -113,10 +124,14 @@ class ProgramCarouselViewUnit extends StatelessWidget {
   /// 需要是 [TodayBroadcastProgram] 数据结构
   final TodayBroadcastProgram program;
 
-  /// 接受轮播倒计时
-  final Animation<double> autoplay;
+  /// 轮播指示动画控制器
+  final Animation<double> controller;
 
-  const ProgramCarouselViewUnit({super.key, required this.program, required this.autoplay});
+  const ProgramCarouselViewUnit({
+    super.key,
+    required this.program,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -129,12 +144,17 @@ class ProgramCarouselViewUnit extends StatelessWidget {
     );
 
     // 构建的广播电台名称
-    final studio = Text(program.studio.name, style: Theme.of(context).textTheme.titleMedium);
+    final studio = Text(
+      program.studio.name,
+      style: Theme.of(context).textTheme.titleMedium,
+    );
 
     // 构建的正文
     final body = Text(
       program.name,
-      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: .bold),
+      style: Theme.of(
+        context,
+      ).textTheme.titleLarge?.copyWith(fontWeight: .bold),
     );
 
     // 构建的图片
@@ -150,15 +170,24 @@ class ProgramCarouselViewUnit extends StatelessWidget {
       children: [
         if (program.hosts.isEmpty)
           Flexible(
-            child: Icon(TablerIcons.route, size: Theme.of(context).textTheme.titleSmall?.fontSize),
+            child: Icon(
+              TablerIcons.route,
+              size: Theme.of(context).textTheme.titleSmall?.fontSize,
+            ),
           ),
         if (program.hosts.length == 1)
           Flexible(
-            child: Icon(TablerIcons.user, size: Theme.of(context).textTheme.titleSmall?.fontSize),
+            child: Icon(
+              TablerIcons.user,
+              size: Theme.of(context).textTheme.titleSmall?.fontSize,
+            ),
           ),
         if (program.hosts.length == 2)
           Flexible(
-            child: Icon(TablerIcons.users, size: Theme.of(context).textTheme.titleSmall?.fontSize),
+            child: Icon(
+              TablerIcons.users,
+              size: Theme.of(context).textTheme.titleSmall?.fontSize,
+            ),
           ),
         if (program.hosts.length >= 3)
           Flexible(
@@ -177,17 +206,23 @@ class ProgramCarouselViewUnit extends StatelessWidget {
             ),
           ),
         if (program.hosts.isEmpty)
-          Flexible(child: Text("无人驾驶", style: Theme.of(context).textTheme.titleSmall)),
+          Flexible(
+            child: Text("无人驾驶", style: Theme.of(context).textTheme.titleSmall),
+          ),
       ],
     );
 
     // 构建的时间标签
-    final programtime = DateTime.now().copyWith(
-      hour: program.start.hour,
-      minute: program.start.minute,
+    final timeDifference = DateTime.now().difference(
+      DateTime.now().copyWith(
+        hour: program.start.hour,
+        minute: program.start.minute,
+      ),
     );
-    final difference = DateTime.now().difference(programtime);
-    final timelabel = "${difference.inHours}小时前";
+    final timelabel = switch (timeDifference.inHours) {
+      <= 0 => "${timeDifference.inMinutes}分钟前",
+      _ => "${timeDifference.inHours}小时前",
+    };
     final tags = Chip(
       avatar: const Icon(TablerIcons.clock),
       label: Text(timelabel, overflow: .ellipsis, softWrap: false, maxLines: 1),
@@ -196,19 +231,26 @@ class ProgramCarouselViewUnit extends StatelessWidget {
     // 构建轮播指示
     final indicator = LayoutBuilder(
       builder: (context, constraints) {
-        final shouldShow = switch (constraints.maxWidth <= constraints.maxHeight) {
+        final showOpacity = switch (constraints.maxWidth <=
+            constraints.maxHeight) {
           true => 0.0,
           false => 1.0,
         };
         return AnimatedOpacity(
-          opacity: shouldShow,
+          opacity: showOpacity,
           duration: Durations.short4,
           child: SizedBox.square(
             dimension: Theme.of(context).textTheme.displaySmall?.fontSize,
             child: AnimatedBuilder(
-              animation: autoplay,
+              animation: controller,
               builder: (context, child) {
-                return CircularProgressIndicator.adaptive(year2023: false, value: autoplay.value);
+                return Transform.rotate(
+                  angle: controller.value * 20,
+                  child: CircularProgressIndicator.adaptive(
+                    year2023: false,
+                    value: controller.value,
+                  ),
+                );
               },
             ),
           ),
@@ -234,7 +276,11 @@ class ProgramCarouselViewUnit extends StatelessWidget {
                       SingleChildScrollView(
                         scrollDirection: .horizontal,
                         physics: const NeverScrollableScrollPhysics(),
-                        child: Row(mainAxisSize: .min, spacing: 8, children: [logo, studio]),
+                        child: Row(
+                          mainAxisSize: .min,
+                          spacing: 8,
+                          children: [logo, studio],
+                        ),
                       ),
                       SingleChildScrollView(
                         scrollDirection: .horizontal,
@@ -278,7 +324,8 @@ class ProgramCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final title = LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth < 8) return SizedBox(); // 避免 Padding 的 Overflow 错误
+        if (constraints.maxWidth < 8)
+          return SizedBox(); // 避免 Padding 的 Overflow 错误
 
         return Row(
           mainAxisSize: .max,
@@ -313,7 +360,9 @@ class ProgramCard extends StatelessWidget {
         if (constraints.maxWidth < 8) return SizedBox(); // 顺应上面布局消失逻辑
         return Text(
           oneProgram.theme,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           overflow: .ellipsis,
           softWrap: true,
           maxLines: 3,
@@ -336,9 +385,16 @@ class ProgramCard extends StatelessWidget {
       mainAxisSize: .min,
       spacing: 4,
       children: [
-        if (oneProgram.like) Chip(avatar: Icon(TablerIcons.heart_filled), label: const Text("我喜欢")),
+        if (oneProgram.like)
+          Chip(
+            avatar: Icon(TablerIcons.heart_filled),
+            label: const Text("我喜欢"),
+          ),
         if (oneProgram.tag)
-          Chip(avatar: const Icon(TablerIcons.tag_filled), label: const Text("已收藏")),
+          Chip(
+            avatar: const Icon(TablerIcons.tag_filled),
+            label: const Text("已收藏"),
+          ),
         Chip(avatar: const Icon(TablerIcons.clock), label: Text(timelabel)),
       ],
     ); // 构建标签
@@ -367,16 +423,41 @@ class ProgramCard extends StatelessWidget {
                 spacing: 16,
                 children: [
                   Expanded(
-                    child: Column(crossAxisAlignment: .start, spacing: 8, children: [title, head]),
+                    child: Column(
+                      crossAxisAlignment: .start,
+                      spacing: 8,
+                      children: [title, head],
+                    ),
                   ),
                   image,
                 ],
               ),
               const SizedBox(height: 16),
-              Row(crossAxisAlignment: .center, children: [tags, const Spacer(), action]),
+              Row(
+                crossAxisAlignment: .center,
+                children: [tags, const Spacer(), action],
+              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ProgramMasonryView extends StatelessWidget {
+  const ProgramMasonryView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: MasonryGridView.count(
+        crossAxisCount: 4,
+        mainAxisSpacing: 4,
+        crossAxisSpacing: 4,
+        itemBuilder: (context, index) {
+          return Placeholder();
+        },
       ),
     );
   }
