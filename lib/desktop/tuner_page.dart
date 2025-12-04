@@ -30,31 +30,55 @@ class ProgramCarouselView extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _ProgramCarouselViewState();
 }
 
-class _ProgramCarouselViewState extends ConsumerState<ProgramCarouselView> {
+class _ProgramCarouselViewState extends ConsumerState<ProgramCarouselView>
+    with SingleTickerProviderStateMixin {
   late final CarouselController _carouselController;
+  late final AnimationController _autoplayController;
   int carouselItems = 0;
 
   @override
   void initState() {
     super.initState();
     _carouselController = CarouselController(initialItem: carouselItems);
+    _autoplayController = AnimationController(vsync: this, duration: const Duration(seconds: 10));
+    _autoplayController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        final currentIndex = getIndex();
+        if (currentIndex >= carouselItems - 1) {
+          _carouselController.animateToItem(0);
+        } else {
+          _carouselController.animateToItem(currentIndex + 1);
+        }
+        _autoplayController.reset();
+        _autoplayController.forward();
+      }
+    });
+    _autoplayController.forward();
   }
 
   @override
   void dispose() {
     _carouselController.dispose();
+    _autoplayController.dispose();
     super.dispose();
   }
 
-  void onTap(int value) {
+  int getIndex() {
     final maxScroll = _carouselController.position.maxScrollExtent;
     final itemExtent = maxScroll > 0 ? maxScroll / (carouselItems - 1) : 1;
-    final int currentIndex = (_carouselController.offset / itemExtent).round();
+    final currentIndex = (_carouselController.offset / itemExtent).round();
+    return currentIndex;
+  }
+
+  void onTap(int value) {
+    final currentIndex = getIndex();
     if (currentIndex == value) {
       GoRouter.of(context).pushNamed("ProgramPage");
     } else {
       _carouselController.animateToItem(value);
     }
+    _autoplayController.reset();
+    _autoplayController.forward();
   }
 
   @override
@@ -71,7 +95,12 @@ class _ProgramCarouselViewState extends ConsumerState<ProgramCarouselView> {
           itemSnapping: true,
           controller: _carouselController,
           onTap: onTap,
-          children: programs.map((program) => ProgramCarouselViewUnit(program: program)).toList(),
+          children: programs
+              .map(
+                (program) =>
+                    ProgramCarouselViewUnit(program: program, autoplay: _autoplayController),
+              )
+              .toList(),
         ),
       ),
     );
@@ -84,7 +113,10 @@ class ProgramCarouselViewUnit extends StatelessWidget {
   /// 需要是 [TodayBroadcastProgram] 数据结构
   final TodayBroadcastProgram program;
 
-  const ProgramCarouselViewUnit({super.key, required this.program});
+  /// 接受轮播倒计时
+  final Animation<double> autoplay;
+
+  const ProgramCarouselViewUnit({super.key, required this.program, required this.autoplay});
 
   @override
   Widget build(BuildContext context) {
@@ -170,10 +202,15 @@ class ProgramCarouselViewUnit extends StatelessWidget {
         };
         return AnimatedOpacity(
           opacity: shouldShow,
-          duration: Durations.short2,
+          duration: Durations.short4,
           child: SizedBox.square(
             dimension: Theme.of(context).textTheme.displaySmall?.fontSize,
-            child: CircularProgressIndicator.adaptive(year2023: false, value: 0.3),
+            child: AnimatedBuilder(
+              animation: autoplay,
+              builder: (context, child) {
+                return CircularProgressIndicator.adaptive(year2023: false, value: autoplay.value);
+              },
+            ),
           ),
         );
       },
