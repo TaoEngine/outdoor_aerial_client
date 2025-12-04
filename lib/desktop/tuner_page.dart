@@ -88,153 +88,140 @@ class ProgramCarouselViewUnit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth < 8) return SizedBox(); // 避免 Padding 的 Overflow 错误
-        return Row(
-          mainAxisSize: .max,
-          mainAxisAlignment: .start,
-          crossAxisAlignment: .center,
-          spacing: 8,
-          children: [
-            Flexible(
-              child: Image(
-                image: program.studio.logo,
-                height: Theme.of(context).textTheme.titleLarge?.fontSize,
-                fit: .fitHeight,
-                alignment: .centerLeft,
-              ),
-            ),
-            Flexible(
-              child: Text(
-                program.studio.name,
-                style: Theme.of(context).textTheme.titleMedium,
-                overflow: .clip,
-                softWrap: false,
-                maxLines: 1,
-              ),
-            ),
-          ],
-        );
-      },
-    ); // 构建标题
+    // 构建的广播电台图标
+    final logo = Image(
+      image: program.studio.logo,
+      height: Theme.of(context).textTheme.titleLarge?.fontSize,
+      fit: .fitHeight,
+      alignment: .centerLeft,
+    );
 
-    final body = LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth < 8) return SizedBox(); // 顺应上面布局消失逻辑
-        return Text(
-          program.name,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: .bold),
-          overflow: .clip,
-          softWrap: false,
-          maxLines: 1,
-        );
-      },
-    ); // 构建正文
+    // 构建的广播电台名称
+    final studio = Text(program.studio.name, style: Theme.of(context).textTheme.titleMedium);
 
+    // 构建的正文
+    final body = Text(
+      program.name,
+      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: .bold),
+    );
+
+    // 构建的图片
     final image = ClipRRect(
       clipBehavior: .antiAlias,
       borderRadius: .circular(24),
       child: Image(image: program.logo, fit: .cover),
-    ); // 构建图片
+    );
 
-    final hostslabel = program.hosts.fold<String>("", (combine, host) {
-      return "$combine $host";
-    });
-    final hosts = LayoutBuilder(
+    // 构建的主持人信息
+    final hosts = Row(
+      mainAxisSize: .min,
+      children: [
+        if (program.hosts.isEmpty)
+          Flexible(
+            child: Icon(TablerIcons.route, size: Theme.of(context).textTheme.titleSmall?.fontSize),
+          ),
+        if (program.hosts.length == 1)
+          Flexible(
+            child: Icon(TablerIcons.user, size: Theme.of(context).textTheme.titleSmall?.fontSize),
+          ),
+        if (program.hosts.length == 2)
+          Flexible(
+            child: Icon(TablerIcons.users, size: Theme.of(context).textTheme.titleSmall?.fontSize),
+          ),
+        if (program.hosts.length >= 3)
+          Flexible(
+            child: Icon(
+              TablerIcons.users_group,
+              size: Theme.of(context).textTheme.titleSmall?.fontSize,
+            ),
+          ),
+        if (program.hosts.isNotEmpty)
+          Flexible(
+            child: Text(
+              program.hosts.fold<String>("", (combine, host) {
+                return "$combine $host";
+              }),
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+          ),
+        if (program.hosts.isEmpty)
+          Flexible(child: Text("无人驾驶", style: Theme.of(context).textTheme.titleSmall)),
+      ],
+    );
+
+    // 构建的时间标签
+    final programtime = DateTime.now().copyWith(
+      hour: program.start.hour,
+      minute: program.start.minute,
+    );
+    final difference = DateTime.now().difference(programtime);
+    final timelabel = "${difference.inHours}小时前";
+    final tags = Chip(
+      avatar: const Icon(TablerIcons.clock),
+      label: Text(timelabel, overflow: .ellipsis, softWrap: false, maxLines: 1),
+    );
+
+    // 构建轮播指示
+    final indicator = LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth < 8) return SizedBox(); // 顺应上面布局消失逻辑
-        return Row(
-          children: [
-            if (program.hosts.isEmpty)
-              Flexible(
-                child: Icon(
-                  TablerIcons.route,
-                  size: Theme.of(context).textTheme.titleSmall?.fontSize,
-                ),
-              ),
-            if (program.hosts.length == 1)
-              Flexible(
-                child: Icon(
-                  TablerIcons.user,
-                  size: Theme.of(context).textTheme.titleSmall?.fontSize,
-                ),
-              ),
-            if (program.hosts.length == 2)
-              Flexible(
-                child: Icon(
-                  TablerIcons.users,
-                  size: Theme.of(context).textTheme.titleSmall?.fontSize,
-                ),
-              ),
-            if (program.hosts.length >= 3)
-              Flexible(
-                child: Icon(
-                  TablerIcons.users_group,
-                  size: Theme.of(context).textTheme.titleSmall?.fontSize,
-                ),
-              ),
-            if (program.hosts.isNotEmpty)
-              Flexible(
-                child: Text(
-                  hostslabel,
-                  style: Theme.of(context).textTheme.titleSmall,
-                  overflow: .ellipsis,
-                  softWrap: false,
-                  maxLines: 1,
-                ),
-              ),
-            if (program.hosts.isEmpty)
-              Flexible(
-                child: Text(
-                  "无人驾驶",
-                  style: Theme.of(context).textTheme.titleSmall,
-                  overflow: .clip,
-                  softWrap: false,
-                  maxLines: 1,
-                ),
-              ),
-          ],
+        final shouldShow = switch (constraints.maxWidth <= constraints.maxHeight) {
+          true => 0.0,
+          false => 1.0,
+        };
+        return AnimatedOpacity(
+          opacity: shouldShow,
+          duration: Durations.short2,
+          child: SizedBox.square(
+            dimension: Theme.of(context).textTheme.displaySmall?.fontSize,
+            child: CircularProgressIndicator.adaptive(year2023: false, value: 0.3),
+          ),
         );
       },
     );
-    // 构建主持人信息
-
-    // final difference = DateTime.now().difference(programStartTime);
-    // final timelabel = switch (difference.inHours) {
-    //   < 24 => "${difference.inHours}小时前",
-    //   _ => "${difference.inDays}天前",
-    // }; // 构建标签
-
-    final indicator = LayoutBuilder(
-      builder: (context, constraints) {
-        // if (constraints.maxWidth > constraints.maxHeight) return SizedBox(); // 顺应上面布局消失逻辑
-        return Align(
-          alignment: .bottomRight,
-          child: CircularProgressIndicator(year2023: false, value: 0.2),
-        );
-      },
-    ); // 构建轮播指示
 
     return Container(
       color: Theme.of(context).colorScheme.surfaceContainerHighest,
-      child: Row(
-        crossAxisAlignment: .stretch,
+      child: Stack(
         children: [
-          Expanded(child: image),
-          Expanded(
-            child: Padding(
-              padding: .all(16),
-              child: Column(
-                mainAxisAlignment: .spaceBetween,
-                crossAxisAlignment: .start,
-                children: [
-                  title,
-                  Column(crossAxisAlignment: .start, spacing: 4, children: [body, hosts]),
-                  indicator,
-                ],
+          Row(
+            crossAxisAlignment: .stretch,
+            children: [
+              Expanded(child: image),
+              Expanded(
+                child: Padding(
+                  padding: .all(16),
+                  child: Column(
+                    mainAxisAlignment: .spaceBetween,
+                    crossAxisAlignment: .start,
+                    children: [
+                      SingleChildScrollView(
+                        scrollDirection: .horizontal,
+                        physics: const NeverScrollableScrollPhysics(),
+                        child: Row(mainAxisSize: .min, spacing: 8, children: [logo, studio]),
+                      ),
+                      SingleChildScrollView(
+                        scrollDirection: .horizontal,
+                        physics: const NeverScrollableScrollPhysics(),
+                        child: Column(
+                          crossAxisAlignment: .start,
+                          spacing: 4,
+                          children: [body, hosts],
+                        ),
+                      ),
+                      SingleChildScrollView(
+                        scrollDirection: .horizontal,
+                        physics: const NeverScrollableScrollPhysics(),
+                        child: tags,
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
+          ),
+          Padding(
+            padding: .all(16),
+            child: Align(alignment: .bottomLeft, child: indicator),
           ),
         ],
       ),
