@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 @immutable
 class BroadcastStudio {
   /// Outdoor Aerial 服务器给出的广播电台 ID
-  final ByteData id;
+  final Uint8List id;
 
   /// 对该广播电台的介绍
   final String abstract;
@@ -41,10 +41,9 @@ class BroadcastStudio {
   });
 
   /// 从 Outdoor Aerial 服务器中获取广播电台信息并生成
-  /// TODO 当前仍使用假数据，后期采用 ProtoBuf 连接
-  factory BroadcastStudio.getServer(Int8List data) {
+  factory BroadcastStudio.fromProto(Int8List data) {
     return BroadcastStudio(
-      id: ByteData(8),
+      id: Uint8List(20),
       logo: AssetImage("assets/ah929.png"),
       abstract: "听出无限欢乐，我要我的生活",
       name: "安徽生活广播",

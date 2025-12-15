@@ -3,17 +3,27 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
 import 'package:outdoor_aerial_client/models/broadcast_studio.dart';
+import 'package:outdoor_aerial_client/protos/models.pb.dart';
+import 'package:outdoor_aerial_client/protos/models.pbenum.dart';
 
 /// 定义节目播出时间
-enum ProgramBroadcastWeekdays { monday, tuesday, wednesday, thursday, friday, saturday, sunday }
+enum ProgramBroadcastWeekdays {
+  monday,
+  tuesday,
+  wednesday,
+  thursday,
+  friday,
+  saturday,
+  sunday,
+}
 
 @immutable
 class BroadcastProgram {
   /// Outdoor Aerial 服务器给出的电台节目 ID
-  final ByteData id;
+  final int id;
 
   /// 电台节目的 Logo
-  final ImageProvider logo;
+  final List<int> logo;
 
   /// 电台节目的名称
   final String name;
@@ -48,6 +58,21 @@ class BroadcastProgram {
     required this.hosts,
     required this.like,
   });
+
+  factory BroadcastProgram.fromProto(List<int> data) {
+    final pbData = BroadcastProgramData.fromBuffer(data);
+    return BroadcastProgram(
+      id: pbData.id,
+      logo: pbData.logo,
+      name: pbData.name,
+      studio: BroadcastStudio.fromProto(),
+      date: pbData.date,
+      start: pbData.start,
+      end: pbData.end,
+      hosts: pbData.hosts,
+      like: pbData.like,
+    );
+  }
 }
 
 @immutable

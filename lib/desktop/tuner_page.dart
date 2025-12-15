@@ -89,31 +89,38 @@ class _ProgramCarouselViewState extends ConsumerState<ProgramCarouselView>
 
   @override
   Widget build(BuildContext context) {
-    final programs = ref.watch(broadcastProgramsProvider);
-    final programsCard = programs
-        .map(
-          (program) => ProgramCarouselViewUnit(
-            program: program,
-            controller: _autoplayController,
+    final programsState = ref.watch(broadcastProgramsProvider);
+
+    return programsState.when(
+      data: (programs) {
+        final programsCard = programs.programs
+            .map(
+              (program) => ProgramCarouselViewUnit(
+                program: program,
+                controller: _autoplayController,
+              ),
+            )
+            .toList();
+
+        _carouselItems = programs.programs.length;
+
+        return Padding(
+          padding: const .only(top: 16),
+          child: LimitedBox(
+            maxHeight: 240,
+            child: CarouselView.weighted(
+              key: const PageStorageKey("ProgramCarouselView"), // 持续保持轮播图展示状态
+              flexWeights: const [1, 6, 1],
+              itemSnapping: true,
+              onTap: _onCarouselUnitTap,
+              controller: _carouselController,
+              children: programsCard,
+            ),
           ),
-        )
-        .toList();
-
-    _carouselItems = programs.length;
-
-    return Padding(
-      padding: const .only(top: 16),
-      child: LimitedBox(
-        maxHeight: 240,
-        child: CarouselView.weighted(
-          key: const PageStorageKey("ProgramCarouselView"), // 持续保持轮播图展示状态
-          flexWeights: const [1, 6, 1],
-          itemSnapping: true,
-          onTap: _onCarouselUnitTap,
-          controller: _carouselController,
-          children: programsCard,
-        ),
-      ),
+        );
+      },
+      error: (error, stack) => Center(child: Text('Error: $error')),
+      loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
 }

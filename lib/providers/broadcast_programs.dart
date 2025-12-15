@@ -1,78 +1,72 @@
-import 'dart:typed_data';
+import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:outdoor_aerial_client/providers/websocket_status.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'package:outdoor_aerial_client/models/broadcast_program.dart';
-import 'package:outdoor_aerial_client/models/broadcast_studio.dart';
 
-part 'broadcast_programs.g.dart';
+class BroadcastProgramsNotifier extends AsyncNotifier<BroadcastPrograms> {
+  WebSocketChannel? _channel;
+  StreamSubscription? _subscription;
 
-@riverpod
-class BroadcastPrograms extends _$BroadcastPrograms {
   @override
-  List<TodayBroadcastProgram> build() {
-    return [
-      TodayBroadcastProgram(
-        id: ByteData(8),
-        logo: AssetImage("assets/sample1.png"),
-        name: "快乐出发",
-        studio: BroadcastStudio(
-          id: ByteData(8),
-          logo: AssetImage("assets/ah908.png"),
-          abstract: "One FM 90.8",
-          name: "安徽交通广播",
-          freq: 90.8,
-          start: TimeOfDay(hour: 0, minute: 0),
-          end: TimeOfDay(hour: 0, minute: 0),
-          like: true,
-        ),
-        date: [.monday, .tuesday, .wednesday, .thursday, .friday],
-        start: TimeOfDay(hour: 8, minute: 30),
-        end: TimeOfDay(hour: 10, minute: 30),
-        hosts: ["YoYo", "晏大胖"],
-        like: true,
-      ),
-      TodayBroadcastProgram(
-        id: ByteData(8),
-        logo: AssetImage("assets/sample2.png"),
-        name: "正午乐逍遥",
-        studio: BroadcastStudio(
-          id: ByteData(8),
-          logo: AssetImage("assets/ah908.png"),
-          abstract: "One FM 90.8",
-          name: "安徽交通广播",
-          freq: 90.8,
-          start: TimeOfDay(hour: 0, minute: 0),
-          end: TimeOfDay(hour: 0, minute: 0),
-          like: true,
-        ),
-        date: [.monday, .tuesday, .wednesday, .thursday, .friday],
-        start: TimeOfDay(hour: 12, minute: 0),
-        end: TimeOfDay(hour: 13, minute: 30),
-        hosts: ["小瑶"],
-        like: true,
-      ),
-      TodayBroadcastProgram(
-        id: ByteData(8),
-        logo: AssetImage("assets/sample3.png"),
-        name: "汽车315",
-        studio: BroadcastStudio(
-          id: ByteData(8),
-          logo: AssetImage("assets/ah929.png"),
-          abstract: "听出无限欢乐，我要我的生活",
-          name: "安徽生活广播",
-          freq: 92.9,
-          start: TimeOfDay(hour: 5, minute: 0),
-          end: TimeOfDay(hour: 23, minute: 0),
-          like: true,
-        ),
-        date: [.monday, .tuesday, .wednesday, .thursday, .friday],
-        start: TimeOfDay(hour: 11, minute: 0),
-        end: TimeOfDay(hour: 12, minute: 0),
-        hosts: ["常虹", "周敏", "雪峰", "魏国", "梦泽", "十一"],
-        like: true,
-      ),
-    ];
+  FutureOr<BroadcastPrograms> build() async {
+    return const BroadcastPrograms(status: ConnectStatus.disconnect);
   }
+
+  Future<void> connectServer() async {
+    state = const AsyncValue.loading();
+
+    try {
+      // 登录 OutdoorAerial 服务器
+      _channel = WebSocketChannel.connect(
+        Uri.parse("ws://127.0.0.1:8908/program"),
+      );
+      state = const AsyncValue.data(
+        BroadcastPrograms(status: ConnectStatus.connecting),
+      );
+
+      _subscription = _channel!.stream.listen(
+        (data) {
+          final currentState =
+              state.value ??
+              const BroadcastPrograms(status: ConnectStatus.disconnect);
+          state = AsyncValue.data(currentState);
+        },
+        onError: (_) {
+          state = AsyncValue.data(
+            BroadcastPrograms(status: ConnectStatus.error),
+          );
+        },
+        onDone: () {
+          state = AsyncValue.data(
+            BroadcastPrograms(status: ConnectStatus.disconnect),
+          );
+        },
+      );
+      state = const AsyncValue.data(
+        BroadcastPrograms(status: ConnectStatus.connected),
+      );
+    } catch (e) {
+      state = AsyncValue.data(BroadcastPrograms(status: ConnectStatus.error));
+    }
+  }
+}
+
+final broadcastProgramsProvider =
+    AsyncNotifierProvider.autoDispose<
+      BroadcastProgramsNotifier,
+      BroadcastPrograms
+    >(BroadcastProgramsNotifier.new);
+
+class BroadcastPrograms extends Equatable {
+  final ConnectStatus status;
+  final List<TodayBroadcastProgram> programs;
+
+  const BroadcastPrograms({required this.status, this.programs = const []});
+
+  @override
+  List<Object?> get props => [status, programs];
 }
