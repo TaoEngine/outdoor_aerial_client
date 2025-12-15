@@ -53,10 +53,10 @@ melos:
     makepb:
       name: 创建 ProtoBuf 数据结构文件
       steps:
-        - "cd .\\lib\\protos"
+        - "cd .\\lib\\models"
         - "protoc --dart_out=. broadcast_datetime.proto broadcast_program.proto broadcast_studio.proto"
     cleanpb:
       name: 清除 ProtoBuf 数据结构文件
       steps:
-        - "cd .\\lib\\protos"
+        - "cd .\\lib\\models"
         - "del *.pb.dart *.pbenum.dart *.pbjson.dart"

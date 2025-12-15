@@ -2,10 +2,9 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:outdoor_aerial_client/providers/websocket_status.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import 'package:outdoor_aerial_client/models/broadcast_program.dart';
+import 'package:outdoor_aerial_client/models/broadcast_program.pb.dart';
 
 class BroadcastProgramsNotifier extends AsyncNotifier<BroadcastPrograms> {
   WebSocketChannel? _channel;
@@ -55,6 +54,21 @@ class BroadcastProgramsNotifier extends AsyncNotifier<BroadcastPrograms> {
   }
 }
 
+/// 用于表示 WebSocket 连接状态
+enum ConnectStatus {
+  /// 未连接
+  disconnect,
+
+  /// 连接中
+  connecting,
+
+  /// 已连接
+  connected,
+
+  /// 出错了
+  error,
+}
+
 final broadcastProgramsProvider =
     AsyncNotifierProvider.autoDispose<
       BroadcastProgramsNotifier,
@@ -63,7 +77,7 @@ final broadcastProgramsProvider =
 
 class BroadcastPrograms extends Equatable {
   final ConnectStatus status;
-  final List<TodayBroadcastProgram> programs;
+  final List<SingleProgram> programs;
 
   const BroadcastPrograms({required this.status, this.programs = const []});
 

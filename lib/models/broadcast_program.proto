@@ -1,46 +1,50 @@
 edition = "2023";
 
-package protos;
+package models;
 
 import "broadcast_datetime.proto";
+import "broadcast_studio.proto";
 
 // 有关电台节目的数据模型
 message BroadcastProgram {
   // Outdoor Aerial 服务器给出的电台节目 ID
-  int32               id          = 1;
+  int32                 id          = 1;
 
   // 电台节目的名称
-  string              name        = 2;
+  string                name        = 2;
 
   // 对该电台节目的介绍
-  string              description = 3;
+  string                description = 3;
 
   // 电台节目的 Logo 数据
-  bytes               logo        = 4;
+  bytes                 logo        = 4;
+
+  // 电台节目隶属广播电台
+  BroadcastStudio       studio      = 5;
 
   // 电台节目的固定播出日期
-  repeated WeekdaysPb date        = 5;
+  repeated WeekdaysData date        = 6;
 
   // 电台节目的固定播出时间
-  TimeOfDayPb         start       = 6;
+  TimeOfDayData         start       = 7;
 
   // 电台节目的固定结束时间
-  TimeOfDayPb         end         = 7;
+  TimeOfDayData         end         = 8;
 
   // 电台节目的主持人
-  repeated string     hosts       = 8;
+  repeated string       hosts       = 9;
 
   // 用户是否喜爱该电台节目
-  bool                like        = 9;
+  bool                  like        = 10;
 }
 
 // 单期电台节目的数据模型
 message SingleProgram {
   // 该电台节目的节目信息
-  BroadcastProgram program  = 1;
+  BroadcastProgram partof   = 1;
 
   // 本期电台节目的播出时间
-  DatePb           time     = 2;
+  DateData         time     = 2;
 
   // 本期电台节目的主题
   string           title    = 3;
@@ -48,6 +52,9 @@ message SingleProgram {
   // 本期电台节目的摘要
   string           abstract = 4;
 
+  // 本期电台节目的配图数据
+  bytes            image    = 5;
+
   // 用户是否收藏本期节目
-  bool             favorite = 5;
+  bool             favorite = 6;
 }

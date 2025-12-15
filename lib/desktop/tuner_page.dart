@@ -1,37 +1,77 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
+import 'package:m3e_collection/m3e_collection.dart';
+import 'package:outdoor_aerial_client/models/broadcast_program.pb.dart';
 
-import 'package:outdoor_aerial_client/models/broadcast_program.dart';
 import 'package:outdoor_aerial_client/providers/broadcast_programs.dart';
 
-class TunerPage extends StatelessWidget {
+class TunerPage extends ConsumerStatefulWidget {
   const TunerPage({super.key});
 
   @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _TunerPageState();
+}
+
+class _TunerPageState extends ConsumerState<TunerPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(broadcastProgramsProvider.notifier).connectServer();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        ProgramCarouselView(),
-        // ProgramMasonryView()
-      ],
+    final programsState = ref.watch(broadcastProgramsProvider);
+
+    return programsState.when(
+      data: (data) {
+        final programs = data.programs;
+        return switch (programs.length) {
+          0 => Center(
+            child: Center(
+              child: SizedBox.square(
+                dimension: Theme.of(context).textTheme.displayLarge?.fontSize,
+                child: LoadingIndicatorM3E(),
+              ),
+            ),
+          ),
+          _ => ListView(
+            children: [
+              ProgramCarouselView(programs: programs),
+              // ProgramMasonryView()
+            ],
+          ),
+        };
+      },
+      error: (error, stack) => Center(child: Text('Error: $error')),
+      loading: () => Center(
+        child: SizedBox.square(
+          dimension: Theme.of(context).textTheme.displayLarge?.fontSize,
+          child: LoadingIndicatorM3E(),
+        ),
+      ),
     );
   }
 }
 
-class ProgramCarouselView extends ConsumerStatefulWidget {
-  const ProgramCarouselView({super.key});
+class ProgramCarouselView extends StatefulWidget {
+  final List<SingleProgram> programs;
+  const ProgramCarouselView({super.key, required this.programs});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _ProgramCarouselViewState();
+  State<ProgramCarouselView> createState() => _ProgramCarouselViewState();
 }
 
-class _ProgramCarouselViewState extends ConsumerState<ProgramCarouselView>
-    with SingleTickerProviderStateMixin {
+class _ProgramCarouselViewState extends State<ProgramCarouselView>
+    with TickerProviderStateMixin {
   late final CarouselController _carouselController;
   late final AnimationController _autoplayController;
   int _carouselItems = 0;
@@ -89,38 +129,30 @@ class _ProgramCarouselViewState extends ConsumerState<ProgramCarouselView>
 
   @override
   Widget build(BuildContext context) {
-    final programsState = ref.watch(broadcastProgramsProvider);
-
-    return programsState.when(
-      data: (programs) {
-        final programsCard = programs.programs
-            .map(
-              (program) => ProgramCarouselViewUnit(
-                program: program,
-                controller: _autoplayController,
-              ),
-            )
-            .toList();
-
-        _carouselItems = programs.programs.length;
-
-        return Padding(
-          padding: const .only(top: 16),
-          child: LimitedBox(
-            maxHeight: 240,
-            child: CarouselView.weighted(
-              key: const PageStorageKey("ProgramCarouselView"), // 持续保持轮播图展示状态
-              flexWeights: const [1, 6, 1],
-              itemSnapping: true,
-              onTap: _onCarouselUnitTap,
-              controller: _carouselController,
-              children: programsCard,
-            ),
+    final programsCard = widget.programs
+        .map(
+          (program) => ProgramCarouselViewUnit(
+            program: program,
+            controller: _autoplayController,
           ),
-        );
-      },
-      error: (error, stack) => Center(child: Text('Error: $error')),
-      loading: () => const Center(child: CircularProgressIndicator()),
+        )
+        .toList();
+
+    _carouselItems = widget.programs.length;
+
+    return Padding(
+      padding: const .only(top: 16),
+      child: LimitedBox(
+        maxHeight: 240,
+        child: CarouselView.weighted(
+          key: const PageStorageKey("ProgramCarouselView"), // 持续保持轮播图展示状态
+          flexWeights: const [1, 6, 1],
+          itemSnapping: true,
+          onTap: _onCarouselUnitTap,
+          controller: _carouselController,
+          children: programsCard,
+        ),
+      ),
     );
   }
 }
@@ -128,8 +160,8 @@ class _ProgramCarouselViewState extends ConsumerState<ProgramCarouselView>
 class ProgramCarouselViewUnit extends StatelessWidget {
   /// 本期电台节目信息
   ///
-  /// 需要是 [TodayBroadcastProgram] 数据结构
-  final TodayBroadcastProgram program;
+  /// 需要是 [SingleProgram] 数据结构
+  final SingleProgram program;
 
   /// 轮播指示动画控制器
   final Animation<double> controller;
@@ -144,7 +176,7 @@ class ProgramCarouselViewUnit extends StatelessWidget {
   Widget build(BuildContext context) {
     // 构建的广播电台图标
     final logo = Image(
-      image: program.studio.logo,
+      image: MemoryImage(Uint8List.fromList(program.partof.studio.logo)),
       height: Theme.of(context).textTheme.titleLarge?.fontSize,
       fit: .fitHeight,
       alignment: .centerLeft,
@@ -152,13 +184,13 @@ class ProgramCarouselViewUnit extends StatelessWidget {
 
     // 构建的广播电台名称
     final studio = Text(
-      program.studio.name,
+      program.partof.studio.name,
       style: Theme.of(context).textTheme.titleMedium,
     );
 
     // 构建的正文
     final body = Text(
-      program.name,
+      program.title,
       style: Theme.of(
         context,
       ).textTheme.titleLarge?.copyWith(fontWeight: .bold),
@@ -168,51 +200,54 @@ class ProgramCarouselViewUnit extends StatelessWidget {
     final image = ClipRRect(
       clipBehavior: .antiAlias,
       borderRadius: .circular(24),
-      child: Image(image: program.logo, fit: .cover),
+      child: Image(
+        image: MemoryImage(Uint8List.fromList(program.image)),
+        fit: .cover,
+      ),
     );
 
     // 构建的主持人信息
     final hosts = Row(
       mainAxisSize: .min,
       children: [
-        if (program.hosts.isEmpty)
+        if (program.partof.hosts.isEmpty)
           Flexible(
             child: Icon(
               TablerIcons.route,
               size: Theme.of(context).textTheme.titleSmall?.fontSize,
             ),
           ),
-        if (program.hosts.length == 1)
+        if (program.partof.hosts.length == 1)
           Flexible(
             child: Icon(
               TablerIcons.user,
               size: Theme.of(context).textTheme.titleSmall?.fontSize,
             ),
           ),
-        if (program.hosts.length == 2)
+        if (program.partof.hosts.length == 2)
           Flexible(
             child: Icon(
               TablerIcons.users,
               size: Theme.of(context).textTheme.titleSmall?.fontSize,
             ),
           ),
-        if (program.hosts.length >= 3)
+        if (program.partof.hosts.length >= 3)
           Flexible(
             child: Icon(
               TablerIcons.users_group,
               size: Theme.of(context).textTheme.titleSmall?.fontSize,
             ),
           ),
-        if (program.hosts.isNotEmpty)
+        if (program.partof.hosts.isNotEmpty)
           Flexible(
             child: Text(
-              program.hosts.fold<String>("", (combine, host) {
+              program.partof.hosts.fold<String>("", (combine, host) {
                 return "$combine $host";
               }),
               style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
-        if (program.hosts.isEmpty)
+        if (program.partof.hosts.isEmpty)
           Flexible(
             child: Text("无人驾驶", style: Theme.of(context).textTheme.titleSmall),
           ),
@@ -222,8 +257,8 @@ class ProgramCarouselViewUnit extends StatelessWidget {
     // 构建的时间标签
     final timeDifference = DateTime.now().difference(
       DateTime.now().copyWith(
-        hour: program.start.hour,
-        minute: program.start.minute,
+        hour: program.partof.start.hours,
+        minute: program.partof.start.minutes,
       ),
     );
     final timelabel = switch (timeDifference.inHours) {
@@ -322,8 +357,8 @@ class ProgramCarouselViewUnit extends StatelessWidget {
 class ProgramCard extends StatelessWidget {
   /// 某一期电台节目信息
   ///
-  /// 需要提供 [OneBroadcastProgram] 数据结构
-  final OneBroadcastProgram oneProgram;
+  /// 需要提供 [SingleProgram] 数据结构
+  final SingleProgram oneProgram;
 
   const ProgramCard({super.key, required this.oneProgram});
 
@@ -342,7 +377,9 @@ class ProgramCard extends StatelessWidget {
           children: [
             Flexible(
               child: Image(
-                image: oneProgram.studio.logo,
+                image: MemoryImage(
+                  Uint8List.fromList(oneProgram.partof.studio.logo),
+                ),
                 height: Theme.of(context).textTheme.titleLarge?.fontSize,
                 fit: .fitHeight,
                 alignment: .centerLeft,
@@ -350,7 +387,7 @@ class ProgramCard extends StatelessWidget {
             ),
             Flexible(
               child: Text(
-                oneProgram.name,
+                oneProgram.partof.name,
                 style: Theme.of(context).textTheme.titleMedium,
                 overflow: .clip,
                 softWrap: false,
@@ -366,7 +403,7 @@ class ProgramCard extends StatelessWidget {
       builder: (context, constraints) {
         if (constraints.maxWidth < 8) return SizedBox(); // 顺应上面布局消失逻辑
         return Text(
-          oneProgram.theme,
+          oneProgram.title,
           style: Theme.of(
             context,
           ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
@@ -380,29 +417,33 @@ class ProgramCard extends StatelessWidget {
     final image = ClipRRect(
       clipBehavior: .antiAlias,
       borderRadius: .circular(24),
-      child: Image(image: oneProgram.image, width: 100, height: 100),
+      child: Image(
+        image: MemoryImage(Uint8List.fromList(oneProgram.image)),
+        width: 100,
+        height: 100,
+      ),
     ); // 构建图片
 
-    final difference = DateTime.now().difference(oneProgram.onestart);
-    final timelabel = switch (difference.inHours) {
-      < 24 => "${difference.inHours}小时前",
-      _ => "${difference.inDays}天前",
-    };
+    // final difference = DateTime.now().difference(oneProgram.);
+    // final timelabel = switch (difference.inHours) {
+    //   < 24 => "${difference.inHours}小时前",
+    //   _ => "${difference.inDays}天前",
+    // };
     final tags = Row(
       mainAxisSize: .min,
       spacing: 4,
       children: [
-        if (oneProgram.like)
+        if (oneProgram.partof.like)
           Chip(
             avatar: Icon(TablerIcons.heart_filled),
             label: const Text("我喜欢"),
           ),
-        if (oneProgram.tag)
+        if (oneProgram.favorite)
           Chip(
             avatar: const Icon(TablerIcons.tag_filled),
             label: const Text("已收藏"),
           ),
-        Chip(avatar: const Icon(TablerIcons.clock), label: Text(timelabel)),
+        // Chip(avatar: const Icon(TablerIcons.clock), label: Text(timelabel)),
       ],
     ); // 构建标签
 
