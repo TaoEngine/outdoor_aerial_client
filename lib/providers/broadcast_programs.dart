@@ -7,6 +7,11 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:outdoor_aerial_client/models/broadcast_program.pb.dart';
 
 class BroadcastProgramsNotifier extends AsyncNotifier<BroadcastPrograms> {
+  /// OutdoorAerial 服务器地址
+  final String host;
+
+  BroadcastProgramsNotifier({required this.host});
+
   WebSocketChannel? _channel;
   StreamSubscription? _subscription;
 
@@ -21,7 +26,7 @@ class BroadcastProgramsNotifier extends AsyncNotifier<BroadcastPrograms> {
     try {
       // 登录 OutdoorAerial 服务器
       _channel = WebSocketChannel.connect(
-        Uri.parse("ws://127.0.0.1:8908/program"),
+        Uri(scheme: "ws", host: host, path: "program"),
       );
       state = const AsyncValue.data(
         BroadcastPrograms(status: ConnectStatus.connecting),
