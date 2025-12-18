@@ -49,3 +49,6 @@ app.*.map.json
 
 # asset file
 /assets/
+
+# editable model file
+/lib/models/
