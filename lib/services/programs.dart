@@ -62,7 +62,7 @@ class TodayProgramsService {
         if (message is List<int>) {
           yield SingleProgram.fromBuffer(message);
         } else {
-          throw FormatException('对面传达的信息我们无法解析');
+          throw FormatException('抱歉对面传达的信息我们无法解析');
         }
       }
     } finally {

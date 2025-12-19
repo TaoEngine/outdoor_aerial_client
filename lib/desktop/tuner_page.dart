@@ -7,9 +7,8 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:m3e_collection/m3e_collection.dart';
-import 'package:outdoor_aerial_client/models/broadcast_program.pb.dart';
-
-import 'package:outdoor_aerial_client/providers/broadcast_programs.dart';
+import 'package:outdoor_aerial_client/models/program/single.pb.dart';
+import 'package:outdoor_aerial_client/providers/programs.dart';
 
 class TunerPage extends ConsumerStatefulWidget {
   const TunerPage({super.key});
@@ -20,20 +19,11 @@ class TunerPage extends ConsumerStatefulWidget {
 
 class _TunerPageState extends ConsumerState<TunerPage> {
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(broadcastProgramsProvider.notifier).connectServer();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final programsState = ref.watch(broadcastProgramsProvider);
+    final programsState = ref.watch(todayProgramProvider);
 
     return programsState.when(
-      data: (data) {
-        final programs = data.programs;
+      data: (programs) {
         return switch (programs.length) {
           0 => Center(
             child: Center(
@@ -175,100 +165,100 @@ class ProgramCarouselViewUnit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 构建的广播电台图标
-    final logo = Image(
-      image: MemoryImage(Uint8List.fromList(program.partof.studio.logo)),
-      height: Theme.of(context).textTheme.titleLarge?.fontSize,
-      fit: .fitHeight,
-      alignment: .centerLeft,
-    );
+    // final logo = Image(
+    //   image: MemoryImage(Uint8List.fromList(program.partof.studio.logo)),
+    //   height: Theme.of(context).textTheme.titleLarge?.fontSize,
+    //   fit: .fitHeight,
+    //   alignment: .centerLeft,
+    // );
 
     // 构建的广播电台名称
-    final studio = Text(
-      program.partof.studio.name,
-      style: Theme.of(context).textTheme.titleMedium,
-    );
+    // final studio = Text(
+    //   program.partof.studio.name,
+    //   style: Theme.of(context).textTheme.titleMedium,
+    // );
 
     // 构建的正文
-    final body = Text(
-      program.title,
-      style: Theme.of(
-        context,
-      ).textTheme.titleLarge?.copyWith(fontWeight: .bold),
-    );
+    // final body = Text(
+    //   program.title,
+    //   style: Theme.of(
+    //     context,
+    //   ).textTheme.titleLarge?.copyWith(fontWeight: .bold),
+    // );
 
     // 构建的图片
-    final image = ClipRRect(
-      clipBehavior: .antiAlias,
-      borderRadius: .circular(24),
-      child: Image(
-        image: MemoryImage(Uint8List.fromList(program.image)),
-        fit: .cover,
-      ),
-    );
+    // final image = ClipRRect(
+    //   clipBehavior: .antiAlias,
+    //   borderRadius: .circular(24),
+    //   child: Image(
+    //     image: MemoryImage(Uint8List.fromList(program.image)),
+    //     fit: .cover,
+    //   ),
+    // );
 
     // 构建的主持人信息
-    final hosts = Row(
-      mainAxisSize: .min,
-      children: [
-        if (program.partof.hosts.isEmpty)
-          Flexible(
-            child: Icon(
-              TablerIcons.route,
-              size: Theme.of(context).textTheme.titleSmall?.fontSize,
-            ),
-          ),
-        if (program.partof.hosts.length == 1)
-          Flexible(
-            child: Icon(
-              TablerIcons.user,
-              size: Theme.of(context).textTheme.titleSmall?.fontSize,
-            ),
-          ),
-        if (program.partof.hosts.length == 2)
-          Flexible(
-            child: Icon(
-              TablerIcons.users,
-              size: Theme.of(context).textTheme.titleSmall?.fontSize,
-            ),
-          ),
-        if (program.partof.hosts.length >= 3)
-          Flexible(
-            child: Icon(
-              TablerIcons.users_group,
-              size: Theme.of(context).textTheme.titleSmall?.fontSize,
-            ),
-          ),
-        if (program.partof.hosts.isNotEmpty)
-          Flexible(
-            child: Text(
-              program.partof.hosts.fold<String>("", (combine, host) {
-                return "$combine $host";
-              }),
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-          ),
-        if (program.partof.hosts.isEmpty)
-          Flexible(
-            child: Text("无人驾驶", style: Theme.of(context).textTheme.titleSmall),
-          ),
-      ],
-    );
+    // final hosts = Row(
+    //   mainAxisSize: .min,
+    //   children: [
+    //     if (program.partof.hosts.isEmpty)
+    //       Flexible(
+    //         child: Icon(
+    //           TablerIcons.route,
+    //           size: Theme.of(context).textTheme.titleSmall?.fontSize,
+    //         ),
+    //       ),
+    //     if (program.partof.hosts.length == 1)
+    //       Flexible(
+    //         child: Icon(
+    //           TablerIcons.user,
+    //           size: Theme.of(context).textTheme.titleSmall?.fontSize,
+    //         ),
+    //       ),
+    //     if (program.partof.hosts.length == 2)
+    //       Flexible(
+    //         child: Icon(
+    //           TablerIcons.users,
+    //           size: Theme.of(context).textTheme.titleSmall?.fontSize,
+    //         ),
+    //       ),
+    //     if (program.partof.hosts.length >= 3)
+    //       Flexible(
+    //         child: Icon(
+    //           TablerIcons.users_group,
+    //           size: Theme.of(context).textTheme.titleSmall?.fontSize,
+    //         ),
+    //       ),
+    //     if (program.partof.hosts.isNotEmpty)
+    //       Flexible(
+    //         child: Text(
+    //           program.partof.hosts.fold<String>("", (combine, host) {
+    //             return "$combine $host";
+    //           }),
+    //           style: Theme.of(context).textTheme.titleSmall,
+    //         ),
+    //       ),
+    //     if (program.partof.hosts.isEmpty)
+    //       Flexible(
+    //         child: Text("无人驾驶", style: Theme.of(context).textTheme.titleSmall),
+    //       ),
+    //   ],
+    // );
 
     // 构建的时间标签
-    final timeDifference = DateTime.now().difference(
-      DateTime.now().copyWith(
-        hour: program.partof.start.hours,
-        minute: program.partof.start.minutes,
-      ),
-    );
-    final timelabel = switch (timeDifference.inHours) {
-      <= 0 => "${timeDifference.inMinutes}分钟前",
-      _ => "${timeDifference.inHours}小时前",
-    };
-    final tags = Chip(
-      avatar: const Icon(TablerIcons.clock),
-      label: Text(timelabel, overflow: .ellipsis, softWrap: false, maxLines: 1),
-    );
+    // final timeDifference = DateTime.now().difference(
+    //   DateTime.now().copyWith(
+    //     hour: program.partof.start.hours,
+    //     minute: program.partof.start.minutes,
+    //   ),
+    // );
+    // final timelabel = switch (timeDifference.inHours) {
+    //   <= 0 => "${timeDifference.inMinutes}分钟前",
+    //   _ => "${timeDifference.inHours}小时前",
+    // };
+    // final tags = Chip(
+    //   avatar: const Icon(TablerIcons.clock),
+    //   label: Text(timelabel, overflow: .ellipsis, softWrap: false, maxLines: 1),
+    // );
 
     // 构建轮播指示
     final indicator = LayoutBuilder(
@@ -307,7 +297,7 @@ class ProgramCarouselViewUnit extends StatelessWidget {
           Row(
             crossAxisAlignment: .stretch,
             children: [
-              Expanded(child: image),
+              // Expanded(child: image),
               Expanded(
                 child: Padding(
                   padding: .all(16),
@@ -315,29 +305,29 @@ class ProgramCarouselViewUnit extends StatelessWidget {
                     mainAxisAlignment: .spaceBetween,
                     crossAxisAlignment: .start,
                     children: [
-                      SingleChildScrollView(
-                        scrollDirection: .horizontal,
-                        physics: const NeverScrollableScrollPhysics(),
-                        child: Row(
-                          mainAxisSize: .min,
-                          spacing: 8,
-                          children: [logo, studio],
-                        ),
-                      ),
-                      SingleChildScrollView(
-                        scrollDirection: .horizontal,
-                        physics: const NeverScrollableScrollPhysics(),
-                        child: Column(
-                          crossAxisAlignment: .start,
-                          spacing: 4,
-                          children: [body, hosts],
-                        ),
-                      ),
-                      SingleChildScrollView(
-                        scrollDirection: .horizontal,
-                        physics: const NeverScrollableScrollPhysics(),
-                        child: tags,
-                      ),
+                      // SingleChildScrollView(
+                      //   scrollDirection: .horizontal,
+                      //   physics: const NeverScrollableScrollPhysics(),
+                      //   child: Row(
+                      //     mainAxisSize: .min,
+                      //     spacing: 8,
+                      //     children: [logo, studio],
+                      //   ),
+                      // ),
+                      // SingleChildScrollView(
+                      //   scrollDirection: .horizontal,
+                      //   physics: const NeverScrollableScrollPhysics(),
+                      //   child: Column(
+                      //     crossAxisAlignment: .start,
+                      //     spacing: 4,
+                      //     children: [body, hosts],
+                      //   ),
+                      // ),
+                      // SingleChildScrollView(
+                      //   scrollDirection: .horizontal,
+                      //   physics: const NeverScrollableScrollPhysics(),
+                      //   child: tags,
+                      // ),
                     ],
                   ),
                 ),
@@ -375,25 +365,25 @@ class ProgramCard extends StatelessWidget {
           crossAxisAlignment: .center,
           spacing: 8,
           children: [
-            Flexible(
-              child: Image(
-                image: MemoryImage(
-                  Uint8List.fromList(oneProgram.partof.studio.logo),
-                ),
-                height: Theme.of(context).textTheme.titleLarge?.fontSize,
-                fit: .fitHeight,
-                alignment: .centerLeft,
-              ),
-            ),
-            Flexible(
-              child: Text(
-                oneProgram.partof.name,
-                style: Theme.of(context).textTheme.titleMedium,
-                overflow: .clip,
-                softWrap: false,
-                maxLines: 1,
-              ),
-            ),
+            // Flexible(
+            //   child: Image(
+            //     image: MemoryImage(
+            //       Uint8List.fromList(oneProgram.partof.studio.logo),
+            //     ),
+            //     height: Theme.of(context).textTheme.titleLarge?.fontSize,
+            //     fit: .fitHeight,
+            //     alignment: .centerLeft,
+            //   ),
+            // ),
+            // Flexible(
+            //   child: Text(
+            //     oneProgram.partof.name,
+            //     style: Theme.of(context).textTheme.titleMedium,
+            //     overflow: .clip,
+            //     softWrap: false,
+            //     maxLines: 1,
+            //   ),
+            // ),
           ],
         );
       },
@@ -433,16 +423,16 @@ class ProgramCard extends StatelessWidget {
       mainAxisSize: .min,
       spacing: 4,
       children: [
-        if (oneProgram.partof.like)
-          Chip(
-            avatar: Icon(TablerIcons.heart_filled),
-            label: const Text("我喜欢"),
-          ),
-        if (oneProgram.favorite)
-          Chip(
-            avatar: const Icon(TablerIcons.tag_filled),
-            label: const Text("已收藏"),
-          ),
+        // if (oneProgram.partof.like)
+        //   Chip(
+        //     avatar: Icon(TablerIcons.heart_filled),
+        //     label: const Text("我喜欢"),
+        //   ),
+        // if (oneProgram.favorite)
+        //   Chip(
+        //     avatar: const Icon(TablerIcons.tag_filled),
+        //     label: const Text("已收藏"),
+        //   ),
         // Chip(avatar: const Icon(TablerIcons.clock), label: Text(timelabel)),
       ],
     ); // 构建标签
