@@ -33,31 +33,43 @@ class ProgramsGetService {
   }
 }
 
-class ProgramsUpdateService {
+class TodayProgramsService {
   /// Outdoor Aerial 的服务器地址
   final String address;
 
-  /// 是否启用 Https 安全访问
+  /// 是否启用 Wss 安全访问
   final bool isWss;
 
   /// 指定的 Path 去执行流式获取节目的任务
   static const path = 'program';
 
-  /// 在应用使用过程中流式获取最新节目的服务
-  ProgramsUpdateService({required this.address, this.isWss = false});
+  /// 流式获取今日最新节目的服务
+  TodayProgramsService({required this.address, this.isWss = false});
+
+  /// WebSocket相关接口
+  late WebSocketChannel _channel;
 
   /// 获取节目
-  Future<Stream> stream() async {
-    final channel = WebSocketChannel.connect(switch (isWss) {
+  Stream<SingleProgram> stream() async* {
+    _channel = WebSocketChannel.connect(switch (isWss) {
       false => Uri(scheme: 'ws', host: address, port: 8908, path: path),
       true => Uri(scheme: 'wss', host: address, port: 8908, path: path),
     })..sink.add('hello');
-    await channel.ready;
+    await _channel.ready;
 
-    return channel.stream.map((message) {
-      if (message is List<int>) {
-        return SingleProgram.fromBuffer(message);
+    try {
+      await for (final message in _channel.stream) {
+        if (message is List<int>) {
+          yield SingleProgram.fromBuffer(message);
+        } else {
+          throw FormatException('对面传达的信息我们无法解析');
+        }
       }
-    });
+    } finally {
+      await _channel.sink.close();
+    }
   }
+
+  /// 停止连接
+  void close() => _channel.sink.close();
 }

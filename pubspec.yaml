@@ -35,7 +35,6 @@ dev_dependencies:
   custom_lint: ^0.8.1
   riverpod_lint: ^3.0.3
   build_runner: ^2.10.4
-  melos: ^7.3.0
 
 flutter:
   uses-material-design: true
@@ -44,19 +43,3 @@ flutter:
     - family: AlibabaPuHuiTi
       fonts:
         - asset: fonts/AlibabaPuHuiTi-Regular.ttf
-  assets:
-    - assets/
-
-melos:
-  useRootAsPackage: true
-  scripts:
-    makepb:
-      name: 创建 ProtoBuf 数据结构文件
-      steps:
-        - "cd .\\lib\\models"
-        - "protoc --dart_out=. broadcast_datetime.proto broadcast_program.proto broadcast_studio.proto"
-    cleanpb:
-      name: 清除 ProtoBuf 数据结构文件
-      steps:
-        - "cd .\\lib\\models"
-        - "del *.pb.dart *.pbenum.dart *.pbjson.dart"
