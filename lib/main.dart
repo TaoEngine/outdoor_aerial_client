@@ -22,9 +22,17 @@ class MainApp extends StatelessWidget {
     initialLocation: "/init",
     routes: <RouteBase>[
       //加载界面
-      GoRoute(path: "/init", name: "SplashPage", builder: (context, state) => const SplashPage()),
+      GoRoute(
+        path: "/init",
+        name: "SplashPage",
+        builder: (context, state) => const SplashPage(),
+      ),
       // 应用主界面
-      GoRoute(path: "/main", name: "MainPage", builder: (context, state) => const MainPage()),
+      GoRoute(
+        path: "/main",
+        name: "MainPage",
+        builder: (context, state) => const MainPage(),
+      ),
       // TODO 应用搜索界面 暂未制作
       GoRoute(
         path: "/main/search",
@@ -72,14 +80,31 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DynamicColorBuilder(
-      builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) => MaterialApp.router(
-        title: "室外天线",
-        theme: withM3ETheme(ThemeData(fontFamily: "AlibabaPuHuiTi", colorScheme: lightDynamic)),
-        darkTheme: withM3ETheme(ThemeData(fontFamily: "AlibabaPuHuiTi", colorScheme: darkDynamic)),
-        routerConfig: mainAppRouter,
-        localizationsDelegates: localizationsDelegates,
-        supportedLocales: supportedLocales,
-      ),
+      builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) =>
+          MaterialApp.router(
+            title: "室外天线",
+            theme: withM3ETheme(
+              ThemeData(
+                progressIndicatorTheme: ProgressIndicatorThemeData(
+                  year2023: false,
+                ),
+                fontFamily: "AlibabaPuHuiTi",
+                colorScheme: lightDynamic,
+              ),
+            ),
+            darkTheme: withM3ETheme(
+              ThemeData(
+                progressIndicatorTheme: ProgressIndicatorThemeData(
+                  year2023: false,
+                ),
+                fontFamily: "AlibabaPuHuiTi",
+                colorScheme: darkDynamic,
+              ),
+            ),
+            routerConfig: mainAppRouter,
+            localizationsDelegates: localizationsDelegates,
+            supportedLocales: supportedLocales,
+          ),
     );
   }
 }

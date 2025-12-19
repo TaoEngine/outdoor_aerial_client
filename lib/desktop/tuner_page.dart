@@ -279,7 +279,6 @@ class ProgramCarouselViewUnit extends StatelessWidget {
                 return Transform.rotate(
                   angle: controller.value * 20,
                   child: CircularProgressIndicator.adaptive(
-                    year2023: false,
                     value: controller.value,
                   ),
                 );
