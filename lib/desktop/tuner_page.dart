@@ -20,9 +20,9 @@ class TunerPage extends ConsumerStatefulWidget {
 class _TunerPageState extends ConsumerState<TunerPage> {
   @override
   Widget build(BuildContext context) {
-    final programsState = ref.watch(todayProgramProvider);
+    final todayProgramsState = ref.watch(todayProgramProvider);
 
-    return programsState.when(
+    return todayProgramsState.when(
       data: (programs) {
         return switch (programs.length) {
           0 => Center(
@@ -119,14 +119,25 @@ class _ProgramCarouselViewState extends State<ProgramCarouselView>
 
   @override
   Widget build(BuildContext context) {
-    final programsCard = widget.programs
-        .map(
-          (program) => ProgramCarouselViewUnit(
-            program: program,
-            controller: _autoplayController,
-          ),
-        )
-        .toList();
+    final programsCard = widget.programs.map((program) {
+      final cover = program.image;
+      final logo = program.image;
+      final studio = '测试';
+      final name = '测试';
+      final title = program.title;
+      final time = TimeOfDay(hour: 12, minute: 34);
+      return ProgramCarouselViewUnit(
+        key: ObjectKey(program),
+        cover: cover,
+        logo: logo,
+        studio: studio,
+        name: name,
+        title: title,
+        hosts: [],
+        time: time,
+        controller: _autoplayController,
+      );
+    }).toList();
 
     _carouselItems = widget.programs.length;
 
@@ -147,118 +158,168 @@ class _ProgramCarouselViewState extends State<ProgramCarouselView>
   }
 }
 
-class ProgramCarouselViewUnit extends StatelessWidget {
-  /// 本期电台节目信息
-  ///
-  /// 需要是 [SingleProgram] 数据结构
-  final SingleProgram program;
+class ProgramCarouselViewUnit extends StatefulWidget {
+  /// 封图
+  final List<int> cover;
+
+  /// 广播电台 logo
+  final List<int> logo;
+
+  /// 广播电台名称
+  final String studio;
+
+  /// 电台节目名称
+  final String name;
+
+  /// 本期电台节目的主题
+  final String title;
+
+  /// 主持人信息
+  final List<String> hosts;
+
+  /// 今日播出时间
+  final TimeOfDay time;
 
   /// 轮播指示动画控制器
   final Animation<double> controller;
 
   const ProgramCarouselViewUnit({
     super.key,
-    required this.program,
+    required this.cover,
+    required this.logo,
+    required this.studio,
+    required this.name,
+    required this.title,
+    required this.hosts,
+    required this.time,
     required this.controller,
   });
 
   @override
+  State<ProgramCarouselViewUnit> createState() =>
+      _ProgramCarouselViewUnitState();
+}
+
+class _ProgramCarouselViewUnitState extends State<ProgramCarouselViewUnit> {
+  late ImageProvider _coverProvider;
+  late ImageProvider _logoProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    _initProviders();
+  }
+
+  void _initProviders() {
+    _coverProvider = MemoryImage(Uint8List.fromList(widget.cover));
+    _logoProvider = MemoryImage(Uint8List.fromList(widget.logo));
+  }
+
+  @override
+  void didUpdateWidget(covariant ProgramCarouselViewUnit oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.cover != oldWidget.cover) {
+      _coverProvider = MemoryImage(Uint8List.fromList(widget.cover));
+    }
+    if (widget.logo != oldWidget.logo) {
+      _logoProvider = MemoryImage(Uint8List.fromList(widget.logo));
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     // 构建的广播电台图标
-    // final logo = Image(
-    //   image: MemoryImage(Uint8List.fromList(program.partof.studio.logo)),
-    //   height: Theme.of(context).textTheme.titleLarge?.fontSize,
-    //   fit: .fitHeight,
-    //   alignment: .centerLeft,
-    // );
+    final logo = Image(
+      image: _logoProvider,
+      height: Theme.of(context).textTheme.titleLarge?.fontSize,
+      fit: .fitHeight,
+      alignment: .centerLeft,
+    );
 
     // 构建的广播电台名称
-    // final studio = Text(
-    //   program.partof.studio.name,
-    //   style: Theme.of(context).textTheme.titleMedium,
-    // );
+    final studio = Text(
+      widget.studio,
+      style: Theme.of(context).textTheme.titleMedium,
+    );
 
     // 构建的正文
-    // final body = Text(
-    //   program.title,
-    //   style: Theme.of(
-    //     context,
-    //   ).textTheme.titleLarge?.copyWith(fontWeight: .bold),
-    // );
+    final body = Text(
+      widget.name,
+      style: Theme.of(
+        context,
+      ).textTheme.titleLarge?.copyWith(fontWeight: .bold),
+    );
 
     // 构建的图片
-    // final image = ClipRRect(
-    //   clipBehavior: .antiAlias,
-    //   borderRadius: .circular(24),
-    //   child: Image(
-    //     image: MemoryImage(Uint8List.fromList(program.image)),
-    //     fit: .cover,
-    //   ),
-    // );
+    final image = ClipRRect(
+      clipBehavior: .antiAlias,
+      borderRadius: .circular(24),
+      child: Image(image: _coverProvider, fit: .cover),
+    );
 
     // 构建的主持人信息
-    // final hosts = Row(
-    //   mainAxisSize: .min,
-    //   children: [
-    //     if (program.partof.hosts.isEmpty)
-    //       Flexible(
-    //         child: Icon(
-    //           TablerIcons.route,
-    //           size: Theme.of(context).textTheme.titleSmall?.fontSize,
-    //         ),
-    //       ),
-    //     if (program.partof.hosts.length == 1)
-    //       Flexible(
-    //         child: Icon(
-    //           TablerIcons.user,
-    //           size: Theme.of(context).textTheme.titleSmall?.fontSize,
-    //         ),
-    //       ),
-    //     if (program.partof.hosts.length == 2)
-    //       Flexible(
-    //         child: Icon(
-    //           TablerIcons.users,
-    //           size: Theme.of(context).textTheme.titleSmall?.fontSize,
-    //         ),
-    //       ),
-    //     if (program.partof.hosts.length >= 3)
-    //       Flexible(
-    //         child: Icon(
-    //           TablerIcons.users_group,
-    //           size: Theme.of(context).textTheme.titleSmall?.fontSize,
-    //         ),
-    //       ),
-    //     if (program.partof.hosts.isNotEmpty)
-    //       Flexible(
-    //         child: Text(
-    //           program.partof.hosts.fold<String>("", (combine, host) {
-    //             return "$combine $host";
-    //           }),
-    //           style: Theme.of(context).textTheme.titleSmall,
-    //         ),
-    //       ),
-    //     if (program.partof.hosts.isEmpty)
-    //       Flexible(
-    //         child: Text("无人驾驶", style: Theme.of(context).textTheme.titleSmall),
-    //       ),
-    //   ],
-    // );
+    final hosts = Row(
+      mainAxisSize: .min,
+      children: [
+        if (widget.hosts.isEmpty)
+          Flexible(
+            child: Icon(
+              TablerIcons.route,
+              size: Theme.of(context).textTheme.titleSmall?.fontSize,
+            ),
+          ),
+        if (widget.hosts.length == 1)
+          Flexible(
+            child: Icon(
+              TablerIcons.user,
+              size: Theme.of(context).textTheme.titleSmall?.fontSize,
+            ),
+          ),
+        if (widget.hosts.length == 2)
+          Flexible(
+            child: Icon(
+              TablerIcons.users,
+              size: Theme.of(context).textTheme.titleSmall?.fontSize,
+            ),
+          ),
+        if (widget.hosts.length >= 3)
+          Flexible(
+            child: Icon(
+              TablerIcons.users_group,
+              size: Theme.of(context).textTheme.titleSmall?.fontSize,
+            ),
+          ),
+        if (widget.hosts.isNotEmpty)
+          Flexible(
+            child: Text(
+              widget.hosts.fold<String>("", (combine, host) {
+                return "$combine $host";
+              }),
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+          ),
+        if (widget.hosts.isEmpty)
+          Flexible(
+            child: Text("无人驾驶", style: Theme.of(context).textTheme.titleSmall),
+          ),
+      ],
+    );
 
     // 构建的时间标签
-    // final timeDifference = DateTime.now().difference(
-    //   DateTime.now().copyWith(
-    //     hour: program.partof.start.hours,
-    //     minute: program.partof.start.minutes,
-    //   ),
-    // );
-    // final timelabel = switch (timeDifference.inHours) {
-    //   <= 0 => "${timeDifference.inMinutes}分钟前",
-    //   _ => "${timeDifference.inHours}小时前",
-    // };
-    // final tags = Chip(
-    //   avatar: const Icon(TablerIcons.clock),
-    //   label: Text(timelabel, overflow: .ellipsis, softWrap: false, maxLines: 1),
-    // );
+    final timeDifference = DateTime.now().difference(
+      DateTime.now().copyWith(
+        hour: widget.time.hour,
+        minute: widget.time.minute,
+      ),
+    );
+    final timelabel = switch (timeDifference.inHours) {
+      <= 0 => "${timeDifference.inMinutes}分钟前",
+      _ => "${timeDifference.inHours}小时前",
+    };
+    final tags = Chip(
+      avatar: const Icon(TablerIcons.clock),
+      label: Text(timelabel, overflow: .ellipsis, softWrap: false, maxLines: 1),
+    );
 
     // 构建轮播指示
     final indicator = LayoutBuilder(
@@ -274,12 +335,12 @@ class ProgramCarouselViewUnit extends StatelessWidget {
           child: SizedBox.square(
             dimension: Theme.of(context).textTheme.displaySmall?.fontSize,
             child: AnimatedBuilder(
-              animation: controller,
+              animation: widget.controller,
               builder: (context, child) {
                 return Transform.rotate(
-                  angle: controller.value * 20,
+                  angle: widget.controller.value * 20,
                   child: CircularProgressIndicator.adaptive(
-                    value: controller.value,
+                    value: widget.controller.value,
                   ),
                 );
               },
@@ -296,7 +357,7 @@ class ProgramCarouselViewUnit extends StatelessWidget {
           Row(
             crossAxisAlignment: .stretch,
             children: [
-              // Expanded(child: image),
+              Expanded(child: image),
               Expanded(
                 child: Padding(
                   padding: .all(16),
@@ -304,29 +365,29 @@ class ProgramCarouselViewUnit extends StatelessWidget {
                     mainAxisAlignment: .spaceBetween,
                     crossAxisAlignment: .start,
                     children: [
-                      // SingleChildScrollView(
-                      //   scrollDirection: .horizontal,
-                      //   physics: const NeverScrollableScrollPhysics(),
-                      //   child: Row(
-                      //     mainAxisSize: .min,
-                      //     spacing: 8,
-                      //     children: [logo, studio],
-                      //   ),
-                      // ),
-                      // SingleChildScrollView(
-                      //   scrollDirection: .horizontal,
-                      //   physics: const NeverScrollableScrollPhysics(),
-                      //   child: Column(
-                      //     crossAxisAlignment: .start,
-                      //     spacing: 4,
-                      //     children: [body, hosts],
-                      //   ),
-                      // ),
-                      // SingleChildScrollView(
-                      //   scrollDirection: .horizontal,
-                      //   physics: const NeverScrollableScrollPhysics(),
-                      //   child: tags,
-                      // ),
+                      SingleChildScrollView(
+                        scrollDirection: .horizontal,
+                        physics: const NeverScrollableScrollPhysics(),
+                        child: Row(
+                          mainAxisSize: .min,
+                          spacing: 8,
+                          children: [logo, studio],
+                        ),
+                      ),
+                      SingleChildScrollView(
+                        scrollDirection: .horizontal,
+                        physics: const NeverScrollableScrollPhysics(),
+                        child: Column(
+                          crossAxisAlignment: .start,
+                          spacing: 4,
+                          children: [body, hosts],
+                        ),
+                      ),
+                      SingleChildScrollView(
+                        scrollDirection: .horizontal,
+                        physics: const NeverScrollableScrollPhysics(),
+                        child: tags,
+                      ),
                     ],
                   ),
                 ),
