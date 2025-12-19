@@ -416,8 +416,9 @@ class ProgramCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final title = LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth < 8)
+        if (constraints.maxWidth < 8) {
           return SizedBox(); // 避免 Padding 的 Overflow 错误
+        }
 
         return Row(
           mainAxisSize: .max,
