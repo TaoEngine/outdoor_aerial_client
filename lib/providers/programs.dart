@@ -6,18 +6,18 @@ import 'package:outdoor_aerial_client/models/program/program.pb.dart';
 import 'package:outdoor_aerial_client/models/program/single.pb.dart';
 import 'package:outdoor_aerial_client/services/programs.dart';
 
-final _ProgramsProvider = Provider<ProgramsGetService>((ref) {
-  return ProgramsGetService(address: '127.0.0.1');
+final _programsProvider = Provider<ProgramsGetService>((ref) {
+  return ProgramsGetService(address: 'localhost');
 });
 
 final _todayProgramsProvider = Provider<TodayProgramsService>((ref) {
-  return TodayProgramsService(address: '127.0.0.1');
+  return TodayProgramsService(address: 'localhost');
 });
 
 class ProgramsNotifier extends AsyncNotifier<List<Program>> {
   @override
   FutureOr<List<Program>> build() async {
-    final service = ref.read(_ProgramsProvider);
+    final service = ref.read(_programsProvider);
     // 获取所有节目
     final programs = await service.get();
 
@@ -43,6 +43,10 @@ class TodayProgramsNotifier extends AsyncNotifier<List<SingleProgram>> {
     return [];
   }
 }
+
+final programsProvider = AsyncNotifierProvider<ProgramsNotifier, List<Program>>(
+  ProgramsNotifier.new,
+);
 
 final todayProgramProvider =
     AsyncNotifierProvider<TodayProgramsNotifier, List<SingleProgram>>(
