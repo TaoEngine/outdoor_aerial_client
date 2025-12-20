@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:outdoor_aerial_client/models/program/single.pb.dart';
-import 'package:outdoor_aerial_client/models/programs.pb.dart';
+import 'package:outdoor_aerial_client/models/protos/program/single.pb.dart';
+import 'package:outdoor_aerial_client/models/protos/programs.pb.dart';
 import 'package:outdoor_aerial_client/services/programs.dart';
 
 void main() {

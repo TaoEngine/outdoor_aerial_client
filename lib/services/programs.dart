@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
-import 'package:outdoor_aerial_client/models/program/single.pb.dart';
-import 'package:outdoor_aerial_client/models/programs.pb.dart';
+import 'package:outdoor_aerial_client/models/protos/program/single.pb.dart';
+import 'package:outdoor_aerial_client/models/protos/programs.pb.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ProgramsGetService {

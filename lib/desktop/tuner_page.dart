@@ -7,7 +7,7 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:m3e_collection/m3e_collection.dart';
-import 'package:outdoor_aerial_client/models/program/single.pb.dart';
+import 'package:outdoor_aerial_client/models//protos/program/single.pb.dart';
 import 'package:outdoor_aerial_client/providers/programs.dart';
 
 class TunerPage extends ConsumerStatefulWidget {
