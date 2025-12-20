@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:outdoor_aerial_client/models/program/program.pb.dart';
+import 'package:outdoor_aerial_client/models/protos/program/program.pb.dart';
 
-import 'package:outdoor_aerial_client/models/program/single.pb.dart';
+import 'package:outdoor_aerial_client/models/protos/program/single.pb.dart';
 import 'package:outdoor_aerial_client/services/programs.dart';
 
 class ProgramsNotifier extends AsyncNotifier<List<Program>> {

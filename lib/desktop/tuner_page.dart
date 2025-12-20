@@ -35,7 +35,7 @@ class _TunerPageState extends ConsumerState<TunerPage> {
           ),
           _ => ListView(
             children: [
-              ProgramCarouselView(programs: programs),
+              // ProgramCarouselView(programs: programs),
               // ProgramMasonryView()
             ],
           ),
