@@ -1,0 +1,49 @@
+edition = "2023";
+
+package program;
+
+import "google/type/timeofday.proto";
+import "program/weekdays.proto";
+
+/*
+ 电台节目的数据模型
+
+ 从 Outdoor Aerial 数据平台获取的，
+ 存放在调谐器上，
+ 供客户端之间流通的节目清单数据
+ */
+message Program {
+  // Outdoor Aerial 服务器分配给电台节目的 UUID
+  bytes uuid = 1;
+
+  // 该电台节目的名称，比如 “心花一路·FUN”
+  string name = 2;
+
+  // 对该电台节目的长文本介绍
+  string description = 3;
+
+  // 电台节目所属广播电台
+  bytes studio = 4;
+
+  // 电台节目的主播
+  repeated string hosts = 5;
+
+  // 电台节目的固定播出日期
+  repeated ProgramWeekdays date = 6;
+
+  // TODO 电台节目的类型，比如新闻、音乐、访谈、聊天等
+
+  // TODO 电台当前的播出状态，标记为开播、重播、暂播
+
+  // 电台节目的固定播出时间
+  google.type.TimeOfDay start = 7;
+
+  // 电台节目的固定结束时间
+  google.type.TimeOfDay end = 8;
+
+  // 电台节目的专属封面数据
+  bytes cover = 9;
+
+  // 用户是否喜爱该电台节目
+  bool like = 10;
+}

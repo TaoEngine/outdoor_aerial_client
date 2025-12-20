@@ -1,0 +1,27 @@
+edition = "2023";
+
+package program;
+
+import "google/type/date.proto";
+
+/* 单期电台节目的数据模型
+ */
+message SingleProgram {
+  // 该电台节目的节目信息
+  bytes partof = 1;
+
+  // 本期电台节目的播出时间
+  google.type.Date time = 2;
+
+  // 本期电台节目的主题
+  string title = 3;
+
+  // 本期电台节目的摘要
+  string abstract = 4;
+
+  // 本期电台节目的配图数据
+  bytes cover = 5;
+
+  // 用户是否收藏本期节目
+  bool favorite = 6;
+}

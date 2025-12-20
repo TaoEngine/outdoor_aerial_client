@@ -1,0 +1,48 @@
+edition = "2024";
+
+package station;
+
+/* 广播电台的类型
+ *
+ * 每个广播电台都会有它擅长播出的类型，在这里罗列了一些常见的电台类型
+ *
+ * 注意拥有多种类型的电台在此将被归类为 “综合” 电台，
+ * 并且数据结构中并不会设立 “其他” 项
+ */
+enum StationType {
+  // 综合台
+  INTERGRATED = 0;
+
+  // 交通台
+  TRAFFIC = 1;
+
+  // 音乐台
+  MUSIC = 2;
+
+  // 新闻台
+  NEWS = 3;
+
+  // 经济台
+  ECONOMY = 4;
+
+  // 体育台
+  SPORTS = 5;
+
+  // 教育台
+  EDUCATIONAL = 6;
+
+  // 科学台
+  SCIENCE = 7;
+
+  // 国际台
+  INTERNATIONAL = 8;
+
+  // 农业台
+  AGRICULTURAL = 9;
+
+  // 少儿台
+  CHILDREN = 10;
+
+  // 养生台
+  HEALTH = 11;
+}
