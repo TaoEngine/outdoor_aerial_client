@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:outdoor_aerial_client/models/protos/program/single.pb.dart';
 import 'package:outdoor_aerial_client/models/protos/programs.pb.dart';
-import 'package:outdoor_aerial_client/service/programs.dart';
+import 'package:outdoor_aerial_client/source/service/programs.dart';
 
 void main() {
   group('节目服务测试', () {

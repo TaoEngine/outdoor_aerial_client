@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:outdoor_aerial_client/models/protos/program/program.pb.dart';
 
 import 'package:outdoor_aerial_client/models/protos/program/single.pb.dart';
-import 'package:outdoor_aerial_client/service/programs.dart';
+import 'package:outdoor_aerial_client/source/service/programs.dart';
 
 class ProgramsNotifier extends AsyncNotifier<List<Program>> {
   @override

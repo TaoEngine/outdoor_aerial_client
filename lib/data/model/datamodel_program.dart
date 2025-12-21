@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:outdoor_aerial_client/model/program/status.dart';
-import 'package:outdoor_aerial_client/model/program/type.dart';
-import 'package:outdoor_aerial_client/model/program/weekday.dart';
+import 'package:outdoor_aerial_client/data/model/datamodel_status.dart';
+import 'package:outdoor_aerial_client/data/model/datamodel_type.dart';
+import 'package:outdoor_aerial_client/data/model/datamodel_weekday.dart';
 
 @immutable
 class Program {

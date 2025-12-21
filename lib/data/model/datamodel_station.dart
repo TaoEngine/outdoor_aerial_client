@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:outdoor_aerial_client/model/station/status.dart';
-import 'package:outdoor_aerial_client/model/station/type.dart';
+import 'package:outdoor_aerial_client/data/model/datamodel_status.dart';
+import 'package:outdoor_aerial_client/data/model/datamodel_type.dart';
 
 @immutable
 class RadioStation {
