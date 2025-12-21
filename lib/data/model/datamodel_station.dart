@@ -27,13 +27,13 @@ class RadioStation {
   final String institution;
 
   /// 该广播电台的播出语言，指定存储 ISO 标准地区代码方便解析，比如 “zh_CN”
-  final String language;
+  final Locale language;
 
   /// 该广播电台拥有的社媒账号，点击就能跳转到指定平台（可选）
   final String? social;
 
   /// 用户是否喜爱该广播电台
-  final bool like;
+  final bool? like;
 
   /// 广播电台的开播时间，比如广播电台在5点开台，此处就填写5时0分。采用 [TimeOfDay] 存储时间
   final TimeOfDay start;
@@ -48,20 +48,20 @@ class RadioStation {
   final StationStatus status;
 
   /// 广播电台数据模型
-  const RadioStation(
-    this.id,
-    this.logo,
-    this.banner,
-    this.frequency,
-    this.name,
-    this.description,
-    this.institution,
-    this.language,
-    this.social,
-    this.like,
-    this.start,
-    this.end,
-    this.type,
-    this.status,
-  );
+  const RadioStation({
+    required this.id,
+    required this.logo,
+    required this.banner,
+    required this.frequency,
+    required this.name,
+    required this.description,
+    required this.institution,
+    required this.language,
+    required this.social,
+    required this.like,
+    required this.start,
+    required this.end,
+    required this.type,
+    required this.status,
+  });
 }
