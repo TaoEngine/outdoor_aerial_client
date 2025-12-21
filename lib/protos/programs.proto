@@ -1,7 +1,0 @@
-edition = "2024";
-
-import "program/program.proto";
-
-message Programs {
-  repeated program.Program programs = 1;
-}

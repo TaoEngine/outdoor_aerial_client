@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:m3e_collection/m3e_collection.dart';
 
-import 'package:outdoor_aerial_client/providers/programs.dart';
+import 'package:outdoor_aerial_client/provider/programs.dart';
 
 class SplashPage extends ConsumerWidget {
   const SplashPage({super.key});

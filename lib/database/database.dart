@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart' show TimeOfDay;
 import 'package:isar_community/isar.dart';
-import 'package:outdoor_aerial_client/models/program/program.dart';
-import 'package:outdoor_aerial_client/models/program/status.dart';
-import 'package:outdoor_aerial_client/models/program/type.dart';
-import 'package:outdoor_aerial_client/models/station/station.dart';
-import 'package:outdoor_aerial_client/models/station/status.dart';
-import 'package:outdoor_aerial_client/models/station/type.dart';
-import 'package:outdoor_aerial_client/models/program/weekday.dart';
+import 'package:outdoor_aerial_client/model/program/program.dart';
+import 'package:outdoor_aerial_client/model/program/status.dart';
+import 'package:outdoor_aerial_client/model/program/type.dart';
+import 'package:outdoor_aerial_client/model/station/station.dart';
+import 'package:outdoor_aerial_client/model/station/status.dart';
+import 'package:outdoor_aerial_client/model/station/type.dart';
+import 'package:outdoor_aerial_client/model/program/weekday.dart';
 
 part 'database.g.dart';
 
