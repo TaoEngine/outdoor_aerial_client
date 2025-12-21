@@ -1,11 +1,10 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 
 @immutable
 class Episode {
-  /// 本期电台节目隶属节目信息，通过 UUID 反查电台节目
-  final Uint8List program;
+  /// 本期电台节目隶属节目信息，通过 id 反查电台节目
+  final int program;
 
   /// 本期电台节目的配图，通过 AI 结合这期节目的主题生成的配图，并且用于主页卡片的展示
   final Uint8List cover;

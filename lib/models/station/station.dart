@@ -7,8 +7,8 @@ import 'package:outdoor_aerial_client/models/station/type.dart';
 
 @immutable
 class RadioStation {
-  /// Outdoor Aerial 服务器分配给广播电台的 UUID
-  final Uint8List uuid;
+  /// Outdoor Aerial 服务器分配给广播电台的 id
+  final int id;
 
   /// 广播电台的 LOGO，将显示在播放器专辑、封面、首页中，和广播电台官方的宣发图一致
   final Uint8List logo;
@@ -51,7 +51,7 @@ class RadioStation {
 
   /// 广播电台数据模型
   const RadioStation(
-    this.uuid,
+    this.id,
     this.logo,
     this.banner,
     this.frequency,

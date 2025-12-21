@@ -11,6 +11,7 @@ import 'package:outdoor_aerial_client/desktop/main_page.dart';
 import 'package:outdoor_aerial_client/desktop/splash_page.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(ProviderScope(child: const MainApp()));
 }
 
