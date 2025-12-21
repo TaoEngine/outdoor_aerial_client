@@ -7,6 +7,9 @@ import 'package:path_provider/path_provider.dart';
 /// 数据库连接的 Provider
 final isarProvider = FutureProvider<Isar>((ref) async {
   final dir = await getApplicationDocumentsDirectory();
-  final isar = await Isar.open([RadioStationDBSchema, ProgramDBSchema], directory: dir.path);
+  final isar = await Isar.open([
+    RadioStationDBSchema,
+    ProgramDBSchema,
+  ], directory: dir.path);
   return isar;
 });
