@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 
 import 'package:outdoor_aerial_client/models/program/status.dart';
