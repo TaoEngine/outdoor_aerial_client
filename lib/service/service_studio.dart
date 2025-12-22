@@ -26,7 +26,8 @@ class RadioStationRepository {
       stations.addAll(localStation);
       yield List.of(stations);
     } catch (e) {
-      // TODO 对读取服务器出现的相关错误作处理
+      // TODO 对读取数据库出现的相关错误作处理
+      rethrow;
     }
 
     /// 然后监听服务器进行实时信息更新
@@ -44,6 +45,16 @@ class RadioStationRepository {
       }
     } catch (e) {
       // TODO 对监听服务器出现的相关错误作处理
+      rethrow;
     }
   }
+}
+
+class ProgramRepository {
+  /// 从本地获取电台节目信息
+
+  /// 从服务器获取电台节目信息
+
+  /// 电台节目的仓库
+  ProgramRepository();
 }

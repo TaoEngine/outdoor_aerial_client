@@ -8,6 +8,8 @@ import 'package:outdoor_aerial_client/data/model/datamodel_type.dart';
 import 'package:outdoor_aerial_client/data/proto/build/dataproto_station.pb.dart';
 import 'package:outdoor_aerial_client/data/proto/build/dataproto_status.pbenum.dart';
 import 'package:outdoor_aerial_client/data/proto/build/dataproto_type.pbenum.dart';
+import 'package:outdoor_aerial_client/data/proto/build/google/type/timeofday.pb.dart'
+    as pbtype;
 
 /// 广播电台数据结构转换器
 class RadioStationMapper {
@@ -66,6 +68,55 @@ class RadioStationMapper {
       ..end = end
       ..type = station.type
       ..status = station.status;
+  }
+
+  /// [RadioStation] 转 [RadioStationPB]
+  ///
+  /// 用于将编辑过的广播电台信息重新发送到服务器进行修改
+  static RadioStationPB modelToPB(RadioStation station) {
+    final language =
+        '${station.language.languageCode}_${station.language.countryCode}';
+    final start = pbtype.TimeOfDay()
+      ..hours = station.start.hour
+      ..minutes = station.start.minute;
+    final end = pbtype.TimeOfDay()
+      ..hours = station.end.hour
+      ..minutes = station.end.minute;
+    final type = switch (station.type) {
+      StationType.integrate => StationTypePB.INTERGRATED,
+      StationType.traffic => StationTypePB.TRAFFIC,
+      StationType.music => StationTypePB.MUSIC,
+      StationType.news => StationTypePB.NEWS,
+      StationType.economy => StationTypePB.ECONOMY,
+      StationType.sports => StationTypePB.SPORTS,
+      StationType.educational => StationTypePB.EDUCATIONAL,
+      StationType.science => StationTypePB.SCIENCE,
+      StationType.international => StationTypePB.INTERNATIONAL,
+      StationType.agricultural => StationTypePB.AGRICULTURAL,
+      StationType.children => StationTypePB.CHILDREN,
+      StationType.health => StationTypePB.HEALTH,
+    };
+    final status = switch (station.status) {
+      StationStatus.onair => StationStatusPB.ONAIR,
+      StationStatus.maintaining => StationStatusPB.MAINTAINING,
+      StationStatus.offair => StationStatusPB.OFFAIR,
+    };
+    return RadioStationPB(
+      id: station.id,
+      logo: station.logo.toList(),
+      banner: station.banner.toList(),
+      frequency: station.frequency,
+      name: station.name,
+      description: station.description,
+      institution: station.institution,
+      language: language,
+      social: station.social,
+      like: station.like,
+      start: start,
+      end: end,
+      type: type,
+      status: status,
+    );
   }
 
   /// [RadioStationPB] 转 [RadioStation]

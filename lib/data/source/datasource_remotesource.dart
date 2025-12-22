@@ -14,7 +14,7 @@ class RadioStationRemoteSource {
   static const path = 'station';
 
   /// 远程广播电台源
-  RadioStationRemoteSource({required this.address, required this.isWss});
+  RadioStationRemoteSource({required this.address, this.isWss = true});
 
   /// WebSocket相关接口
   late WebSocketChannel _channel;
