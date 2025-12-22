@@ -1,0 +1,73 @@
+edition = "2024";
+
+package proto;
+
+enum StationTypePB {
+  // 综合台
+  INTERGRATED = 0;
+
+  // 交通台
+  TRAFFIC = 1;
+
+  // 音乐台
+  MUSIC = 2;
+
+  // 新闻台
+  NEWS = 3;
+
+  // 经济台
+  ECONOMY = 4;
+
+  // 体育台
+  SPORTS = 5;
+
+  // 教育台
+  EDUCATIONAL = 6;
+
+  // 科学台
+  SCIENCE = 7;
+
+  // 国际台
+  INTERNATIONAL = 8;
+
+  // 农业台
+  AGRICULTURAL = 9;
+
+  // 少儿台
+  CHILDREN = 10;
+
+  // 健康台
+  HEALTH = 11;
+}
+
+enum ProgramTypePB {
+  // 综合节目，包含不止一个分类的节目
+  PROGRAM_TYPE_INTEGRATE = 0;
+
+  // 新闻节目，聚焦时事与政治的新闻类节目
+  PROGRAM_TYPE_NEWS = 1;
+
+  // 音乐节目，纯粹播放音乐或对音乐进行点评的节目
+  PROGRAM_TYPE_MUSIC = 2;
+
+  // 播客节目，邀请嘉宾进行深度对话或者话题延申的节目
+  PROGRAM_TYPE_PODCAST = 3;
+
+  // 综艺节目，交流趣事讨论八卦或者主持人持续与听众进行互动的节目
+  PROGRAM_TYPE_ENTERTAINMENT = 4;
+
+  // 体育节目，报道实况比赛或者分析赛点事件的节目
+  PROGRAM_TYPE_SPORTS = 5;
+
+  // 广播剧节目，音频小说或评书节目
+  PROGRAM_TYPE_STORYTELLING = 6;
+
+  // 教育节目，谈论家庭教育或孩子的心理问题或教育讲座节目
+  PROGRAM_TYPE_EDUCATIONAL = 7;
+
+  // 财经节目，解析今日股市或提供投资建议的节目
+  PROGRAM_TYPE_FINANCE = 8;
+
+  // 健康节目，与听众交流健身或养生知识的节目
+  PROGRAM_TYPE_HEALTH = 9;
+}

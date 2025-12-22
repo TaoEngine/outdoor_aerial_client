@@ -1,9 +1,13 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:outdoor_aerial_client/data/base/database_program.dart';
 import 'package:outdoor_aerial_client/data/base/database_station.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_program.dart';
+import 'package:outdoor_aerial_client/data/base/database_timeofday.dart';
 import 'package:outdoor_aerial_client/data/model/datamodel_station.dart';
+import 'package:outdoor_aerial_client/data/model/datamodel_status.dart';
+import 'package:outdoor_aerial_client/data/model/datamodel_type.dart';
+import 'package:outdoor_aerial_client/data/proto/build/dataproto_station.pb.dart';
+import 'package:outdoor_aerial_client/data/proto/build/dataproto_status.pbenum.dart';
+import 'package:outdoor_aerial_client/data/proto/build/dataproto_type.pbenum.dart';
 
 /// 广播电台数据结构转换器
 class RadioStationMapper {
@@ -33,5 +37,53 @@ class RadioStationMapper {
       type: db.type,
       status: db.status,
     );
+  }
+
+  /// [RadioStationPB] 转 [RadioStationDB]
+  ///
+  /// 用于将从服务器传回的广播电台信息存储在数据库上
+  static RadioStationDB pbToDB(RadioStationPB pb) {
+    final start = TimeOfDayDB()
+      ..hour = pb.start.hours
+      ..minute = pb.start.minutes;
+    final end = TimeOfDayDB()
+      ..hour = pb.end.hours
+      ..minute = pb.end.minutes;
+    final type = switch (pb.type) {
+      StationTypePB.INTERGRATED => StationType.integrate,
+      StationTypePB.TRAFFIC => StationType.traffic,
+      StationTypePB.MUSIC => StationType.music,
+      StationTypePB.NEWS => StationType.news,
+      StationTypePB.ECONOMY => StationType.economy,
+      StationTypePB.SPORTS => StationType.sports,
+      StationTypePB.EDUCATIONAL => StationType.educational,
+      StationTypePB.SCIENCE => StationType.science,
+      StationTypePB.INTERNATIONAL => StationType.international,
+      StationTypePB.AGRICULTURAL => StationType.agricultural,
+      StationTypePB.CHILDREN => StationType.children,
+      StationTypePB.HEALTH => StationType.health,
+      _ => StationType.integrate,
+    };
+    final status = switch (pb.status) {
+      StationStatusPB.ONAIR => StationStatus.onair,
+      StationStatusPB.MAINTAINING => StationStatus.maintaining,
+      StationStatusPB.OFFAIR => StationStatus.offair,
+      _ => StationStatus.offair,
+    };
+    return RadioStationDB()
+      ..id = pb.id
+      ..logo = pb.logo
+      ..banner = pb.banner
+      ..frequency = pb.frequency
+      ..name = pb.name
+      ..description = pb.description
+      ..institution = pb.institution
+      ..language = pb.language
+      ..social = pb.social
+      ..like = pb.like
+      ..start = start
+      ..end = end
+      ..type = type
+      ..status = status;
   }
 }

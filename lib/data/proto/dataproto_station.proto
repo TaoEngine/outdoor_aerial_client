@@ -1,0 +1,51 @@
+edition = "2024";
+
+package proto;
+
+import "google/type/timeofday.proto";
+import "dataproto_status.proto";
+import "dataproto_type.proto";
+
+message RadioStationPB {
+  // Outdoor Aerial 服务器分配给广播电台的 id
+  int32 id = 1;
+
+  // 广播电台的 LOGO，将显示在播放器专辑、封面、首页中，和广播电台官方的宣发图一致
+  bytes logo = 2;
+
+  // 广播电台的横幅，将用于标识节目卡片归属，需要透明 PNG 格式，内容从 LOGO 中选取非文字部分
+  bytes banner = 3;
+
+  // 广播电台的频率，存储单位为 “兆赫兹”，比如 “90.8” 指 90.8MHz
+  double frequency = 4;
+
+  // 该广播电台的名称，比如 “安徽交通广播”
+  string name = 5;
+
+  // 对该广播电台的长文本介绍（可选）
+  string description = 6;
+
+  // 该广播电台所属单位，比如 “安徽广播电视台”
+  string institution = 7;
+
+  // 该广播电台的播出语言，指定存储 ISO 标准地区代码方便解析，比如 “zh_CN”
+  string language = 8;
+
+  // 该广播电台拥有的社媒账号，点击就能跳转到指定平台（可选）
+  string social = 9;
+
+  // 用户是否喜爱该广播电台
+  bool like = 10;
+
+  // 广播电台的开播时间，比如广播电台在5点开台，此处就填写5时0分
+  google.type.TimeOfDay start = 11;
+
+  // 广播电台的晚安时间，比如广播电台在23点晚安，此处就填写23时0分
+  google.type.TimeOfDay end = 12;
+
+  // 广播电台的类型，比如交通、新闻、经济、综合等
+  StationTypePB type = 13;
+
+  // 广播电台当前的播出状态，可标记为 “广播中”、“停机检修” 和 “停播”
+  StationStatusPB status = 14;
+}

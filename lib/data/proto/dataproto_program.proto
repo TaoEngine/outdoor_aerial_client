@@ -1,0 +1,43 @@
+edition = "2023";
+
+package proto;
+
+import "google/type/timeofday.proto";
+import "dataproto_status.proto";
+import "dataproto_type.proto";
+import "dataproto_weekday.proto";
+
+message ProgramPB {
+  // Outdoor Aerial 服务器分配给电台节目的 id
+  uint32 id = 1;
+
+  // 该电台节目隶属广播电台，通过 id 反查广播电台
+  uint32 studio = 2;
+
+  // 该电台节目的名称，比如 “心花一路·FUN”
+  string name = 3;
+
+  // 对该电台节目的长文本介绍（可选）
+  string description = 4;
+
+  // 用户是否喜欢该电台节目，若true则为用户订阅里面的节目，若false则为用户屏蔽这个节目（可选）
+  bool like = 5;
+
+  // 电台节目的类型，比如新闻、音乐、访谈、闲聊等
+  ProgramTypePB type = 6;
+
+  // 电台当前的播出状态，可标记为 “开播”、“重播” 和 “暂播”
+  ProgramStatusPB status = 7;
+
+  // 电台节目的固定播出时间，比如节目8点半播出，此处就填写8时30分
+  google.type.TimeOfDay start = 8;
+
+  // 电台节目的固定结束时间，比如节目10点半结束，此处就填写10时30分
+  google.type.TimeOfDay end = 9;
+
+  // 该电台节目的主持人阵容，可以为多个，比如 “晏大胖”
+  repeated string hosts = 10;
+
+  // 电台节目的固定播出日期
+  repeated ProgramWeekdayPB weekday = 11;
+}

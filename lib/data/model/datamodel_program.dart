@@ -11,7 +11,7 @@ class Program {
   /// 该电台节目隶属广播电台，通过 id 反查广播电台
   final int studio;
 
-  /// 该电台节目的名称，比如 “快乐出发”
+  /// 该电台节目的名称，比如 “心花一路·FUN”
   final String name;
 
   /// 对该电台节目的长文本介绍（可选）

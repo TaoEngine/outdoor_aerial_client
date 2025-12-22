@@ -1,0 +1,25 @@
+edition = "2024";
+
+package proto;
+
+enum StationStatusPB {
+  // 广播中
+  ONAIR = 0;
+
+  // 停机检修
+  MAINTAINING = 1;
+
+  // 电台停播
+  OFFAIR = 2;
+}
+
+enum ProgramStatusPB {
+  // 开播的节目
+    LIVE = 0;
+
+  // 重播的节目
+    REPLAY = 1;
+
+  // 暂播的节目
+    SUSPENDED = 2;
+}

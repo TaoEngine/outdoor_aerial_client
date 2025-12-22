@@ -1,0 +1,27 @@
+edition = "2023";
+
+package proto;
+
+// 定义周数
+enum ProgramWeekdayPB {
+  // 周一
+  MON = 0;
+
+  // 周二
+  TUE = 1;
+
+  // 周三
+  WED = 2;
+
+  // 周四
+  THU = 3;
+
+  // 周五
+  FRI = 4;
+
+  // 周六
+  SAT = 5;
+
+  // 周日
+  SUN = 6;
+}

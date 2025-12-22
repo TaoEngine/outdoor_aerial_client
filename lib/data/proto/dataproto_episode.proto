@@ -1,0 +1,26 @@
+edition = "2024";
+
+package proto;
+
+import "google/type/date.proto";
+
+message EpisodePB {
+  // 本期电台节目隶属节目信息，通过 id 反查电台节目
+  uint32 program = 1;
+
+  // 本期电台节目的配图，通过 AI 结合这期节目的主题生成的配图，并且用于主页卡片的展示
+  bytes cover = 2;
+
+  // 本期电台节目的主题，利用 AI 分析节目音频片段给出的本期节目主题
+  string title = 3;
+
+  // 本期电台节目的摘要，利用 AI 分析节目音频片段给出的本期节目摘要
+  string abstract = 4;
+
+  // 用户是否收藏本期节目
+  bytes favorite = 5;
+
+  // 本期电台节目的播出时间，比如本期节目在2025年12月18日上午8点半播出
+  // 此处就填写2025年12月18日8时30分
+  google.type.Date time = 6;
+}
