@@ -1,6 +1,5 @@
 import 'package:http/http.dart' as http;
-import 'package:outdoor_aerial_client/models/protos/program/single.pb.dart';
-import 'package:outdoor_aerial_client/models/protos/programs.pb.dart';
+import 'package:outdoor_aerial_client/data/proto/build/dataproto_program.pb.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ProgramsGetService {
@@ -17,7 +16,6 @@ class ProgramsGetService {
   ProgramsGetService({required this.address, this.isHttps = false});
 
   /// 获取节目
-
   Future<Programs> get() async {
     final response = await http
         .get(switch (isHttps) {

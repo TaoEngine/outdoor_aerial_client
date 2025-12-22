@@ -39,16 +39,45 @@ class RadioStationMapper {
     );
   }
 
-  /// [RadioStationPB] 转 [RadioStationDB]
+  /// [RadioStation] 转 [RadioStationDB]
   ///
-  /// 用于将从服务器传回的广播电台信息存储在数据库上
-  static RadioStationDB pbToDB(RadioStationPB pb) {
+  /// 用于将广播电台信息存储到数据库中
+  static RadioStationDB modelToDB(RadioStation station) {
+    final language =
+        '${station.language.languageCode}_${station.language.countryCode}';
     final start = TimeOfDayDB()
-      ..hour = pb.start.hours
-      ..minute = pb.start.minutes;
+      ..hour = station.start.hour
+      ..minute = station.start.minute;
     final end = TimeOfDayDB()
-      ..hour = pb.end.hours
-      ..minute = pb.end.minutes;
+      ..hour = station.end.hour
+      ..minute = station.end.minute;
+    return RadioStationDB()
+      ..id = station.id
+      ..logo = station.logo.toList()
+      ..banner = station.banner.toList()
+      ..frequency = station.frequency
+      ..name = station.name
+      ..description = station.description
+      ..institution = station.institution
+      ..language = language
+      ..social = station.social
+      ..like = station.like
+      ..start = start
+      ..end = end
+      ..type = station.type
+      ..status = station.status;
+  }
+
+  /// [RadioStationPB] 转 [RadioStation]
+  ///
+  /// 用于将从服务器传回的广播电台信息呈现在组件上
+  static RadioStation pbToModel(RadioStationPB pb) {
+    final logo = Uint8List.fromList(pb.logo);
+    final banner = Uint8List.fromList(pb.banner);
+    final languageCode = pb.language.split('_');
+    final language = Locale(languageCode[0], languageCode[1]);
+    final start = TimeOfDay(hour: pb.start.hours, minute: pb.start.minutes);
+    final end = TimeOfDay(hour: pb.end.hours, minute: pb.end.minutes);
     final type = switch (pb.type) {
       StationTypePB.INTERGRATED => StationType.integrate,
       StationTypePB.TRAFFIC => StationType.traffic,
@@ -70,20 +99,21 @@ class RadioStationMapper {
       StationStatusPB.OFFAIR => StationStatus.offair,
       _ => StationStatus.offair,
     };
-    return RadioStationDB()
-      ..id = pb.id
-      ..logo = pb.logo
-      ..banner = pb.banner
-      ..frequency = pb.frequency
-      ..name = pb.name
-      ..description = pb.description
-      ..institution = pb.institution
-      ..language = pb.language
-      ..social = pb.social
-      ..like = pb.like
-      ..start = start
-      ..end = end
-      ..type = type
-      ..status = status;
+    return RadioStation(
+      id: pb.id,
+      logo: logo,
+      banner: banner,
+      frequency: pb.frequency,
+      name: pb.name,
+      description: pb.description,
+      institution: pb.institution,
+      language: language,
+      social: pb.social,
+      like: pb.like,
+      start: start,
+      end: end,
+      type: type,
+      status: status,
+    );
   }
 }
