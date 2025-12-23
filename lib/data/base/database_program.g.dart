@@ -94,16 +94,11 @@ int _programDBEstimateSize(
         allOffsets[TimeOfDayDB]!,
         allOffsets,
       );
+  bytesCount += 3 + object.hosts.length * 3;
   {
-    final list = object.hosts;
-    if (list != null) {
-      bytesCount += 3 + list.length * 3;
-      {
-        for (var i = 0; i < list.length; i++) {
-          final value = list[i];
-          bytesCount += value.length * 3;
-        }
-      }
+    for (var i = 0; i < object.hosts.length; i++) {
+      final value = object.hosts[i];
+      bytesCount += value.length * 3;
     }
   }
   bytesCount += 3 + object.name.length * 3;
@@ -161,7 +156,7 @@ ProgramDB _programDBDeserialize(
         allOffsets,
       ) ??
       TimeOfDayDB();
-  object.hosts = reader.readStringList(offsets[2]);
+  object.hosts = reader.readStringList(offsets[2]) ?? [];
   object.id = id;
   object.like = reader.readBoolOrNull(offsets[3]);
   object.name = reader.readString(offsets[4]);
@@ -208,7 +203,7 @@ P _programDBDeserializeProp<P>(
               TimeOfDayDB())
           as P;
     case 2:
-      return (reader.readStringList(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 3:
       return (reader.readBoolOrNull(offset)) as P;
     case 4:
@@ -551,22 +546,6 @@ extension ProgramDBQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.greaterThan(property: r'description', value: ''),
-      );
-    });
-  }
-
-  QueryBuilder<ProgramDB, ProgramDB, QAfterFilterCondition> hostsIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        const FilterCondition.isNull(property: r'hosts'),
-      );
-    });
-  }
-
-  QueryBuilder<ProgramDB, ProgramDB, QAfterFilterCondition> hostsIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        const FilterCondition.isNotNull(property: r'hosts'),
       );
     });
   }
@@ -1542,7 +1521,7 @@ extension ProgramDBQueryProperty
     });
   }
 
-  QueryBuilder<ProgramDB, List<String>?, QQueryOperations> hostsProperty() {
+  QueryBuilder<ProgramDB, List<String>, QQueryOperations> hostsProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'hosts');
     });

@@ -22,12 +22,12 @@ class Episode {
   /// 此处就填写2025年12月18日8时30分。采用 [DateTime] 存储时间
   final DateTime time;
 
-  const Episode(
-    this.program,
-    this.cover,
-    this.title,
-    this.abstract,
-    this.favorite,
-    this.time,
-  );
+  const Episode({
+    required this.program,
+    required this.cover,
+    required this.title,
+    required this.abstract,
+    required this.favorite,
+    required this.time,
+  });
 }

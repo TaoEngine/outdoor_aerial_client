@@ -39,17 +39,17 @@ class Program {
   final List<ProgramWeekday> weekday;
 
   /// 电台节目数据模型
-  const Program(
-    this.id,
-    this.name,
-    this.description,
-    this.studio,
-    this.hosts,
-    this.weekday,
-    this.type,
-    this.status,
-    this.start,
-    this.end,
-    this.like,
-  );
+  const Program({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.studio,
+    required this.hosts,
+    required this.weekday,
+    required this.type,
+    required this.status,
+    required this.start,
+    required this.end,
+    required this.like,
+  });
 }

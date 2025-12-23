@@ -49,12 +49,3 @@ class RadioStationRepository {
     }
   }
 }
-
-class ProgramRepository {
-  /// 从本地获取电台节目信息
-
-  /// 从服务器获取电台节目信息
-
-  /// 电台节目的仓库
-  ProgramRepository();
-}

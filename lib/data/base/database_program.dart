@@ -40,7 +40,7 @@ class ProgramDB {
   late TimeOfDayDB end;
 
   /// 参考 [Program.hosts]
-  List<String>? hosts;
+  late List<String> hosts;
 
   /// 参考 [Program.weekday]
   @enumerated
