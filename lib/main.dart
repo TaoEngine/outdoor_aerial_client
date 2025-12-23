@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:go_router/go_router.dart';
-import 'package:m3e_collection/m3e_collection.dart';
-
 import 'package:outdoor_aerial_client/desktop/main_page.dart';
 import 'package:outdoor_aerial_client/desktop/splash_page.dart';
 
@@ -84,23 +81,19 @@ class MainApp extends StatelessWidget {
       builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) =>
           MaterialApp.router(
             title: "室外天线",
-            theme: withM3ETheme(
-              ThemeData(
-                progressIndicatorTheme: ProgressIndicatorThemeData(
-                  year2023: false,
-                ),
-                fontFamily: "AlibabaPuHuiTi",
-                colorScheme: lightDynamic,
+            theme: ThemeData(
+              progressIndicatorTheme: ProgressIndicatorThemeData(
+                year2023: false,
               ),
+              fontFamily: "AlibabaPuHuiTi",
+              colorScheme: lightDynamic,
             ),
-            darkTheme: withM3ETheme(
-              ThemeData(
-                progressIndicatorTheme: ProgressIndicatorThemeData(
-                  year2023: false,
-                ),
-                fontFamily: "AlibabaPuHuiTi",
-                colorScheme: darkDynamic,
+            darkTheme: ThemeData(
+              progressIndicatorTheme: ProgressIndicatorThemeData(
+                year2023: false,
               ),
+              fontFamily: "AlibabaPuHuiTi",
+              colorScheme: darkDynamic,
             ),
             routerConfig: mainAppRouter,
             localizationsDelegates: localizationsDelegates,

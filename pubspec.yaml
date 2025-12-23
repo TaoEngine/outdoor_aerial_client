@@ -22,7 +22,6 @@ dependencies:
   http: ^1.6.0
   isar_community: ^3.3.0
   isar_community_flutter_libs: ^3.3.0
-  m3e_collection: ^0.3.7
   otp: ^3.2.0
   path_provider: ^2.1.5
   protobuf: ^6.0.0
