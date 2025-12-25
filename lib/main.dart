@@ -81,6 +81,16 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return DynamicColorBuilder(
       builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+        if (lightDynamic != null && darkDynamic != null) {
+          lightDynamic = ColorScheme.fromSeed(
+            seedColor: Color(lightDynamic.primary.toARGB32()),
+            brightness: Brightness.light,
+          );
+          darkDynamic = ColorScheme.fromSeed(
+            seedColor: Color(darkDynamic.primary.toARGB32()),
+            brightness: Brightness.dark,
+          );
+        }
         return MaterialApp.router(
           title: "室外天线",
           theme: ThemeData(
