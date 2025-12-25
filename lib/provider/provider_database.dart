@@ -1,11 +1,15 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar_community/isar.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:outdoor_aerial_client/data/base/database_program.dart';
-import 'package:outdoor_aerial_client/data/base/database_station.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../data/base/database_program.dart';
+import '../data/base/database_station.dart';
+
+part 'provider_database.g.dart';
 
 /// 数据库连接的 Provider
-final isarProvider = FutureProvider<Isar>((ref) async {
+@riverpod
+Future<Isar> isarDatabase(Ref ref) async {
   final dir = await getApplicationDocumentsDirectory();
   final isar = await Isar.open([
     RadioStationDBSchema,
@@ -14,6 +18,5 @@ final isarProvider = FutureProvider<Isar>((ref) async {
 
   /// 设置释放资源的操作
   ref.onDispose(() async => isar.close());
-
   return isar;
-});
+}

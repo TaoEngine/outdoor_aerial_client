@@ -1,18 +1,25 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_station.dart';
-import 'package:outdoor_aerial_client/data/source/datasource_station.dart';
-import 'package:outdoor_aerial_client/service/service_local.dart';
-import 'package:outdoor_aerial_client/service/service_remote.dart';
-import 'package:outdoor_aerial_client/provider/provider_database.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-/// 广播电台列表流 Provider
-final stationsStreamProvider = StreamProvider<List<RadioStation>>((ref) {
-  final isar = ref.watch(isarProvider).value;
-  if (isar == null) throw Exception('无法启动数据库');
+import '../data/model/datamodel_station.dart';
+import '../data/source/datasource_station.dart';
+import '../service/service_local.dart';
+import '../service/service_remote.dart';
 
-  final repository = RadioStationSource(
-    localService: RadioStationLocalService(isar: isar),
-    remoteService: RadioStationRemoteService(address: '127.0.0.1'),
-  );
-  return repository.watchStations();
-});
+part 'provider_station.g.dart';
+
+/// 广播电台列表流
+@riverpod
+class Stations extends _$Stations {
+  /// 从本地和服务器获取广播电台信息
+  @override
+  Stream<List<RadioStation>> build({
+    required RadioStationLocalService localService,
+    required RadioStationRemoteService remoteService,
+  }) async* {
+    final repository = RadioStationSource(
+      localService: localService,
+      remoteService: remoteService,
+    );
+    yield* repository.watchStations();
+  }
+}
