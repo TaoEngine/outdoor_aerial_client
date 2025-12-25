@@ -1,6 +1,6 @@
-import 'package:outdoor_aerial_client/data/model/datamodel_program.dart';
-import 'package:outdoor_aerial_client/service/service_local.dart';
-import 'package:outdoor_aerial_client/service/service_remote.dart';
+import '../model/datamodel_program.dart';
+import '../../service/service_local.dart';
+import '../../service/service_remote.dart';
 
 class ProgramSource {
   /// 从本地获取电台节目信息

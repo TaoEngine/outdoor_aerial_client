@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:outdoor_aerial_client/data/base/database_program.dart';
-import 'package:outdoor_aerial_client/data/base/database_timeofday.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_program.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_status.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_type.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_weekday.dart';
-import 'package:outdoor_aerial_client/data/proto/build/dataproto_program.pb.dart';
-import 'package:outdoor_aerial_client/data/proto/build/dataproto_status.pbenum.dart';
-import 'package:outdoor_aerial_client/data/proto/build/dataproto_type.pbenum.dart';
-import 'package:outdoor_aerial_client/data/proto/build/dataproto_weekday.pbenum.dart';
-import 'package:outdoor_aerial_client/data/proto/build/google/type/timeofday.pb.dart'
-    as pbtype;
+
+import '../base/database_program.dart';
+import '../base/database_timeofday.dart';
+import '../model/datamodel_program.dart';
+import '../model/datamodel_status.dart';
+import '../model/datamodel_type.dart';
+import '../model/datamodel_weekday.dart';
+import '../proto/build/dataproto_program.pb.dart';
+import '../proto/build/dataproto_status.pbenum.dart';
+import '../proto/build/dataproto_type.pbenum.dart';
+import '../proto/build/dataproto_weekday.pbenum.dart';
+import '../proto/build/google/type/timeofday.pb.dart' as pbtype;
 
 /// 电台节目数据结构转换器
 class ProgramMapper {

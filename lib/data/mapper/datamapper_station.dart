@@ -1,15 +1,15 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:outdoor_aerial_client/data/base/database_station.dart';
-import 'package:outdoor_aerial_client/data/base/database_timeofday.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_station.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_status.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_type.dart';
-import 'package:outdoor_aerial_client/data/proto/build/dataproto_station.pb.dart';
-import 'package:outdoor_aerial_client/data/proto/build/dataproto_status.pbenum.dart';
-import 'package:outdoor_aerial_client/data/proto/build/dataproto_type.pbenum.dart';
-import 'package:outdoor_aerial_client/data/proto/build/google/type/timeofday.pb.dart'
-    as pbtype;
+
+import '../base/database_station.dart';
+import '../base/database_timeofday.dart';
+import '../model/datamodel_station.dart';
+import '../model/datamodel_status.dart';
+import '../model/datamodel_type.dart';
+import '../proto/build/dataproto_station.pb.dart';
+import '../proto/build/dataproto_status.pbenum.dart';
+import '../proto/build/dataproto_type.pbenum.dart';
+import '../proto/build/google/type/timeofday.pb.dart' as pbtype;
 
 /// 广播电台数据结构转换器
 class RadioStationMapper {

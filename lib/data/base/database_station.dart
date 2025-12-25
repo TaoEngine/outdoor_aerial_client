@@ -1,7 +1,8 @@
 import 'package:isar_community/isar.dart';
-import 'package:outdoor_aerial_client/data/base/database_timeofday.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_status.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_type.dart';
+
+import '../base/database_timeofday.dart';
+import '../model/datamodel_status.dart';
+import '../model/datamodel_type.dart';
 
 part 'database_station.g.dart';
 

@@ -1,10 +1,11 @@
 import 'package:isar_community/isar.dart';
-import 'package:outdoor_aerial_client/data/base/database_program.dart';
-import 'package:outdoor_aerial_client/data/base/database_station.dart';
-import 'package:outdoor_aerial_client/data/mapper/datamapper_program.dart';
-import 'package:outdoor_aerial_client/data/mapper/datamapper_station.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_program.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_station.dart';
+
+import '../data/base/database_program.dart';
+import '../data/base/database_station.dart';
+import '../data/mapper/datamapper_program.dart';
+import '../data/mapper/datamapper_station.dart';
+import '../data/model/datamodel_program.dart';
+import '../data/model/datamodel_station.dart';
 
 class RadioStationLocalService {
   /// isar数据库

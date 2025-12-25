@@ -1,10 +1,11 @@
-import 'package:outdoor_aerial_client/data/mapper/datamapper_program.dart';
-import 'package:outdoor_aerial_client/data/mapper/datamapper_station.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_program.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_station.dart';
-import 'package:outdoor_aerial_client/data/proto/build/dataproto_program.pb.dart';
-import 'package:outdoor_aerial_client/data/proto/build/dataproto_station.pb.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+
+import '../data/mapper/datamapper_program.dart';
+import '../data/mapper/datamapper_station.dart';
+import '../data/model/datamodel_program.dart';
+import '../data/model/datamodel_station.dart';
+import '../data/proto/build/dataproto_program.pb.dart';
+import '../data/proto/build/dataproto_station.pb.dart';
 
 class RadioStationRemoteService {
   /// Outdoor Aerial 的服务器地址

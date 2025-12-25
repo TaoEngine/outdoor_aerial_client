@@ -1,9 +1,10 @@
 import 'package:isar_community/isar.dart';
-import 'package:outdoor_aerial_client/data/base/database_timeofday.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_program.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_status.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_type.dart';
-import 'package:outdoor_aerial_client/data/model/datamodel_weekday.dart';
+
+import '../base/database_timeofday.dart';
+import '../model/datamodel_program.dart';
+import '../model/datamodel_status.dart';
+import '../model/datamodel_type.dart';
+import '../model/datamodel_weekday.dart';
 
 part 'database_program.g.dart';
 
@@ -46,4 +47,3 @@ class ProgramDB {
   @enumerated
   late List<ProgramWeekday> weekday;
 }
-

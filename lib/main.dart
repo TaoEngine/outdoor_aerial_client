@@ -4,9 +4,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:go_router/go_router.dart';
-import 'package:outdoor_aerial_client/page/desktop/desktop_main.dart';
-import 'package:outdoor_aerial_client/page/mobile/mobile_main.dart';
-import 'package:outdoor_aerial_client/page/page_splash.dart';
+
+import '../page/desktop/desktop_main.dart';
+import '../page/page_splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

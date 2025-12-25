@@ -1,6 +1,6 @@
-import 'package:outdoor_aerial_client/data/model/datamodel_station.dart';
-import 'package:outdoor_aerial_client/service/service_local.dart';
-import 'package:outdoor_aerial_client/service/service_remote.dart';
+import '../model/datamodel_station.dart';
+import '../../service/service_local.dart';
+import '../../service/service_remote.dart';
 
 class RadioStationSource {
   /// 从本地获取广播电台信息
@@ -10,10 +10,7 @@ class RadioStationSource {
   final RadioStationRemoteService remoteService;
 
   /// 广播电台的仓库
-  RadioStationSource({
-    required this.localService,
-    required this.remoteService,
-  });
+  RadioStationSource({required this.localService, required this.remoteService});
 
   /// 临时存储广播电台的列表
   final List<RadioStation> stations = List.empty(growable: true);
