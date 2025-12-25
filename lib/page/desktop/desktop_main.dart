@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:go_router/go_router.dart';
 
+import '../desktop/desktop_tuner.dart';
+
 class DesktopMain extends StatefulWidget {
   const DesktopMain({super.key});
 
@@ -19,9 +21,15 @@ class _DesktopMainState extends State<DesktopMain> {
       Padding(
         padding: .all(4),
         child: ListTile(
-          leading: CircleAvatar(child: Icon(TablerIcons.antenna)),
+          leading: Hero(
+            tag: "logo",
+            child: CircleAvatar(child: Icon(TablerIcons.antenna)),
+          ),
           title: Text("室外天线", style: Theme.of(context).textTheme.headlineSmall),
-          subtitle: Text("位于安徽省马鞍山市", style: Theme.of(context).textTheme.bodySmall),
+          subtitle: Text(
+            "位于安徽省马鞍山市",
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
         ),
       ),
       NavigationDrawerDestination(
@@ -56,7 +64,7 @@ class _DesktopMainState extends State<DesktopMain> {
           ),
           Expanded(
             child: switch (_currentPageIndex) {
-              0 => Placeholder(),
+              0 => DesktopTuner(),
               1 => Placeholder(),
               2 => Placeholder(),
               3 => Placeholder(),
@@ -122,7 +130,9 @@ class BottomPlayWidget extends StatelessWidget {
                   FractionallySizedBox(
                     alignment: .centerLeft,
                     widthFactor: programProgress,
-                    child: Ink(color: Theme.of(context).colorScheme.tertiaryContainer),
+                    child: Ink(
+                      color: Theme.of(context).colorScheme.tertiaryContainer,
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: .start,
@@ -134,7 +144,10 @@ class BottomPlayWidget extends StatelessWidget {
                         child: ClipRRect(
                           clipBehavior: .antiAlias,
                           borderRadius: .circular(10),
-                          child: AspectRatio(aspectRatio: 1, child: programImage),
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: programImage,
+                          ),
                         ),
                       ),
                       Padding(
@@ -144,7 +157,10 @@ class BottomPlayWidget extends StatelessWidget {
                           mainAxisAlignment: .center,
                           crossAxisAlignment: .start,
                           children: [
-                            Text(programTitle, style: Theme.of(context).textTheme.bodyLarge),
+                            Text(
+                              programTitle,
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
                             Text(
                               "$programName | $programBroadcasting",
                               style: Theme.of(context).textTheme.bodySmall,
