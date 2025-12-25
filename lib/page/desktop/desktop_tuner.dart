@@ -1,4 +1,6 @@
 // import 'dart:typed_data';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 // import 'package:flutter/widget_previews.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,44 +12,33 @@ class DesktopTuner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverToBoxAdapter(child: SizedBox(height: 320, child: Card())),
-        SliverPadding(
-          padding: EdgeInsetsGeometry.only(left: 4, right: 4),
-          sliver: SliverCrossAxisGroup(
-            slivers: [
-              SliverCrossAxisExpanded(
-                flex: 1,
-                sliver: SliverList.list(
-                  children: List.filled(
-                    16,
-                    SizedBox(height: 200, child: Card()),
-                  ),
-                ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const double targetItemWidth = 420.0; // 瀑布图卡片最小大小
+        final int expandedCount = (constraints.maxWidth / targetItemWidth)
+            .floor() // 向下取整
+            .clamp(1, 6); 
+        final sliverFlow = List.generate(expandedCount, (index) {
+          return SliverCrossAxisExpanded(
+            flex: 1,
+            sliver: SliverList.list(
+              children: List.filled(
+                16,
+                AspectRatio(aspectRatio: 2/1, child: Card()),
               ),
-              SliverCrossAxisExpanded(
-                flex: 1,
-                sliver: SliverList.list(
-                  children: List.filled(
-                    12,
-                    SizedBox(height: 240, child: Card()),
-                  ),
-                ),
-              ),
-              SliverCrossAxisExpanded(
-                flex: 1,
-                sliver: SliverList.list(
-                  children: List.filled(
-                    12,
-                    SizedBox(height: 200, child: Card()),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+            ),
+          );
+        });
+        return CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(child: SizedBox(height: 320, child: Card())),
+            SliverPadding(
+              padding: EdgeInsetsGeometry.only(left: 4, right: 4),
+              sliver: SliverCrossAxisGroup(slivers: sliverFlow),
+            ),
+          ],
+        );
+      },
     );
   }
 }
