@@ -1,18 +1,18 @@
 import 'package:outdoor_aerial_client/data/model/datamodel_station.dart';
-import 'package:outdoor_aerial_client/data/source/datasource_localsource.dart';
-import 'package:outdoor_aerial_client/data/source/datasource_remotesource.dart';
+import 'package:outdoor_aerial_client/service/service_local.dart';
+import 'package:outdoor_aerial_client/service/service_remote.dart';
 
-class RadioStationRepository {
+class RadioStationSource {
   /// 从本地获取广播电台信息
-  final RadioStationLocalSource localSource;
+  final RadioStationLocalService localService;
 
   /// 从服务器获取广播电台信息
-  final RadioStationRemoteSource remoteSource;
+  final RadioStationRemoteService remoteService;
 
   /// 广播电台的仓库
-  RadioStationRepository({
-    required this.localSource,
-    required this.remoteSource,
+  RadioStationSource({
+    required this.localService,
+    required this.remoteService,
   });
 
   /// 临时存储广播电台的列表
@@ -22,7 +22,7 @@ class RadioStationRepository {
   Stream<List<RadioStation>> watchStations() async* {
     /// 首先获取本地数据库中已有的广播电台
     try {
-      final localStation = await localSource.getAllStations();
+      final localStation = await localService.getAllStations();
       stations.addAll(localStation);
       yield List.of(stations);
     } catch (e) {
@@ -32,7 +32,7 @@ class RadioStationRepository {
 
     /// 然后监听服务器进行实时信息更新
     try {
-      await for (final station in remoteSource.streamStation()) {
+      await for (final station in remoteService.streamStation()) {
         final index = stations.indexWhere((s) => s.id == station.id); // 索引
         switch (index) {
           case -1: // 找不到索引，是新的广播电台
@@ -40,7 +40,7 @@ class RadioStationRepository {
           default:
             stations[index] = station;
         }
-        await localSource.saveStation(station); // 对数据库一并更新
+        await localService.saveStation(station); // 对数据库一并更新
         yield List.of(stations);
       }
     } catch (e) {

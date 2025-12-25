@@ -6,7 +6,7 @@ import 'package:outdoor_aerial_client/data/proto/build/dataproto_program.pb.dart
 import 'package:outdoor_aerial_client/data/proto/build/dataproto_station.pb.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-class RadioStationRemoteSource {
+class RadioStationRemoteService {
   /// Outdoor Aerial 的服务器地址
   final String address;
 
@@ -17,7 +17,7 @@ class RadioStationRemoteSource {
   static const path = 'station';
 
   /// 远程广播电台源
-  RadioStationRemoteSource({required this.address, this.isWss = true});
+  RadioStationRemoteService({required this.address, this.isWss = true});
 
   /// WebSocket相关接口
   late WebSocketChannel _channel;
@@ -45,7 +45,7 @@ class RadioStationRemoteSource {
   }
 }
 
-class ProgramRemoteSource {
+class ProgramRemoteService {
   /// Outdoor Aerial 的服务器地址
   final String address;
 
@@ -56,7 +56,7 @@ class ProgramRemoteSource {
   static const path = 'program';
 
   /// 远程电台节目源
-  ProgramRemoteSource({required this.address, this.isWss = true});
+  ProgramRemoteService({required this.address, this.isWss = true});
 
   /// WebSocket相关接口
   late WebSocketChannel _channel;

@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:go_router/go_router.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+class DesktopMain extends StatefulWidget {
+  const DesktopMain({super.key});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<DesktopMain> createState() => _DesktopMainState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _DesktopMainState extends State<DesktopMain> {
   int _currentPageIndex = 0;
 
   @override

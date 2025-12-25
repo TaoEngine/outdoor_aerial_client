@@ -1,4 +1,3 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter_soloud/flutter_soloud.dart';
 
 /// 音频取流播放服务
@@ -6,7 +5,7 @@ import 'package:flutter_soloud/flutter_soloud.dart';
 /// 它会从 Outdoor Aerial 中拉取 WebSockets 音频流并播放
 /// 如果拉取的是Opus流还会对其进行解码
 /// 此外它还有负责音频通知展示的功能
-class StreamService extends BaseAudioHandler {
+class StreamService {
   /// 关于推流的一些设置
   AudioSource? streamSetting;
 
@@ -38,24 +37,6 @@ class StreamService extends BaseAudioHandler {
       channels: streamChannel,
       format: streamFormat,
     );
-  }
-
-  @override
-  Future<void> play() {
-    // TODO: 播放音频
-    return super.play();
-  }
-
-  @override
-  Future<void> pause() {
-    // TODO: 暂停音频
-    return super.pause();
-  }
-
-  @override
-  Future<void> stop() {
-    // TODO: 停止音频
-    return super.stop();
   }
 }
 

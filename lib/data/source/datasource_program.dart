@@ -1,25 +1,25 @@
 import 'package:outdoor_aerial_client/data/model/datamodel_program.dart';
-import 'package:outdoor_aerial_client/data/source/datasource_localsource.dart';
-import 'package:outdoor_aerial_client/data/source/datasource_remotesource.dart';
+import 'package:outdoor_aerial_client/service/service_local.dart';
+import 'package:outdoor_aerial_client/service/service_remote.dart';
 
-class ProgramRepository {
-  /// TODO 像 RadioStationRepository 那样从本地获取电台节目信息
-  final ProgramLocalSource localSource;
+class ProgramSource {
+  /// 从本地获取电台节目信息
+  final ProgramLocalService localService;
 
-  /// TODO 像 RadioStationRepository 那样从服务器获取电台节目信息
-  final ProgramRemoteSource remoteSource;
+  /// 从服务器获取电台节目信息
+  final ProgramRemoteService remoteService;
 
   /// 电台节目的仓库
-  ProgramRepository({required this.localSource, required this.remoteSource});
+  ProgramSource({required this.localService, required this.remoteService});
 
   /// 临时存储电台节目的列表
   final List<Program> programs = List.empty(growable: true);
 
   /// 实时获取电台列表流
-  Stream<List<Program>> watchStations() async* {
+  Stream<List<Program>> watchPrograms() async* {
     /// 首先获取本地数据库中已有的电台节目
     try {
-      final localStation = await localSource.geetAllPrograms();
+      final localStation = await localService.geetAllPrograms();
       programs.addAll(localStation);
       yield List.of(programs);
     } catch (e) {
@@ -29,7 +29,7 @@ class ProgramRepository {
 
     /// 然后监听服务器进行实时信息更新
     try {
-      await for (final station in remoteSource.streamProgram()) {
+      await for (final station in remoteService.streamProgram()) {
         final index = programs.indexWhere((s) => s.id == station.id); // 索引
         switch (index) {
           case -1: // 找不到索引，是新的电台节目
@@ -37,7 +37,7 @@ class ProgramRepository {
           default:
             programs[index] = station;
         }
-        await localSource.saveProgram(station); // 对数据库一并更新
+        await localService.saveProgram(station); // 对数据库一并更新
         yield List.of(programs);
       }
     } catch (e) {

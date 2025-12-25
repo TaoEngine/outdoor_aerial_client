@@ -6,19 +6,19 @@ import 'package:outdoor_aerial_client/data/mapper/datamapper_station.dart';
 import 'package:outdoor_aerial_client/data/model/datamodel_program.dart';
 import 'package:outdoor_aerial_client/data/model/datamodel_station.dart';
 
-class RadioStationLocalSource {
+class RadioStationLocalService {
   /// isar数据库
   final Isar isar;
 
   /// 本地广播电台源
-  RadioStationLocalSource({required this.isar});
+  RadioStationLocalService({required this.isar});
 
   /// 从数据库中获取所有广播电台
   Future<List<RadioStation>> getAllStations() async {
     final stationDBs = await isar.radioStationDBs.where().findAll();
     final stations = List.generate(
       stationDBs.length,
-      (index) => RadioStationMapper.dbToModel(stationDBs[index]),
+          (index) => RadioStationMapper.dbToModel(stationDBs[index]),
     );
     return stations;
   }
@@ -34,19 +34,19 @@ class RadioStationLocalSource {
   }
 }
 
-class ProgramLocalSource {
+class ProgramLocalService {
   /// isar数据库
   final Isar isar;
 
   /// 本地电台节目源
-  ProgramLocalSource({required this.isar});
+  ProgramLocalService({required this.isar});
 
   /// 从数据库中获取所有电台节目
   Future<List<Program>> geetAllPrograms() async {
     final programDBs = await isar.programDBs.where().findAll();
     final programs = List.generate(
       programDBs.length,
-      (index) => ProgramMapper.dbToModel(programDBs[index]),
+          (index) => ProgramMapper.dbToModel(programDBs[index]),
     );
     return programs;
   }

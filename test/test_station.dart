@@ -1,19 +1,18 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:isar_community/isar.dart';
 import 'package:outdoor_aerial_client/data/base/database_program.dart';
 import 'package:outdoor_aerial_client/data/base/database_station.dart';
 import 'package:outdoor_aerial_client/data/model/datamodel_station.dart';
-import 'package:outdoor_aerial_client/data/source/datasource_localsource.dart';
-import 'package:outdoor_aerial_client/data/source/datasource_remotesource.dart';
-import 'package:outdoor_aerial_client/service/service_studio.dart';
+import 'package:outdoor_aerial_client/data/source/datasource_station.dart';
+import 'package:outdoor_aerial_client/service/service_local.dart';
+import 'package:outdoor_aerial_client/service/service_remote.dart';
 
 void main() {
   group('广播电台服务测试', () {
     late Isar isar;
-    late RadioStationRepository repository;
+    late RadioStationSource repository;
     late Directory tempDir;
 
     setUp(() async {
@@ -32,14 +31,14 @@ void main() {
     });
 
     test('测试通过通道持续获取广播电台3条', () async {
-      final localSource = RadioStationLocalSource(isar: isar);
-      final remoteSource = RadioStationRemoteSource(
+      final localSource = RadioStationLocalService(isar: isar);
+      final remoteSource = RadioStationRemoteService(
         address: '127.0.0.1',
         isWss: false,
       );
-      repository = RadioStationRepository(
-        localSource: localSource,
-        remoteSource: remoteSource,
+      repository = RadioStationSource(
+        localService: localSource,
+        remoteService: remoteSource,
       );
 
       final completer = Completer<List<RadioStation>>();

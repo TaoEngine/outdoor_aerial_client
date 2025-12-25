@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:go_router/go_router.dart';
-import 'package:outdoor_aerial_client/page/desktop/desktop_main.dart';
+import 'package:outdoor_aerial_client/page/mobile/mobile_main.dart';
 import 'package:outdoor_aerial_client/page/page_splash.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   runApp(ProviderScope(child: const MainApp()));
 }
 
@@ -29,7 +31,7 @@ class MainApp extends StatelessWidget {
       GoRoute(
         path: "/main",
         name: "MainPage",
-        builder: (context, state) => const MainPage(),
+        builder: (context, state) => const MobileMain(),
       ),
       // TODO 应用搜索界面 暂未制作
       GoRoute(
@@ -78,27 +80,24 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DynamicColorBuilder(
-      builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) =>
-          MaterialApp.router(
-            title: "室外天线",
-            theme: ThemeData(
-              progressIndicatorTheme: ProgressIndicatorThemeData(
-                year2023: false,
-              ),
-              fontFamily: "AlibabaPuHuiTi",
-              colorScheme: lightDynamic,
-            ),
-            darkTheme: ThemeData(
-              progressIndicatorTheme: ProgressIndicatorThemeData(
-                year2023: false,
-              ),
-              fontFamily: "AlibabaPuHuiTi",
-              colorScheme: darkDynamic,
-            ),
-            routerConfig: mainAppRouter,
-            localizationsDelegates: localizationsDelegates,
-            supportedLocales: supportedLocales,
+      builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+        return MaterialApp.router(
+          title: "室外天线",
+          theme: ThemeData(
+            progressIndicatorTheme: ProgressIndicatorThemeData(year2023: false),
+            fontFamily: "AlibabaPuHuiTi",
+            colorScheme: lightDynamic,
           ),
+          darkTheme: ThemeData(
+            progressIndicatorTheme: ProgressIndicatorThemeData(year2023: false),
+            fontFamily: "AlibabaPuHuiTi",
+            colorScheme: darkDynamic,
+          ),
+          routerConfig: mainAppRouter,
+          localizationsDelegates: localizationsDelegates,
+          supportedLocales: supportedLocales,
+        );
+      },
     );
   }
 }
