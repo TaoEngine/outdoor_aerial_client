@@ -29,12 +29,12 @@ class _DesktopMainState extends State<DesktopMain> {
         label: Text("调谐器", style: Theme.of(context).textTheme.labelLarge),
       ),
       NavigationDrawerDestination(
-        icon: Icon(TablerIcons.timeline_event_text),
-        label: Text("节目单", style: Theme.of(context).textTheme.labelLarge),
-      ),
-      NavigationDrawerDestination(
         icon: Icon(TablerIcons.heart),
         label: Text("我喜欢", style: Theme.of(context).textTheme.labelLarge),
+      ),
+      NavigationDrawerDestination(
+        icon: Icon(TablerIcons.folder),
+        label: Text("节目单", style: Theme.of(context).textTheme.labelLarge),
       ),
       NavigationDrawerDestination(
         icon: Icon(TablerIcons.settings),

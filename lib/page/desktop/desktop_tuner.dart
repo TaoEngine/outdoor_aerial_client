@@ -4,46 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:go_router/go_router.dart';
 
-class DesktopTuner extends ConsumerStatefulWidget {
+class DesktopTuner extends ConsumerWidget {
   const DesktopTuner({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _TunerPageState();
-}
-
-class _TunerPageState extends ConsumerState<DesktopTuner> {
-  @override
-  Widget build(BuildContext context) {
-    final todayProgramsState = ref.watch(todayProgramProvider);
-
-    return todayProgramsState.when(
-      data: (programs) {
-        return switch (programs.length) {
-          0 => Center(
-            child: Center(
-              child: SizedBox.square(
-                dimension: Theme.of(context).textTheme.displayLarge?.fontSize,
-                child: LoadingIndicatorM3E(),
-              ),
-            ),
-          ),
-          _ => ListView(
-            children: [
-              // ProgramCarouselView(programs: programs),
-              // ProgramMasonryView()
-            ],
-          ),
-        };
-      },
-      error: (error, stack) => Center(child: Text('Error: $error')),
-      loading: () => Center(
-        child: SizedBox.square(
-          dimension: Theme.of(context).textTheme.displayLarge?.fontSize,
-          child: LoadingIndicatorM3E(),
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context, WidgetRef ref) {}
 }
 
 class ProgramCarouselView extends StatefulWidget {
