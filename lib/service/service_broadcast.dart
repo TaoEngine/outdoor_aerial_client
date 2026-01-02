@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'dart:ui';
 
+import 'package:flutter/widgets.dart';
 import 'package:flutter_soloud/flutter_soloud.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -12,7 +14,15 @@ class BroadcastService {
   final bool isWss;
 
   /// 广播音频播放服务
-  BroadcastService({required this.address, this.isWss = false});
+  BroadcastService({required this.address, this.isWss = false}) {
+    _listener = AppLifecycleListener(
+      // 只有服务被销毁了，客户端才能被彻底关掉
+      onExitRequested: () async {
+        await dispose();
+        return AppExitResponse.exit;
+      },
+    );
+  }
 
   /// 指定的地址去执行取流任务
   static const path = 'broadcast';
@@ -29,6 +39,9 @@ class BroadcastService {
   /// 推流相关服务订阅
   StreamSubscription? _subscription;
 
+  /// 播放器生命周期处理
+  AppLifecycleListener? _listener;
+
   /// 从 Outdoor Aerial 服务器中取流
   Future<void> broadcast() async {
     if (!SoLoud.instance.isInitialized) {
@@ -40,8 +53,7 @@ class BroadcastService {
     // s16le = 2 bytes
     int bytesPerSample = 2;
     int channels = 2;
-    double bytesPerSecond = (44100 * channels * bytesPerSample)
-        .toDouble();
+    double bytesPerSecond = (44100 * channels * bytesPerSample).toDouble();
     double bufferingTime = 65536 / bytesPerSecond;
 
     // 确保 bufferingTime 至少有一些值，避免为 0 导致问题，虽然 0 也是允许的
@@ -82,6 +94,9 @@ class BroadcastService {
 
   /// 终止取流操作并销毁当前服务
   Future<void> dispose() async {
+    _listener?.dispose();
+    _listener = null;
+
     await _subscription?.cancel();
     _subscription = null;
 
@@ -96,6 +111,10 @@ class BroadcastService {
     if (_stream != null) {
       await SoLoud.instance.disposeSource(_stream!);
       _stream = null;
+    }
+
+    if (SoLoud.instance.isInitialized) {
+      SoLoud.instance.deinit();
     }
   }
 
