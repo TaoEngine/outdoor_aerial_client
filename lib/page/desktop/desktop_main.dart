@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:go_router/go_router.dart';
 import 'package:outdoor_aerial_client/widget/widget_bottom_play.dart';
 
 import '../desktop/desktop_tuner.dart';
@@ -18,7 +17,7 @@ class _DesktopMainState extends State<DesktopMain> {
 
   @override
   Widget build(BuildContext context) {
-    final mainNavigationBarDestinations = <Widget>[
+    final destinations = <Widget>[
       NavigationDrawerDestination(
         icon: Icon(TablerIcons.antenna),
         label: Text("调谐器", style: Theme.of(context).textTheme.labelLarge),
@@ -70,7 +69,7 @@ class _DesktopMainState extends State<DesktopMain> {
                 },
                 selectedIndex: _currentPageIndex,
                 header: header,
-                children: mainNavigationBarDestinations,
+                children: destinations,
               ),
               Expanded(
                 child: switch (_currentPageIndex) {
