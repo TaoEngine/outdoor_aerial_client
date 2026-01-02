@@ -24,6 +24,8 @@ dependencies:
   protobuf: ^6.0.0
   riverpod_annotation: ^3.0.3
   web_socket_channel: ^3.0.3
+  audio_service: ^0.18.18
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:

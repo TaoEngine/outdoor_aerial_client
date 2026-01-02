@@ -1,4 +1,4 @@
-package tao.outdoor.aerial.outdoor_aerial_client
+package tao.outdoor.aerial
 
 import io.flutter.embedding.android.FlutterActivity
 

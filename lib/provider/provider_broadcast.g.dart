@@ -40,7 +40,7 @@ final class BroadcastProvider extends $NotifierProvider<Broadcast, bool> {
   }
 }
 
-String _$broadcastHash() => r'523009edf189f50c56e9c0d4b176144dbfbdbeca';
+String _$broadcastHash() => r'cb0a987724bec9f396cd38dc74121288ca272d33';
 
 abstract class _$Broadcast extends $Notifier<bool> {
   bool build();
