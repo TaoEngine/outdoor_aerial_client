@@ -12,7 +12,7 @@ class BroadcastService {
   final bool isWss;
 
   /// 广播音频播放服务
-  BroadcastService({required this.address, required this.isWss});
+  BroadcastService({required this.address, this.isWss = false});
 
   /// 指定的地址去执行取流任务
   static const path = 'broadcast';
@@ -95,7 +95,7 @@ class BroadcastService {
   bool get isMuted => _isMuted;
 
   /// 对广播音频进行静音（不影响推流播放）
-  void mute() {
+  void toggleMute() {
     if (_handle != null) {
       _isMuted = !_isMuted;
       if (_isMuted) {
