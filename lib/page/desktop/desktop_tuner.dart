@@ -52,7 +52,7 @@ class _DesktopTunerState extends State<DesktopTuner>
               ),
               const SizedBox(height: 72),
               Text(
-                '没有节目哦，搜台试试看',
+                '没有节目欸，搜索电台试试看',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ],

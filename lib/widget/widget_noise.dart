@@ -17,7 +17,7 @@ class NoisePainter extends CustomPainter {
     final maxDots = ((maxWidth * maxHeight / 16) * 0.6).round();
 
     final backgroundPaint = Paint()
-      ..color = Theme.of(context).colorScheme.primaryContainer;
+      ..color = Theme.of(context).colorScheme.secondaryContainer;
     final foregroundPaint = Paint()
       ..color = Theme.of(context).colorScheme.onPrimary;
 
@@ -25,7 +25,7 @@ class NoisePainter extends CustomPainter {
     for (var i = 0; i < maxDots; i++) {
       final x = _random.nextInt(maxWidth).toDouble();
       final y = _random.nextInt(maxHeight).toDouble();
-      canvas.drawRect(Rect.fromLTWH(x, y, 4, 4), foregroundPaint);
+      canvas.drawRect(.fromLTWH(x, y, 4, 4), foregroundPaint);
     }
   }
 
