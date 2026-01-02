@@ -2,8 +2,8 @@ import 'package:isar_community/isar.dart';
 
 import '../data/base/database_program.dart';
 import '../data/base/database_station.dart';
-import '../data/mapper/datamapper_program.dart';
-import '../data/mapper/datamapper_station.dart';
+import '../data/plugin/dataplugin_program.dart';
+import '../data/plugin/dataplugin_station.dart';
 import '../data/model/datamodel_program.dart';
 import '../data/model/datamodel_station.dart';
 
