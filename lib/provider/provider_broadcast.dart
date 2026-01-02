@@ -8,18 +8,19 @@ class Broadcast extends _$Broadcast {
   late final BroadcastService _service;
 
   @override
-  void build() async {
+  bool build() {
     _service = BroadcastService(address: '127.0.0.1');
 
     // 销毁服务绑定
     ref.onDispose(_service.dispose);
 
-    await _service.broadcast();
+    _service.broadcast();
+    return false;
   }
 
   // 操作静音
-  void toggleMute() => _service.toggleMute();
-
-  // 是否静音
-  bool get isMuted => _service.isMuted;
+  void toggleMute() {
+    state = !state;
+    _service.setMute(state);
+  }
 }

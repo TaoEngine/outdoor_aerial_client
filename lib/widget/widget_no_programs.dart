@@ -52,7 +52,7 @@ class _NoProgramsWidgetState extends State<NoProgramsWidget>
                 child: const CircleAvatar(child: Icon(TablerIcons.antenna_off)),
               ),
               Text(
-                '没有节目欸，搜索电台试试看',
+                '没找到节目欸，搜索电台试试看',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ],

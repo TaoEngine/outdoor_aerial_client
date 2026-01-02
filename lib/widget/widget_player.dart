@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
-class BottomPlayWidget extends StatelessWidget {
+class PlayerWidget extends StatelessWidget {
   /// 节目的主标题，包括 Slogan 或者歌曲的名称
   final String title;
 
@@ -17,22 +17,22 @@ class BottomPlayWidget extends StatelessWidget {
   /// 可选描述节目的图片
   final Widget? cover;
 
+  /// 右侧操作按钮
+  final Widget action;
+
   /// 点击播放器需要做的事情
   final VoidCallback onTap;
 
-  /// 按下停止键需要做的事情
-  final VoidCallback onStopButtomTap;
-
   /// 底部播放器组件
-  const BottomPlayWidget({
+  const PlayerWidget({
     super.key,
     this.name,
     this.station,
     this.cover,
     this.progress,
     required this.title,
+    required this.action,
     required this.onTap,
-    required this.onStopButtomTap,
   });
 
   @override
@@ -104,13 +104,7 @@ class BottomPlayWidget extends StatelessWidget {
                   alignment: .centerRight,
                   child: AspectRatio(
                     aspectRatio: 1,
-                    child: Center(
-                      child: IconButton.outlined(
-                        onPressed: () => onStopButtomTap.call(),
-                        icon: Icon(TablerIcons.volume_off),
-                        tooltip: "电台静音",
-                      ),
-                    ),
+                    child: Center(child: action),
                   ),
                 ),
               ],

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:outdoor_aerial_client/provider/provider_broadcast.dart';
-import 'package:outdoor_aerial_client/widget/widget_bottom_play.dart';
+import 'package:outdoor_aerial_client/widget/widget_player.dart';
 
 import '../desktop/desktop_tuner.dart';
 
@@ -19,8 +19,6 @@ class _DesktopMainState extends ConsumerState<DesktopMain> {
 
   @override
   Widget build(BuildContext context) {
-    final notifier = ref.read(broadcastProvider.notifier);
-
     final destinations = <Widget>[
       NavigationDrawerDestination(
         icon: Icon(TablerIcons.antenna),
@@ -51,14 +49,7 @@ class _DesktopMainState extends ConsumerState<DesktopMain> {
       ),
     );
 
-    final player = Align(
-      alignment: .bottomCenter,
-      child: BottomPlayWidget(
-        title: '没有信号',
-        onTap: () {},
-        onStopButtomTap: notifier.toggleMute,
-      ),
-    );
+    final player = Align(alignment: .bottomCenter, child: BottomPlayer());
 
     return Scaffold(
       body: Stack(
@@ -88,6 +79,31 @@ class _DesktopMainState extends ConsumerState<DesktopMain> {
           ),
           player,
         ],
+      ),
+    );
+  }
+}
+
+class BottomPlayer extends ConsumerWidget {
+  const BottomPlayer({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isMuted = ref.watch(broadcastProvider);
+    final notifier = ref.watch(broadcastProvider.notifier);
+    return PlayerWidget(
+      title: '无信号',
+      onTap: () {},
+      action: IconButton.outlined(
+        onPressed: notifier.toggleMute,
+        icon: switch (isMuted) {
+          false => Icon(TablerIcons.volume),
+          true => Icon(TablerIcons.volume_off),
+        },
+        tooltip: switch (isMuted) {
+          false => '对电台静音',
+          true => '取消电台静音',
+        },
       ),
     );
   }

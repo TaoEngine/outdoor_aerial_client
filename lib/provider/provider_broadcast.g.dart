@@ -12,7 +12,7 @@ part of 'provider_broadcast.dart';
 @ProviderFor(Broadcast)
 const broadcastProvider = BroadcastProvider._();
 
-final class BroadcastProvider extends $NotifierProvider<Broadcast, void> {
+final class BroadcastProvider extends $NotifierProvider<Broadcast, bool> {
   const BroadcastProvider._()
     : super(
         from: null,
@@ -32,31 +32,31 @@ final class BroadcastProvider extends $NotifierProvider<Broadcast, void> {
   Broadcast create() => Broadcast();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(void value) {
+  Override overrideWithValue(bool value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<void>(value),
+      providerOverride: $SyncValueProvider<bool>(value),
     );
   }
 }
 
-String _$broadcastHash() => r'd30113eca9c950c9b693a4a1e4493cda6c32d429';
+String _$broadcastHash() => r'523009edf189f50c56e9c0d4b176144dbfbdbeca';
 
-abstract class _$Broadcast extends $Notifier<void> {
-  void build();
+abstract class _$Broadcast extends $Notifier<bool> {
+  bool build();
   @$mustCallSuper
   @override
   void runBuild() {
-    build();
-    final ref = this.ref as $Ref<void, void>;
+    final created = build();
+    final ref = this.ref as $Ref<bool, bool>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<void, void>,
-              void,
+              AnyNotifier<bool, bool>,
+              bool,
               Object?,
               Object?
             >;
-    element.handleValue(ref, null);
+    element.handleValue(ref, created);
   }
 }
