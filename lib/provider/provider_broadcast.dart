@@ -9,7 +9,7 @@ class Broadcast extends _$Broadcast {
 
   @override
   bool build() {
-    _service = BroadcastService(address: '127.0.0.1');
+    _service = BroadcastService(address: '192.168.137.1');
 
     // 销毁服务绑定
     ref.onDispose(_service.dispose);
